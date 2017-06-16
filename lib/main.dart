@@ -30,8 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title: const Text('hello')),
-        body: new LinesWidget(child: const Center(child: const Text('Hello'))),
+        appBar: new AppBar(title: const Text('Tessellation')),
+        body: new LinesWidget()
                         );
       }
 }
