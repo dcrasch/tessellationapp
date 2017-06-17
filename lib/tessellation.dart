@@ -1,28 +1,25 @@
 import 'dart:math';
-import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/painting.dart';
 
 class TessellationLine {
-  TessellationLine();
+  TessellationLine(this.transform);
 
   final Paint _paint = new Paint()..color = const Color(0xFF00FF00)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0;
-  Matrix4 transform = new Matrix4.zero();
   double human_angle = 0.0;
   List<Offset> _lines = new List();
+  Matrix4 transform;
 
-  void update(PointerEvent event) {
-    addPoint(event.position);
-  }
-
-  void addPoint(Offset p) {
-    _lines.add(p);
+  void addPoint(Offset point) {
+    _lines.add(point);
   }
 
   void paint(Canvas canvas, _) {
     canvas.drawPath(toPath(), _paint);
+    canvas.drawPath(toPathC(), _paint);
   }
 
   Path toPath() {
@@ -35,7 +32,21 @@ class TessellationLine {
     }
     return p;
   }
+
+  Path toPathC() {
+    final Path p = new Path();
+    if (_lines.length == 0) return p;
+    Offset p1 = _lines.elementAt(0);
+    p1 = MatrixUtils.transformPoint(transform, p1);
+    p.moveTo(p1.dx,p1.dy);
+    for (Offset p2 in _lines) { // TODO reverse
+      p2 = MatrixUtils.transformPoint(transform, p2);
+      p.lineTo(p2.dx,p2.dy);
+    }
+    return p;
+  }
 }
+
 
 class RenderLines extends RenderConstrainedBox {
   RenderLines() : super(additionalConstraints: const BoxConstraints.expand());
@@ -46,9 +57,10 @@ class RenderLines extends RenderConstrainedBox {
   @override void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
     if (event is PointerDownEvent) {
       if (_lines.length==0) {
-        _lines[0] = new TessellationLine();
+        Matrix4 T = new Matrix4.translationValues(100.0,100.0,0.0);
+        _lines[0] = new TessellationLine(T);
       }
-      _lines[0].update(event);
+      _lines[0].addPoint(event.position);
       markNeedsPaint();
     }
   }
