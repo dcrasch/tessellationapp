@@ -11,3 +11,6 @@ For help getting started with Flutter, view our online
 
 Use transformPoint in MatrixUtils to transform points.
 Matrix4 not the same as the matrix4 in vector_math!
+add vector_math: any to pubspec.yaml
+import 'package:vector_math/vector_math_64.dart' show Vector3;
+init matrix with identity matrix! otherwise 0 scale!

@@ -59,9 +59,8 @@ class RenderLines extends RenderConstrainedBox {
     if (event is PointerDownEvent) {
       if (_lines.length==0) {
         Matrix4 T = new Matrix4.identity()
-          //..translate(10.0,10.10,0.0)
+          ..translate(10.0,10.10,0.0)
           ..rotate(new Vector3(100.0,100.0,100.0),1.57);
-        print(T);
         _lines[0] = new TessellationLine(T);
       }
       _lines[0].addPoint(event.position);
