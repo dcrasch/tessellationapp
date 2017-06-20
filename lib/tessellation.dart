@@ -1,7 +1,8 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class TessellationLine {
   TessellationLine(this.transform);
@@ -57,7 +58,7 @@ class RenderLines extends RenderConstrainedBox {
   @override void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
     if (event is PointerDownEvent) {
       if (_lines.length==0) {
-        Matrix4 T = new Matrix4.translationValues(100.0,100.0,0.0);
+        final Matrix4 T = new Matrix4.translationValues(100.0,100.0,0.0);
         _lines[0] = new TessellationLine(T);
       }
       _lines[0].addPoint(event.position);
