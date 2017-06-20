@@ -1,5 +1,6 @@
 name: tessellationapp
-version: 2.0
+version: 2.0.0
+
 description: Tessellation
 author: David Rasch <david@cloudscripting.nl>
 
