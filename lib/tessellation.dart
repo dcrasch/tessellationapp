@@ -22,7 +22,7 @@ class RenderLines extends RenderConstrainedBox {
   @override void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
-    figure.paint(canvas, offset);
+    _figure.paint(canvas, offset);
     super.paint(context, offset);
   }
 

@@ -7,7 +7,7 @@ import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'tessellationline.dart';
 
 class TessellationFigure {
-  TessellationLine(this.transform) {
+  TessellationFigure() {
 
   }
 
@@ -33,27 +33,27 @@ class TessellationFigure {
       ..translate(1.0, 0.0, 0.0);
     TessellationLine line  = new TessellationLine(T);
     line.addPoint(new Offset(0.0, 0.0));
-    line.addPoint(new Ofsset(0.0, 1.0));
-
-    _lines.add(line);
-
-    Matrix4 T = new Matrix4.identity()
-      ..translate(0.0, -1.0 ,0.0);
-    TessellationLine line  = new TessellationLine(T);
     line.addPoint(new Offset(0.0, 1.0));
-    line.addPoint(new Ofsset(1.0, 1.0));
 
     _lines.add(line);
+
+    Matrix4 T2 = new Matrix4.identity()
+      ..translate(0.0, -1.0 ,0.0);
+    TessellationLine line2  = new TessellationLine(T2);
+    line2.addPoint(new Offset(0.0, 1.0));
+    line2.addPoint(new Offset(1.0, 1.0));
+
+    _lines.add(line2);
   }
 
   Path toPath() {
     final Path p = new Path();
     if (_lines.length == 0) return p;
-    TessellationLine l1 = _liness.elementAt(0);
-    p.addPath(l1.toFirstPoint, Offset.zero);
+    TessellationLine l1 = _lines.elementAt(0);
+    p.addPath(l1.toFirstPoint(), Offset.zero);
     // todo use for each
     for (TessellationLine line in _lines) {
-      p.addPath(line.toPath(), Ofsset.zero);
+      p.addPath(line.toPath(), Offset.zero);
     }
 
     if (sequence == 0) {
@@ -62,7 +62,7 @@ class TessellationFigure {
       }
     }
     else {
-      for (TessellationLIne line in _lines.reversed) {
+      for (TessellationLine line in _lines.reversed) {
         p.addPath(line.toPath(), Offset.zero);
       }
     }

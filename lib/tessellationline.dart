@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 
 class TessellationLine {
   TessellationLine(this.transform) {
-    
   }
 
   final Paint _paint = new Paint()..color = const Color(0xFF00FF00)
@@ -24,12 +23,6 @@ class TessellationLine {
 
   void removePointAt(int i) {
     _points.removeAt(i);
-  }
-  
-
-  void paint(Canvas canvas, _) {
-    canvas.drawPath(toPath(), _paint);
-    canvas.drawPath(toPathC(), _paint);
   }
 
   Path toFirstPoint() {
