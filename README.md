@@ -9,6 +9,7 @@ For help getting started with Flutter, view our online
 
 ## Development Notes
 
+### Graphics
 Use transformPoint in MatrixUtils to transform points.
 Matrix4 not the same as the matrix4 in vector_math!
 add vector_math: any to pubspec.yaml
@@ -17,4 +18,7 @@ init matrix with identity matrix! otherwise 0 scale!
 
 addpath and extended path don't join the lines
 
-https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
+### Read,write,parse files
+
+* https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
+* https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/gallery/example_code_parser.dart
