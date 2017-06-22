@@ -14,3 +14,7 @@ Matrix4 not the same as the matrix4 in vector_math!
 add vector_math: any to pubspec.yaml
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 init matrix with identity matrix! otherwise 0 scale!
+
+addpath and extended path don't join the lines
+
+https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
