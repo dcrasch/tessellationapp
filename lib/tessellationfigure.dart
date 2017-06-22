@@ -48,21 +48,13 @@ class TessellationFigure {
   Path toPath() {
     final Path p = new Path();
     if (_lines.length == 0) return p;
+    // todo create continues figure
     TessellationLine l1 = _lines.elementAt(0);
-    p.addPath(l1.toFirstPoint(), Offset.zero);
-    _lines.forEach((line1) => p.extendWithPath(line1.toPath(), Offset.zero));
-    // corresponding
-    // addPath and extendWithPath ???
-    if (sequence == 0) {
-      for (TessellationLine line2 in _lines) {
-        for (Offset p3 in line2.cpoints().reversed) {
-          Offset p4 = MatrixUtils.transformPoint(line2.transform, p3);
-          p.lineTo(p4.dx, p4.dy);
-        }
-      }
-      
+    _lines.forEach((line1) => p.addPath(line1.toPath(), Offset.zero));
+    if (sequence==0) {
+      _lines.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
     } else {
-      // TODO _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
+      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
     }
     return p;
   }

@@ -47,10 +47,14 @@ class TessellationLine {
   }
 
   Path toPathC() {
-    //broken??? start at zero??
+    // fix initial start at zero
     final Path px = new Path();
     if (_points.length == 0) return px;
-    for (Offset p3 in cpoints()) {
+    Offset first = _points.elementAt(0);
+    Offset p4x = MatrixUtils.transformPoint(transform, first);
+    px.moveTo(p4x.dx, p4x.dy);
+
+    for (Offset p3 in _points) {
       Offset p4 = MatrixUtils.transformPoint(transform, p3);
       px.lineTo(p4.dx, p4.dy);
     }
