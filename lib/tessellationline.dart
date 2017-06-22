@@ -10,8 +10,8 @@ class TessellationLine {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0;
   double human_angle = 0.0;
-  List<Offset> _points = new List();
-  Matrix4 transform;
+  List<Offset> _points = new List<Offset>();
+  Matrix4 transform = new Matrix4.identity();
 
   void addPoint(Offset point) {
     _points.add(point);
@@ -23,6 +23,10 @@ class TessellationLine {
 
   void removePointAt(int i) {
     _points.removeAt(i);
+  }
+
+  List<Offset> cpoints() {
+    return _points;
   }
 
   Path toFirstPoint() {
@@ -37,19 +41,20 @@ class TessellationLine {
     final Path p = new Path();
     if (_points.length == 0) return p;
     for (Offset p2 in _points) {
-      p.lineTo(p2.dx,p2.dy);
+      p.lineTo(p2.dx, p2.dy);
     }
     return p;
   }
 
   Path toPathC() {
-    final Path p = new Path();
-    if (_points.length == 0) return p;
-    for (Offset p2 in _points.reversed) {
-      p2 = MatrixUtils.transformPoint(transform, p2);
-      p.lineTo(p2.dx,p2.dy);
+    //broken??? start at zero??
+    final Path px = new Path();
+    if (_points.length == 0) return px;
+    for (Offset p3 in cpoints()) {
+      Offset p4 = MatrixUtils.transformPoint(transform, p3);
+      px.lineTo(p4.dx, p4.dy);
     }
-    return p;
+    return px;
   }
 
   bool breakline(Offset p1, Offset p2, Offset current, double rectsize) {
