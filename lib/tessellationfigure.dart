@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
@@ -43,6 +46,10 @@ class TessellationFigure {
     line2.addPoint(new Offset(1.0, 1.0));
 
     _lines.add(line2);
+  }
+  
+  void fromJson(Map data) {
+    
   }
 
   Path toPath() {

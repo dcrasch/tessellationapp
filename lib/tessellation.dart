@@ -15,18 +15,20 @@ class RenderLines extends RenderConstrainedBox {
     print(PointerEvent);
     if (event is PointerDownEvent) {
       // todo stuff
-      print(event.position);
       markNeedsPaint();
+      
     }
   }
 
   @override void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
-    print(_figure);
+    
     _figure.paint(canvas, offset);
     super.paint(context, offset);
   }
+
+  
 
 }
 
