@@ -23,7 +23,8 @@ class TessellationFigure {
   List<TessellationLine> _lines = new List<TessellationLine>();
   List<Color> _colors = new List(4);
 
-  void initWithSquare() {
+  TessellationFigure.withSquare() {
+    print('with square');
     gridincx = 1.0;
     gridincy = 1.0;
     shiftx = 0.0;
@@ -47,29 +48,57 @@ class TessellationFigure {
 
     _lines.add(line2);
   }
-  
-  void fromMap(Map data) {
-    // TODO make static factory?
-    gridincx = data['gridincx'];
-    gridincy = data['gridincy'];
-    shiftx = data['shiftx'];
-    shifty = data['shifty'];
-    rotdiv = data['rotdiv'];
-    sequence = data['sequence'];
+
+  TessellationFigure.fromJson(Map _json) {
+    // check for types
+    gridincx = _json['gridincx'];
+    gridincy = _json['gridincy'];
+    shiftx = _json['shiftx'];
+    shifty = _json['shifty'];
+    rotdiv = _json['rotdiv'];
+    sequence = _json['sequence'];
+
+    for (var linemap in _json['lines']) {
+      Matrix4 T = new Matrix4.identity()
+        ..translate(linemap['tx'], linemap['ty']);
+        // TODO ..rotate(new Vector(0.0, 0.0, 0.0), linemap['angle']/180*pi);
+      TessellationLine line = new TessellationLine(T);
+      for (var pointmap in linemap['points']) {
+        Offset point = new Offset(pointmap['x'], pointmap['y']);
+        line.addPoint(point);
+      }      
+      _lines.add(line);
+    }
+  }
+
+  TessellationFigure.fromJsonDave(Map _json) {
+    gridincx = _json['gridincx'];
+    gridincy = _json['gridincy'];
+    shiftx = _json['shiftx'];
+    shifty = _json['shifty'];
+    rotdiv = _json['rotdiv'];
+    sequence = _json['sequence'];
     
-    _lines.clear();
-    for (var linemap in data['lines']) {
+    // TODO use _json['lines'].map((value) =>  maybe?
+    for (var linemap in _json['lines']) {
       Matrix T = new Matrix4.identity();
       T.translate(linemap['tx'],linemap['ty']);
       T.rotate(linemap['angle']/180*pi);
-      
+      print(T);
+
       Tessellation line = new TessellationLine(T);
-      for (var pointmap in data['points']) {
+      for (var pointmap in linemap['points']) {
         Offset point = new Offset(pointmap['x'],pointmap['y']);
         line.addPoint(point);
       }      
       _lines.add(line);
     }
+  }
+
+  Map<String, Object> toJson() {
+    final Map<String, Object> _json = new Map<String, Object>();
+    // TODO
+    return _json;
   }
 
   Path toPath() {
