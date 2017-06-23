@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 
 import 'tessellationfigure.dart';
+import 'tessellationline.dart';
 
 class RenderLines extends RenderConstrainedBox {
   RenderLines(this.figure) : super(additionalConstraints: const BoxConstraints.expand());
@@ -15,6 +16,10 @@ class RenderLines extends RenderConstrainedBox {
     print(PointerEvent);
     if (event is PointerDownEvent) {
       // todo stuff
+      PointIndexPath selectedPoint = figure.leftcreate(event.position);
+      if (selectedPoint != null) {
+        print("hit ${event.position}");
+      }
       markNeedsPaint();
       
     }

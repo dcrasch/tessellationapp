@@ -19,6 +19,8 @@ class TessellationFigure {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0/50;
 
+  double rectsize = 2.0/50;
+
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
   List<TessellationLine> _lines = new List<TessellationLine>();
@@ -57,10 +59,42 @@ class TessellationFigure {
 
   void paint(Canvas canvas, _) {
     canvas.save();
-    canvas.translate(100.0, 100.0);
-    canvas.scale(100.0, 100.0);
+    canvas.translate(400.0, 300.0);
+    canvas.scale(400.0, 400.0);
 
     canvas.drawPath(toPath(), _paint);
     canvas.restore();
+  }
+
+  PointIndexPath leftcreate(Offset point) {
+    Offset p3 = new Offset((point.dx-400.0)/400.0,
+        (point.dy-300.0)/400.0);
+    int counter = 0;
+    PointIndexPath selectedpointindex;
+    for (TessellationLine line in _lines) {
+      selectedpointindex = line.hitline(p3, rectsize);
+      if (selectedpointindex != null ) {
+        selectedpointindex.lineIndex = counter;
+        return selectedpointindex;
+      }
+      counter++;
+    }
+    return null;
+  }
+
+    PointIndexPath leftdown(Offset point) {
+    Offset p3 = new Offset((point.dx-400.0)/400.0,
+        (point.dy-300.0)/400.0);
+    int counter = 0;
+    PointIndexPath selectedpointindex;
+    for (TessellationLine line in _lines) {
+      selectedpointindex = line.hitline(p3, rectsize);
+      if (selectedpointindex != null ) {
+        selectedpointindex.lineIndex = counter;
+        return selectedpointindex;
+      }
+      counter++;
+    }
+    return null;
   }
 }

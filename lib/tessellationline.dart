@@ -89,7 +89,7 @@ class TessellationLine {
     double r = d.distance;
     if (r>0) {
       double distancefromline = ((current.dx * d.dy - current.dy * d.dx +
-          d.dx * point2.dy - d.dy * point2.dx) / r).abs;
+          d.dx * p2.dy - d.dy * p2.dx) / r).abs();
       if ((distancefromline < rectsize) &&
           ((current-p1).distance < r) &&
           ((current-p2).distance < r)) {
@@ -136,9 +136,9 @@ class TessellationLine {
         if (breakline(current, previous, p2, rectsize)) {
           return new PointIndexPath(0, counter, true);
         }
-        counter++;
-        previous = current;
       }
+      counter++;
+      previous = current;
     }
     return null;
   }
