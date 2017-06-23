@@ -48,8 +48,28 @@ class TessellationFigure {
     _lines.add(line2);
   }
   
-  void fromJson(Map data) {
+  void fromMap(Map data) {
+    // TODO make static factory?
+    gridincx = data['gridincx'];
+    gridincy = data['gridincy'];
+    shiftx = data['shiftx'];
+    shifty = data['shifty'];
+    rotdiv = data['rotdiv'];
+    sequence = data['sequence'];
     
+    _lines.clear();
+    for (var linemap in data['lines']) {
+      Matrix T = new Matrix4.identity();
+      T.translate(linemap['tx'],linemap['ty']);
+      T.rotate(linemap['angle']/180*pi);
+      
+      Tessellation line = new TessellationLine(T);
+      for (var pointmap in data['points']) {
+        Offset point = new Offset(pointmap['x'],pointmap['y']);
+        line.addPoint(point);
+      }      
+      _lines.add(line);
+    }
   }
 
   Path toPath() {

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 import 'tessellation.dart';
 
@@ -30,18 +31,23 @@ class MyHomePage extends StatefulWidget {
   @override
     _MyHomePageState createState() => new _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> {
   Future<Directory> _appDocumentsDirectory;
+  Future<String> _getSquare(AssetBundle bundle) async {
+    final String code = await bundle.loadString('lib/square.json') ?? "failed";
+    return code;
+  }
 
   @override Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(title: const Text('Tessellation')),
         body: new Center(
-            child: new FutureBuilder<Directory>(
-                future:  _appDocumentsDirectory,
-                builder: (BuildContext context, AsyncSnapshot<Directory> snapshot) {
+            child: new FutureBuilder<String>(
+                future:  _getSquare(DefaultAssetBundle.of(context)),
+                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return new Text('path: ${snapshot.data.path}');
+                return new Text('path: ${snapshot.data}');
               } else {
                 return const Text('You have not yet pressed the button');
               }

@@ -19,6 +19,12 @@ class RenderLines extends RenderConstrainedBox {
       
     }
   }
+  
+  void load(String data) {
+    final JsonDecoder decoder = new JsonDecoder();
+    final Map<dynamic> result = decoder.convert(data);
+    _figure.fromMap(result);
+  }
 
   @override void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
