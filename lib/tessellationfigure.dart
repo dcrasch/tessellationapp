@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -18,38 +19,28 @@ class TessellationFigure {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0/50;
 
+  double rectsize = 2.0/50;
+
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
   List<TessellationLine> _lines = new List<TessellationLine>();
   List<Color> _colors = new List(4);
 
-  void initWithSquare() {
-    gridincx = 1.0;
-    gridincy = 1.0;
-    shiftx = 0.0;
-    shifty = 1.0;
-
-    rotdiv = 1;
-    sequence = 0;
-
-    Matrix4 T = new Matrix4.identity()
-      ..translate(1.0, 0.0, 0.0);
-    TessellationLine line1  = new TessellationLine(T);
-    line1.addPoint(new Offset(0.0, 0.0));
-    line1.addPoint(new Offset(0.0, 1.0));
-    _lines.add(line1);
-
-    Matrix4 T2 = new Matrix4.identity()
-      ..translate(0.0, -1.0 ,0.0);
-    TessellationLine line2  = new TessellationLine(T2);
-    line2.addPoint(new Offset(0.000003, 1.0));
-    line2.addPoint(new Offset(1.0, 1.0));
-
-    _lines.add(line2);
+  TessellationFigure.fromJson(Map _json) {
+    // TODO check for types
+    gridincx = _json['gridincx'];
+    gridincy = _json['gridincy'];
+    shiftx = _json['shiftx'];
+    shifty = _json['shifty'];
+    rotdiv = _json['rotdiv'];
+    sequence = _json['sequence'];
+    _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
   }
-  
-  void fromJson(Map data) {
-    
+
+  Map<String, Object> toJson() {
+    final Map<String, Object> _json = new Map<String, Object>();
+    // TODO
+    return _json;
   }
 
   Path toPath() {
@@ -61,17 +52,60 @@ class TessellationFigure {
     if (sequence==0) {
       _lines.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
     } else {
-      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
+      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(), Offset.zero));
     }
     return p;
   }
 
   void paint(Canvas canvas, _) {
     canvas.save();
-    canvas.translate(100.0, 100.0);
-    canvas.scale(100.0, 100.0);
+    canvas.translate(400.0, 300.0);
+    canvas.scale(400.0, 400.0);
 
     canvas.drawPath(toPath(), _paint);
     canvas.restore();
+  }
+
+  void addPoint(Offset point, PointIndexPath i) {
+    Offset p1;
+    if (i.corrp) {
+      p1 = _lines[i.lineIndex].correspondingPoint(point);
+    }
+    else {
+      p1 = point;
+    }
+    _lines[i.lineIndex].insertPointAt(i.pointIndex);
+  }
+
+  PointIndexPath leftcreate(Offset point) {
+    Offset p3 = new Offset((point.dx-400.0)/400.0,
+        (point.dy-300.0)/400.0);
+    int counter = 0;
+    PointIndexPath selectedpointindex;
+    for (TessellationLine line in _lines) {
+      selectedpointindex = line.hitline(p3, rectsize);
+      if (selectedpointindex != null ) {
+        selectedpointindex.lineIndex = counter;
+        return selectedpointindex;
+      }
+      counter++;
+    }
+    return null;
+  }
+
+    PointIndexPath leftdown(Offset point) {
+    Offset p3 = new Offset((point.dx-400.0)/400.0,
+        (point.dy-300.0)/400.0);
+    int counter = 0;
+    PointIndexPath selectedpointindex;
+    for (TessellationLine line in _lines) {
+      selectedpointindex = line.hitline(p3, rectsize);
+      if (selectedpointindex != null ) {
+        selectedpointindex.lineIndex = counter;
+        return selectedpointindex;
+      }
+      counter++;
+    }
+    return null;
   }
 }

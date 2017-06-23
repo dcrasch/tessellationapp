@@ -3,11 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 
 import 'tessellationfigure.dart';
+import 'tessellationline.dart';
 
 class RenderLines extends RenderConstrainedBox {
-  RenderLines() : super(additionalConstraints: const BoxConstraints.expand());
+  RenderLines(this.figure) : super(additionalConstraints: const BoxConstraints.expand());
 
-  final TessellationFigure _figure = new TessellationFigure()..initWithSquare();
+  TessellationFigure figure;
 
   @override bool hitTestSelf(Offset position) => true;
 
@@ -15,27 +16,28 @@ class RenderLines extends RenderConstrainedBox {
     print(PointerEvent);
     if (event is PointerDownEvent) {
       // todo stuff
+      PointIndexPath selectedPoint = figure.leftcreate(event.position);
+      if (selectedPoint != null) {
+        print("hit ${event.position}");
+      }
       markNeedsPaint();
       
     }
   }
-
+  
   @override void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
-    
-    _figure.paint(canvas, offset);
+    if (figure != null) {
+      figure.paint(canvas, offset);
+    }
     super.paint(context, offset);
   }
-
-  
-
 }
 
 
 class LinesWidget extends SingleChildRenderObjectWidget {
-  const LinesWidget({ Key key, Widget child }) :
-    super(key: key, child: child);
-
-  @override RenderLines createRenderObject(BuildContext context) => new RenderLines();
+  TessellationFigure figure;
+  LinesWidget({ Key key, Widget child, this.figure }) : super(key: key, child: child);
+  @override RenderLines createRenderObject(BuildContext context) => new RenderLines(figure);
 }
