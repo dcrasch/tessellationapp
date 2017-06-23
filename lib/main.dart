@@ -53,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 future:  _getSquare(DefaultAssetBundle.of(context)),
                 builder: (BuildContext context, AsyncSnapshot<TessellationFigure> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print('gaan');
                 return new LinesWidget(figure:snapshot.data);
               } else {
                 return const Text('You have not yet pressed the button');

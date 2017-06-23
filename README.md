@@ -17,4 +17,11 @@ init matrix with identity matrix! otherwise 0 scale!
 
 addpath and extended path don't join the lines
 
-https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
+## Files and Directories
+
+* https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
+* https://github.com/flutter/flutter/blob/master/dev/tools/dartdoc.dart
+
+## Futures
+
+* https://www.dartlang.org/tutorials/language/futures
