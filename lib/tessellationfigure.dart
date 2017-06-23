@@ -33,7 +33,6 @@ class TessellationFigure {
     rotdiv = _json['rotdiv'];
     sequence = _json['sequence'];
     _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
-    print('done');
   }
 
   Map<String, Object> toJson() {
@@ -51,7 +50,7 @@ class TessellationFigure {
     if (sequence==0) {
       _lines.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
     } else {
-      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
+      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(), Offset.zero));
     }
     return p;
   }

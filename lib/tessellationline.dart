@@ -30,12 +30,10 @@ class TessellationLine {
   TessellationLine.fromJson(Map _json) {
     // TODO check for types
     transform = new Matrix4.identity()
-      //..rotate(new Vector3(0.0, 0.0, 0.0), _json['angle']/180.0*PI)
-      ..translate(_json['tx'], _json['ty']);
+      ..translate(_json['tx'], _json['ty'])
+      ..rotateZ(_json['angle']/180.0*PI);
     ci = new Matrix4.inverted(transform);
-    
     _points = _json['points'].map((value) => new Offset(value['x'],value['y'])).toList();
-    
   }
 
   void addPoint(Offset point) {

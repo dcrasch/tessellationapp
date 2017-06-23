@@ -2,7 +2,7 @@ name: tessellationapp
 version: 2.0.0
 description: Tessellation
 authors:
-- David Rasch <david@cloudscripting.nl>
+  - David Rasch <david@cloudscripting.nl>
 homepage: https://www.cloudscripting.nl/tessellations/
 
 dependencies:
@@ -18,4 +18,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-   - lib/square.json
+    - lib/square.json
+    - lib/triangle.json

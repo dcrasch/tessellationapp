@@ -14,7 +14,7 @@ Matrix4 not the same as the matrix4 in vector_math!
 add vector_math: any to pubspec.yaml
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 init matrix with identity matrix! otherwise 0 scale!
-
+rotateZ is 2d rotate on flat paper
 addpath and extended path don't join the lines
 
 ## Files and Directories
