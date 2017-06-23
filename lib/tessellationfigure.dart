@@ -66,6 +66,17 @@ class TessellationFigure {
     canvas.restore();
   }
 
+  void addPoint(Offset point, PointIndexPath i) {
+    Offset p1;
+    if (i.corrp) {
+      p1 = _lines[i.lineIndex].correspondingPoint(point);
+    }
+    else {
+      p1 = point;
+    }
+    _lines[i.lineIndex].insertPointAt(i.pointIndex);
+  }
+
   PointIndexPath leftcreate(Offset point) {
     Offset p3 = new Offset((point.dx-400.0)/400.0,
         (point.dy-300.0)/400.0);

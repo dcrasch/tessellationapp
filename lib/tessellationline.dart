@@ -48,6 +48,10 @@ class TessellationLine {
     _points.removeAt(i);
   }
 
+  void insertPointAt(int i, Offset point) {
+    _points.insert(i, point);
+  }
+
   List<Offset> cpoints() {
     return _points;
   }
@@ -149,6 +153,6 @@ class TessellationLine {
   }
 
   Offset correspondingpoint(Offset p1) {
-    return  MatrixUtils.transformPoint(transform, p1);
+    return  MatrixUtils.transformPoint(ci, p1);
   }
 }
