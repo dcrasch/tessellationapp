@@ -9,19 +9,35 @@ class RenderLines extends RenderConstrainedBox {
   RenderLines(this.figure) : super(additionalConstraints: const BoxConstraints.expand());
 
   TessellationFigure figure;
+  PointIndexPath selectedPoint;
 
   @override bool hitTestSelf(Offset position) => true;
 
   @override void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
-    print(PointerEvent);
+    Offset touchPoint = new Offset((event.position.dx-200.0)/200.0,
+        (event.position.dy-150.0)/200.0);    
+    
     if (event is PointerDownEvent) {
-      // todo stuff
-      PointIndexPath selectedPoint = figure.leftcreate(event.position);
+      selectedPoint = figure.leftdown(touchPoint);
       if (selectedPoint != null) {
-        print("hit ${event.position}");
+        figure.drag(touchPoint, selectedPoint);
+        markNeedsPaint();      
       }
-      markNeedsPaint();
-      
+      else {
+        selectedPoint = figure.leftcreate(touchPoint);
+        if (selectedPoint != null) {
+          figure.addPoint(touchPoint, selectedPoint);
+        }
+      }
+    }
+    if (event is PointerMoveEvent) {
+      if (selectedPoint != null) {
+        figure.drag(touchPoint, selectedPoint);
+        markNeedsPaint();      
+      }
+    }
+    if (event is PointerUpEvent) {
+      selectedPoint = null;
     }
   }
   
@@ -29,7 +45,11 @@ class RenderLines extends RenderConstrainedBox {
     final Canvas canvas = context.canvas;
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
     if (figure != null) {
+      canvas.save();
+      canvas.translate(200.0, 150.0);
+      canvas.scale(200.0, 200.0);
       figure.paint(canvas, offset);
+      canvas.restore();
     }
     super.paint(context, offset);
   }

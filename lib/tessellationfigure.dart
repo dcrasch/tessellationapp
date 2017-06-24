@@ -25,9 +25,11 @@ class TessellationFigure {
   int sequence, rotdiv;
   List<TessellationLine> _lines = new List<TessellationLine>();
   List<Color> _colors = new List(4);
+  String description;
 
   TessellationFigure.fromJson(Map _json) {
     // TODO check for types
+    description = _json['description'];
     gridincx = _json['gridincx'];
     gridincy = _json['gridincy'];
     shiftx = _json['shiftx'];
@@ -58,32 +60,25 @@ class TessellationFigure {
   }
 
   void paint(Canvas canvas, _) {
-    canvas.save();
-    canvas.translate(400.0, 300.0);
-    canvas.scale(400.0, 400.0);
-
     canvas.drawPath(toPath(), _paint);
-    canvas.restore();
   }
 
   void addPoint(Offset point, PointIndexPath i) {
     Offset p1;
     if (i.corrp) {
-      p1 = _lines[i.lineIndex].correspondingPoint(point);
+      p1 = _lines[i.lineIndex].correspondingpoint(point);
     }
     else {
       p1 = point;
     }
-    _lines[i.lineIndex].insertPointAt(i.pointIndex);
+    _lines[i.lineIndex].insertPointAt(i.pointIndex,p1);
   }
 
   PointIndexPath leftcreate(Offset point) {
-    Offset p3 = new Offset((point.dx-400.0)/400.0,
-        (point.dy-300.0)/400.0);
     int counter = 0;
     PointIndexPath selectedpointindex;
     for (TessellationLine line in _lines) {
-      selectedpointindex = line.hitline(p3, rectsize);
+      selectedpointindex = line.hitline(point, rectsize);
       if (selectedpointindex != null ) {
         selectedpointindex.lineIndex = counter;
         return selectedpointindex;
@@ -93,13 +88,11 @@ class TessellationFigure {
     return null;
   }
 
-    PointIndexPath leftdown(Offset point) {
-    Offset p3 = new Offset((point.dx-400.0)/400.0,
-        (point.dy-300.0)/400.0);
+  PointIndexPath leftdown(Offset point) {
     int counter = 0;
     PointIndexPath selectedpointindex;
     for (TessellationLine line in _lines) {
-      selectedpointindex = line.hitline(p3, rectsize);
+      selectedpointindex = line.hitendpoint(point, rectsize);
       if (selectedpointindex != null ) {
         selectedpointindex.lineIndex = counter;
         return selectedpointindex;
@@ -107,5 +100,25 @@ class TessellationFigure {
       counter++;
     }
     return null;
+  }
+
+  bool drag(Offset point, PointIndexPath i) {
+    Offset p1;
+    if (i != null) {
+      if (i.corrp) {
+        p1 = _lines[i.lineIndex].correspondingpoint(point);
+      }
+      else {
+        p1 = point;
+      }
+      _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
+      return true;
+    }
+    return false;
+  }
+
+  Offset getPoint(PointIndexPath i) {
+    Offset point = _lines[i.lineIndex].getPointAt(i.pointIndex);
+    return point;
   }
 }

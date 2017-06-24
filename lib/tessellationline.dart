@@ -52,6 +52,10 @@ class TessellationLine {
     _points.insert(i, point);
   }
 
+  void getPointAt(int i) {
+    return _points[i];
+  }
+
   List<Offset> cpoints() {
     return _points;
   }
@@ -67,6 +71,9 @@ class TessellationLine {
   Path toPath() {
     final Path p = new Path();
     if (_points.length == 0) return p;
+    Offset first = _points.elementAt(0);
+    p.moveTo(first.dx, first.dy);
+
     for (Offset p2 in _points) {
       p.lineTo(p2.dx, p2.dy);
     }
@@ -114,6 +121,7 @@ class TessellationLine {
   PointIndexPath hitendpoint(Offset p1, double rectsize) {
     int counter = 0;
     Offset p2 = MatrixUtils.transformPoint(ci, p1);
+    int maxPointIndex = _points.length-1;
     for (Offset point in _points) {
       if ((counter > 0) && (counter < maxPointIndex)) {
         if (hit(p1, point, rectsize)) {
