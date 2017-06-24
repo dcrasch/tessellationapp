@@ -14,7 +14,7 @@ class RenderLines extends RenderConstrainedBox {
   @override bool hitTestSelf(Offset position) => true;
 
   @override void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
-    Offset touchPoint = new Offset((event.position.dx-200.0)/200.0,
+    Offset touchPoint = new Offset((event.position.dx-100.0)/200.0,
         (event.position.dy-150.0)/200.0);    
     
     if (event is PointerDownEvent) {
@@ -46,7 +46,7 @@ class RenderLines extends RenderConstrainedBox {
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
     if (figure != null) {
       canvas.save();
-      canvas.translate(200.0, 150.0);
+      canvas.translate(100.0, 150.0);
       canvas.scale(200.0, 200.0);
       figure.paint(canvas, offset);
       canvas.restore();
