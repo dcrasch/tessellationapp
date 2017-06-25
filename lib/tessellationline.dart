@@ -112,10 +112,10 @@ class TessellationLine {
 
   bool hit(Offset p1, Offset p2, double rectsize) {
     final Offset d = p1-p2;
-    return ((d.dx > rectsize) &&
-        (d.dx < -rectsize) &&
-        (d.dy > rectsize) &&
-        (d.dy < -rectsize));
+    return ((d.dx < rectsize) &&
+        (d.dx > -rectsize) &&
+        (d.dy < rectsize) &&
+        (d.dy > -rectsize));
   }
 
   PointIndexPath hitendpoint(Offset p1, double rectsize) {
@@ -128,7 +128,7 @@ class TessellationLine {
           return new PointIndexPath(0, counter, false);
         }
         if (hit(p2, point, rectsize)) {
-          return new PointIndexPath(0,counter, true);
+          return new PointIndexPath(0, counter, true);
         }
       }
       counter++;
