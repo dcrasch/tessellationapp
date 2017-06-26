@@ -36,6 +36,13 @@ class TessellationLine {
     _points = _json['points'].map((value) => new Offset(value['x'],value['y'])).toList();
   }
 
+  
+  Map<String, Object> toJson() {
+    final Map<String, Object> _json = new Map<String, Object>();
+    /// TODO transform enzo
+    // TODO _json['points'] = _points.map((value) => 
+  }
+
   void addPoint(Offset point) {
     _points.add(point);
   }

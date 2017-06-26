@@ -41,7 +41,14 @@ class TessellationFigure {
 
   Map<String, Object> toJson() {
     final Map<String, Object> _json = new Map<String, Object>();
-    // TODO
+    _json['description'] = description;
+    _json['gridincx'] = gridincx;
+    _json['gridincy'] = gridincy;
+    _json['shiftx'] = shiftx;
+    _json['shifty'] = shifty;
+    _json['rotdiv'] = rotdiv;
+    _json['sequence'] = sequence;
+    _json['lines'] = _lines.map((value) => value.toJson());
     return _json;
   }
 

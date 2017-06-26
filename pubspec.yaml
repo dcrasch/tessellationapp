@@ -20,3 +20,7 @@ flutter:
   assets:
     - lib/square.json
     - lib/triangle.json
+    - lib/square90.json
+    - lib/brick.json
+    - lib/diamond.json
+    - lib/hexagon.json
