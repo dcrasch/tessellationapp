@@ -51,3 +51,5 @@ inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Ico
 inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-83.5x83.5@2x.png -w167 -h167
 
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
+
+$ flutter packages pub build

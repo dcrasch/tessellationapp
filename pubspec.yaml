@@ -14,6 +14,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  barback:
+  path:
 
 flutter:
   uses-material-design: true
@@ -24,3 +26,8 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
+    - lib/icon.svg.png
+
+transformers:
+  - tessellationapp/icon_resizer:
+      $include: "lib/icon.svg"
