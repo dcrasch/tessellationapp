@@ -30,3 +30,24 @@ addpath and extended path don't join the lines
 ## Futures
 
 * https://www.dartlang.org/tutorials/language/futures
+
+## Icons
+
+Scale icons with convert inkscape script
+
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-20x20@1x.png -w20 -h20
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-20x20@2x.png -w40 -h40
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-20x20@3x.png -w60 -h60
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-29x29@1x.png -w29 -h29
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-29x29@2x.png -w58 -h58
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-29x29@3x.png -w87 -h87
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-40x40@1x.png -w40 -h40
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-40x40@2x.png -w80 -h80
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-40x40@3x.png -w120 -h120
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-60x60@2x.png -w120 -h120
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-60x60@3x.png -w180 -h180
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-76x76@1x.png -w76 -h76
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-76x76@2x.png -w152 -h152
+inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-83.5x83.5@2x.png -w167 -h167
+
+Only convert the image part not the whole page with -a 0:-6.933:320:313.067
