@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
@@ -64,6 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
             })),
         floatingActionButton: new FloatingActionButton(
             onPressed: () {
+          showDialog(
+              context: context,
+              child: new AccentColorPickerDialog());
           setState(() {
             _appDocumentsDirectory = getApplicationDocumentsDirectory();
           });
