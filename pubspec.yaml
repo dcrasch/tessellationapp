@@ -16,7 +16,7 @@ dev_dependencies:
     sdk: flutter
   barback:
   path:
-
+  flutter_color_picker: {path: flutter_color_picker-0.0.1}
 flutter:
   uses-material-design: true
   assets:
@@ -26,8 +26,7 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
-    - lib/icon.svg.png
 
-transformers:
-  - tessellationapp/icon_resizer:
-      $include: "lib/icon.svg"
+#transformers:
+#  - tessellationapp/icon_resizer:
+#      $include: "lib/icon.svg"

@@ -71,6 +71,12 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.30"
+  flutter_color_picker:
+    description:
+      path: "flutter_color_picker-0.0.1"
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter_test:
     description: flutter
     source: sdk
