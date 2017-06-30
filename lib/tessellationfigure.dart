@@ -38,10 +38,10 @@ class TessellationFigure {
     sequence = _json['sequence'];
     _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
 
-    //_colors.add(const Color(0xFF000000));
-    //_colors.add(const Color(0x00FF0000));
-    //_colors.add(const Color(0x0000FF00));
-    //_colors.add(const Color(0x00000000));
+    _colors[0]=const Color(0xFF000000);
+    _colors[1]=const Color(0x00FF0000);
+    _colors[2]=const Color(0x0000FF00);
+   _colors[3]=const Color(0x00000000);
   }
 
   Map<String, Object> toJson() {
@@ -70,9 +70,67 @@ class TessellationFigure {
     }
     return p;
   }
-
+  
+  void tessellate(Canvas canvas) {
+    final Path fp = toPath();
+    double dscale = 0.5; // @TODO !!
+    double sx = 0.0;
+    double sy = 0.0;
+    double rot = 0.0;
+    double igx = dscale * gridincx;
+    double igy = dscale * gridincy;
+    double shx = dscale * shiftx;
+    double shy = dscale * shifty;
+    double minx;
+    double maxx;
+    double miny;
+    double maxy;
+    int row = 0;
+    int color;
+    for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
+      rot = 2 * PI * currentdiv / rotdiv;
+      minx = -igx * 2;
+      maxx = 400.0 + igx;
+      miny = -igy * 2 ;
+      maxy = 300.0 + igy;
+      while (miny <= maxy) {
+        sx = minx;
+        sy = miny;
+        if (sequence == 0) {
+          color = row % 2;
+        }
+        while (sx <= maxx) {
+          if (sequence == 1) {
+            color = currentdiv - 1;
+          }
+          if ((sequence == 0) && (gridincy<gridincx)) {
+            // for hexagons
+            color = row%4;
+          }
+          canvas.save();
+          canvas.translate(sx,sy);
+          canvas.scale(dscale,dscale);
+          canvas.rotate(rot);
+          //Paint p = new Paint()..color =  todo set color
+          canvas.drawPath(fp, _paint);
+          canvas.restore();
+           sx += igx;
+           //sy += shy;
+           color++;
+        }
+        minx += shx;
+        miny += igy;
+        if (minx > -igx) {
+          minx -= igx;
+          maxy -= shy;
+        }
+        row++;
+      }
+    }
+  }
   void paint(Canvas canvas, _) {
     canvas.drawPath(toPath(), _paint);
+    tessellate(canvas);
   }
 
   void addPoint(Offset point, PointIndexPath i) {
