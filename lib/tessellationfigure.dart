@@ -73,7 +73,7 @@ class TessellationFigure {
   
   void tessellate(Canvas canvas) {
     final Path fp = toPath();
-    double dscale = 0.5; // @TODO !!
+    double dscale = 40.0; //0.5; // @TODO !!
     double sx = 0.0;
     double sy = 0.0;
     double rot = 0.0;
@@ -90,9 +90,9 @@ class TessellationFigure {
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
       rot = 2 * PI * currentdiv / rotdiv;
       minx = -igx * 2;
-      maxx = 400.0 + igx;
+      maxx = 800.0 + igx;
       miny = -igy * 2 ;
-      maxy = 300.0 + igy;
+      maxy = 1200.0 + igy;
       while (miny <= maxy) {
         sx = minx;
         sy = miny;
@@ -130,7 +130,6 @@ class TessellationFigure {
   }
   void paint(Canvas canvas, _) {
     canvas.drawPath(toPath(), _paint);
-    tessellate(canvas);
   }
 
   void addPoint(Offset point, PointIndexPath i) {

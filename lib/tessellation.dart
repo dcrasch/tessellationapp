@@ -50,6 +50,8 @@ class RenderLines extends RenderConstrainedBox {
       canvas.scale(200.0, 200.0);
       figure.paint(canvas, offset);
       canvas.restore();
+
+      figure.tessellate(canvas);
     }
     super.paint(context, offset);
   }
