@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
           showDialog(
               context: context,
-              child: new AccentColorPickerDialog());
+              child: new ColorWheelDialog());
           setState(() {
             _appDocumentsDirectory = getApplicationDocumentsDirectory();
           });

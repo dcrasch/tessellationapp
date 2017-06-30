@@ -37,6 +37,11 @@ class TessellationFigure {
     rotdiv = _json['rotdiv'];
     sequence = _json['sequence'];
     _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
+
+    //_colors.add(const Color(0xFF000000));
+    //_colors.add(const Color(0x00FF0000));
+    //_colors.add(const Color(0x0000FF00));
+    //_colors.add(const Color(0x00000000));
   }
 
   Map<String, Object> toJson() {
@@ -55,13 +60,13 @@ class TessellationFigure {
   Path toPath() {
     final Path p = new Path();
     if (_lines.length == 0) return p;
-    // todo create continues figure
     TessellationLine l1 = _lines.elementAt(0);
-    _lines.forEach((line1) => p.addPath(line1.toPath(), Offset.zero));
+    l1.addStartToPath(p);
+    _lines.forEach((line1) => line1.addToPath(p));
     if (sequence==0) {
-      _lines.forEach((line3) => p.addPath(line3.toPathC(),Offset.zero));
+      _lines.forEach((line3) => line3.addToPathC(p));
     } else {
-      _lines.reversed.forEach((line3) => p.addPath(line3.toPathC(), Offset.zero));
+      _lines.reversed.forEach((line3) => line3.addToPathC(p));
     }
     return p;
   }

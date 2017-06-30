@@ -69,39 +69,24 @@ class TessellationLine {
     return _points;
   }
 
-  Path toFirstPoint() {
-    final Path p = new Path();
-    if (_points.length == 0) return p;
+  void addStartToPath(Path p) {
+    if (_points.length == 0) return;
     Offset p1 = _points.elementAt(0);
-    p.moveTo(p1.dx,p1.dy);
-    return p;
+    p.moveTo(p1.dx, p1.dy);
   }
 
-  Path toPath() {
-    final Path p = new Path();
-    if (_points.length == 0) return p;
-    Offset first = _points.elementAt(0);
-    p.moveTo(first.dx, first.dy);
-
+  void addToPath(Path p) {
+    if (_points.length == 0) return;
     for (Offset p2 in _points) {
       p.lineTo(p2.dx, p2.dy);
     }
-    return p;
   }
 
-  Path toPathC() {
-    // fix initial start at zero
-    final Path px = new Path();
-    if (_points.length == 0) return px;
-    Offset first = _points.elementAt(0);
-    Offset p4x = MatrixUtils.transformPoint(transform, first);
-    px.moveTo(p4x.dx, p4x.dy);
-
-    for (Offset p3 in _points) {
+  void addToPathC(Path p) {
+    for (Offset p3 in _points.reversed) {
       Offset p4 = MatrixUtils.transformPoint(transform, p3);
-      px.lineTo(p4.dx, p4.dy);
+      p.lineTo(p4.dx, p4.dy);
     }
-    return px;
   }
 
   bool breakline(Offset p1, Offset p2, Offset current, double rectsize) {

@@ -18,6 +18,7 @@ init matrix with identity matrix! otherwise 0 scale!
 rotateZ is 2d rotate on flat paper
 addpath and extended path don't join the lines
 
+
 ### Read and Parse files
 * https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
 * https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/gallery/example_code_parser.dart
@@ -53,3 +54,16 @@ inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Ico
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
 
 $ flutter packages pub build
+
+Colorwheel
+==============
+https://github.com/chiralcode/Android-Color-Picker/blob/master/src/com/chiralcode/colorpicker/ColorPicker.java
+
+SweepGradient sweepGradient = new SweepGradient(width / 2, height / 2, colors, null);
+RadialGradient radialGradient = new RadialGradient(width / 2, height / 2, colorWheelRadius, 0xFFFFFFFF, 0x00FFFFFF, TileMode.CLAMP);
+ComposeShader composeShader = new ComposeShader(sweepGradient, radialGradient, PorterDuff.Mode.SRC_OVER);
+ colorWheelPaint.setShader(composeShader);
+canvas.drawCircle(width / 2, height / 2, colorWheelRadius, colorWheelPaint);
+file:///Users/david/flutter/dev/docs/doc/flutter/dart-ui/Gradient-class.html
+  
+  
