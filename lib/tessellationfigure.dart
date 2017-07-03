@@ -11,15 +11,14 @@ import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'tessellationline.dart';
 
 class TessellationFigure {
-  TessellationFigure() {
+  TessellationFigure() {}
 
-  }
-
-  final Paint _paint = new Paint()..color = const Color(0xFFFFFF00)
+  final Paint _paint = new Paint()
+    ..color = const Color(0xFFFFFF00)
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0/50;
+    ..strokeWidth = 2.0 / 50;
 
-  double rectsize = 2.0/50;
+  double rectsize = 2.0 / 50;
 
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
@@ -36,15 +35,21 @@ class TessellationFigure {
     shifty = _json['shifty'];
     rotdiv = _json['rotdiv'];
     sequence = _json['sequence'];
-    _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
+    _lines = _json['lines']
+        .map((value) => new TessellationLine.fromJson(value))
+        .toList();
 
-    _colors[0]=new Paint()..color = const Color(0xFFFFFFFF)
+    _colors[0] = new Paint()
+      ..color = const Color(0xFFFFFFFF)
       ..style = PaintingStyle.fill;
-    _colors[1]=new Paint()..color = const Color(0xFF0000FF)
+    _colors[1] = new Paint()
+      ..color = const Color(0xFF0000FF)
       ..style = PaintingStyle.fill;
-    _colors[2]=new Paint()..color = const Color(0xFF000033)
+    _colors[2] = new Paint()
+      ..color = const Color(0xFF000033)
       ..style = PaintingStyle.fill;
-    _colors[3]=new Paint()..color = const Color(0xFFFF0000)
+    _colors[3] = new Paint()
+      ..color = const Color(0xFFFF0000)
       ..style = PaintingStyle.fill;
   }
 
@@ -67,7 +72,7 @@ class TessellationFigure {
     TessellationLine l1 = _lines.elementAt(0);
     l1.addStartToPath(p);
     _lines.forEach((line1) => line1.addToPath(p));
-    if (sequence==0) {
+    if (sequence == 0) {
       _lines.forEach((line3) => line3.addToPathC(p));
     } else {
       _lines.reversed.forEach((line3) => line3.addToPathC(p));
@@ -95,7 +100,7 @@ class TessellationFigure {
       rot = 2 * PI * currentdiv / rotdiv;
       minx = -igx * 2;
       maxx = 800.0 + igx;
-      miny = -igy * 2 ;
+      miny = -igy * 2;
       maxy = 1200.0 + igy;
       while (miny <= maxy) {
         sx = minx;
@@ -107,16 +112,15 @@ class TessellationFigure {
           if (sequence == 1) {
             color = currentdiv - 1;
           }
-          if ((sequence == 0) &&
-              (gridincy<gridincx)) {
+          if ((sequence == 0) && (gridincy < gridincx)) {
             // for hexagons
-            color = row%4;
+            color = row % 4;
           }
           canvas.save();
-          canvas.translate(sx,sy);
-          canvas.scale(dscale,dscale);
+          canvas.translate(sx, sy);
+          canvas.scale(dscale, dscale);
           canvas.rotate(rot);
-          Paint p = _colors[color%4];
+          Paint p = _colors[color % 4];
           canvas.drawPath(fp, p);
           canvas.restore();
           sx += igx;
@@ -142,11 +146,10 @@ class TessellationFigure {
     Offset p1;
     if (i.corrp) {
       p1 = _lines[i.lineIndex].correspondingpoint(point);
-    }
-    else {
+    } else {
       p1 = point;
     }
-    _lines[i.lineIndex].insertPointAt(i.pointIndex,p1);
+    _lines[i.lineIndex].insertPointAt(i.pointIndex, p1);
   }
 
   PointIndexPath leftcreate(Offset point) {
@@ -154,7 +157,7 @@ class TessellationFigure {
     PointIndexPath selectedpointindex;
     for (TessellationLine line in _lines) {
       selectedpointindex = line.hitline(point, rectsize);
-      if (selectedpointindex != null ) {
+      if (selectedpointindex != null) {
         selectedpointindex.lineIndex = counter;
         return selectedpointindex;
       }
@@ -168,7 +171,7 @@ class TessellationFigure {
     PointIndexPath selectedpointindex;
     for (TessellationLine line in _lines) {
       selectedpointindex = line.hitendpoint(point, rectsize);
-      if (selectedpointindex != null ) {
+      if (selectedpointindex != null) {
         selectedpointindex.lineIndex = counter;
         return selectedpointindex;
       }
@@ -182,8 +185,7 @@ class TessellationFigure {
     if (i != null) {
       if (i.corrp) {
         p1 = _lines[i.lineIndex].correspondingpoint(point);
-      }
-      else {
+      } else {
         p1 = point;
       }
       _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
