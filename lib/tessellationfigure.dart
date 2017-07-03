@@ -74,7 +74,7 @@ class TessellationFigure {
     }
     return p;
   }
-  
+
   void tessellate(Canvas canvas) {
     final Path fp = toPath();
     double dscale = 80.0; //0.5; // @TODO !!
@@ -107,7 +107,8 @@ class TessellationFigure {
           if (sequence == 1) {
             color = currentdiv - 1;
           }
-          if ((sequence == 0) && (gridincy<gridincx)) {
+          if ((sequence == 0) &&
+              (gridincy<gridincx)) {
             // for hexagons
             color = row%4;
           }
@@ -115,12 +116,12 @@ class TessellationFigure {
           canvas.translate(sx,sy);
           canvas.scale(dscale,dscale);
           canvas.rotate(rot);
-          Paint p = _colors[color%2];
+          Paint p = _colors[color%4];
           canvas.drawPath(fp, p);
           canvas.restore();
-           sx += igx;
-           //sy += shy;
-           color++;
+          sx += igx;
+          //sy += shy;
+          color++;
         }
         minx += shx;
         miny += igy;
@@ -132,6 +133,7 @@ class TessellationFigure {
       }
     }
   }
+
   void paint(Canvas canvas, _) {
     canvas.drawPath(toPath(), _paint);
   }
