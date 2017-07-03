@@ -38,14 +38,18 @@ class TessellationFigure {
     sequence = _json['sequence'];
     _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
 
-    _colors[0]=const Color(0xFF000000);
-    _colors[1]=const Color(0x00FF0000);
-    _colors[2]=const Color(0x0000FF00);
-   _colors[3]=const Color(0x00000000);
+    _colors[0]=new Paint()..color = const Color(0xFF000000)
+      ..style = PaintingStyle.fill;
+    _colors[1]=new Paint()..color = const Color(0xFF0000FF)
+      ..style = PaintingStyle.fill;
+    _colors[2]=new Paint()..color = const Color(0xFF000033)
+      ..style = PaintingStyle.fill;
+    _colors[3]=new Paint()..color = const Color(0xFFFF0000)
+      ..style = PaintingStyle.fill;
   }
 
-  Map<String, Object> toJson() {
-    final Map<String, Object> _json = new Map<String, Object>();
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _json = new Map<String, dynamic>();
     _json['description'] = description;
     _json['gridincx'] = gridincx;
     _json['gridincy'] = gridincy;
@@ -111,8 +115,8 @@ class TessellationFigure {
           canvas.translate(sx,sy);
           canvas.scale(dscale,dscale);
           canvas.rotate(rot);
-          //Paint p = new Paint()..color =  todo set color
-          canvas.drawPath(fp, _paint);
+          Paint p = _colors[color%2];
+          canvas.drawPath(fp, p);
           canvas.restore();
            sx += igx;
            //sy += shy;

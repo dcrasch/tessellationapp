@@ -33,16 +33,19 @@ class TessellationLine {
       ..translate(_json['tx'], _json['ty'])
       ..rotateZ(_json['angle']/180.0*PI);
     ci = new Matrix4.inverted(transform);
+    human_angle = _json['angle'];
     _points = _json['points'].map((value) => new Offset(value['x'],value['y'])).toList();
   }
 
-  
-  Map<String, Object> toJson() {
-    final Map<String, Object> _json = new Map<String, Object>();
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _json = new Map<String, dynamic>();
     Vector3 translation = transform.getTranslation();
-    //_json['tx'] = translation.x
-    //_json['ty'] = translation.y
+    _json['tx'] = translation[0];
+    _json['ty'] = translation[1];
+    _json['angle'] = human_angle;
     _json['points'] = _points.map((value) => {'x':value.dx, 'y':value.dy });
+    return _json;
   }
 
   void addPoint(Offset point) {

@@ -38,11 +38,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<Directory> _appDocumentsDirectory;
   Future<TessellationFigure> _getSquare(AssetBundle bundle) async {
-    final String code = await bundle.loadString('lib/hexagon.json') ?? "failed";
+    final String code = await bundle.loadString('lib/triangle.json') ?? "failed";
     final JsonDecoder decoder = new JsonDecoder();
-    final Map<String, dynamic> result = decoder.convert(code);    
+    final Map<String, dynamic> result = decoder.convert(code);
     return new TessellationFigure.fromJson(result);
   }
+
   Future<TessellationFigure> _getTriangle(AssetBundle bundle) async {
     final String code = await bundle.loadString('lib/triangle.json') ?? "failed";
     final JsonDecoder decoder = new JsonDecoder();

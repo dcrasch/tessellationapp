@@ -1,4 +1,5 @@
 {
+    "description" : "square90",
     "gridincx": 2.0,
     "gridincy": 2.0,
     "lines": [

@@ -1,4 +1,5 @@
 {
+    "description" : "hexagon",
     "gridincx": 3.73205,
     "gridincy": 0.866025,
     "lines": [
