@@ -45,13 +45,14 @@ class RenderLines extends RenderConstrainedBox {
     final Canvas canvas = context.canvas;
     canvas.drawRect(offset & size, new Paint()..color = const Color(0xFFFFFFFF));
     if (figure != null) {
+      figure.tessellate(canvas);
       canvas.save();
       canvas.translate(100.0, 150.0);
       canvas.scale(200.0, 200.0);
       figure.paint(canvas, offset);
       canvas.restore();
 
-      figure.tessellate(canvas);
+      
     }
     super.paint(context, offset);
   }

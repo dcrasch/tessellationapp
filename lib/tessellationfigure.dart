@@ -15,7 +15,7 @@ class TessellationFigure {
 
   }
 
-  final Paint _paint = new Paint()..color = const Color(0xFF00FF00)
+  final Paint _paint = new Paint()..color = const Color(0xFFFFFF00)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0/50;
 
@@ -38,7 +38,7 @@ class TessellationFigure {
     sequence = _json['sequence'];
     _lines = _json['lines'].map((value) => new TessellationLine.fromJson(value)).toList();
 
-    _colors[0]=new Paint()..color = const Color(0xFF000000)
+    _colors[0]=new Paint()..color = const Color(0xFFFFFFFF)
       ..style = PaintingStyle.fill;
     _colors[1]=new Paint()..color = const Color(0xFF0000FF)
       ..style = PaintingStyle.fill;
@@ -77,7 +77,7 @@ class TessellationFigure {
   
   void tessellate(Canvas canvas) {
     final Path fp = toPath();
-    double dscale = 40.0; //0.5; // @TODO !!
+    double dscale = 80.0; //0.5; // @TODO !!
     double sx = 0.0;
     double sy = 0.0;
     double rot = 0.0;
