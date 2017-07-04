@@ -159,7 +159,20 @@ class TessellationLine {
   }
 
   Rect fitrect() {
-    // TODO
+    Offset minPoint = _points[0];
+    Ofsset maxPoint = _points[0];
+    for (Offset current in _points) {
+      maxPoint.dx = math.max(current.dx, maxPoint.dx);
+      maxPoint.dy = math.max(current.dy, maxPoint.dy);
+      minPoint.dx = math.min(current.dx, minPoint.dx);
+      minPoint.dy = math.min(current.dy, minPoint.dy);
+      Offset cpoint = correspondingpoint(current);
+      maxPoint.dx = math.max(cpoint.dx, maxPoint.dx);
+      maxPoint.dy = math.max(cpoint.dy, maxPoint.dy);
+      minPoint.dx = math.min(cpoint.dx, minPoint.dx);
+      minPoint.dy = math.min(cpoint.dy, minPoint.dy);
+    }
+    return new Rect.fromPoints(minPoint, maxPoint);
   }
 
   Offset correspondingpoint(Offset p1) {

@@ -198,4 +198,13 @@ class TessellationFigure {
     Offset point = _lines[i.lineIndex].getPointAt(i.pointIndex);
     return point;
   }
+
+  Rect fit() {
+    TessellationLine line1 = _lines[0];
+    Rect q = line1.fitrect();
+    for (TessellationLine line in _lines) {
+      q = q.intersect(line.fitrect); // union???
+    }
+    return q;
+  }
 }
