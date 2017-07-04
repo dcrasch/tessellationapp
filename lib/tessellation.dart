@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
@@ -6,11 +7,17 @@ import 'tessellationfigure.dart';
 import 'tessellationline.dart';
 
 class RenderLines extends RenderConstrainedBox {
-  RenderLines(this.figure)
-      : super(additionalConstraints: const BoxConstraints.expand());
-
+  RenderLines(this.figure) {
+//    super(additionalConstraints: const BoxConstraints.expand());
+    transform = new Matrix4.identity()
+      ..translate(100.0,150.0)
+      ..scale(200.0);    
+  }
   TessellationFigure figure;
   PointIndexPath selectedPoint;
+  
+  Matrix4 transform = new Matrix4.identity();
+  Matrix4 ci = Matrix4.identity();
 
   @override
   bool hitTestSelf(Offset position) => true;
@@ -46,6 +53,7 @@ class RenderLines extends RenderConstrainedBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
+    print(size);
     canvas.drawRect(
         offset & size, new Paint()..color = const Color(0xFFFFFFFF));
     if (figure != null) {

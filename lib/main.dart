@@ -9,6 +9,7 @@ import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
+import 'tessellationlist.dart';
 
 void main() {
   runApp(new MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: new MyHomePage(title: 'Tessellation'),
+      //home:  new ListDemo(),
     );
   }
 }
