@@ -80,7 +80,7 @@ class TessellationFigure {
     return p;
   }
 
-  void tessellate(Canvas canvas) {
+  void tessellate(Canvas canvas, Rect rect) {
     final Path fp = toPath();
     double dscale = 80.0; //0.5; // @TODO !!
     double sx = 0.0;
@@ -96,12 +96,14 @@ class TessellationFigure {
     double maxy;
     int row = 0;
     int color;
+    double screenwidth=rect.width;
+    double screenheight=rect.height;
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
       rot = 2 * PI * currentdiv / rotdiv;
       minx = -igx * 2;
-      maxx = 800.0 + igx;
+      maxx = screenwidth + igx;
       miny = -igy * 2;
-      maxy = 1200.0 + igy;
+      maxy = screenheight + igy;
       while (miny <= maxy) {
         sx = minx;
         sy = miny;
