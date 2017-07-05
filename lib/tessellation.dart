@@ -7,26 +7,23 @@ import 'tessellationfigure.dart';
 import 'tessellationline.dart';
 
 class RenderLines extends RenderConstrainedBox {
-  RenderLines(this.figure) {
-//    super(additionalConstraints: const BoxConstraints.expand());
-    transform = new Matrix4.identity()
-      ..translate(100.0,150.0)
-      ..scale(200.0);    
-  }
+  RenderLines(this.figure) : super(additionalConstraints: const BoxConstraints.expand());
+
   TessellationFigure figure;
   PointIndexPath selectedPoint;
   
-  Matrix4 transform = new Matrix4.identity();
-  Matrix4 ci = Matrix4.identity();
+  Matrix4 transform = new Matrix4.identity()
+    ..translate(100.0,150.0)
+    ..scale(200.0);
+  Matrix4 ci = new Matrix4.identity();
 
   @override
   bool hitTestSelf(Offset position) => true;
 
   @override
   void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
-    Offset touchPoint = new Offset((event.position.dx - 100.0) / 200.0,
-        (event.position.dy - 150.0) / 200.0);
-
+    ci = new Matrix4.inverted(transform);
+    Offset touchPoint = MatrixUtils.transformPoint(ci, event.position);
     if (event is PointerDownEvent) {
       selectedPoint = figure.leftdown(touchPoint);
       if (selectedPoint != null) {
@@ -59,8 +56,7 @@ class RenderLines extends RenderConstrainedBox {
     if (figure != null) {
       figure.tessellate(canvas);
       canvas.save();
-      canvas.translate(100.0, 150.0);
-      canvas.scale(200.0, 200.0);
+      canvas.transform(transform.storage);
       figure.paint(canvas, offset);
       canvas.restore();
     }
