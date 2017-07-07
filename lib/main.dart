@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Tessellation'),
-      //home:  new ListDemo(),
+      //home: new MyHomePage(title: 'Tessellation'),
+      home:  new ListDemo(),
     );
   }
 }
@@ -57,13 +57,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('Tessellation')),
+      appBar: new AppBar(title: const Text('Tessellation'),
+                         actions: <Widget>[
+                         new IconButton(
+                             icon: const Icon(Icons.fullscreen),
+                             onPressed : () {
+                           //
+                         }
+                                        )
+                         ]
+                         ),
       body: new Center(
           child: new FutureBuilder<TessellationFigure>(
               future: _getSquare(DefaultAssetBundle.of(context)),
               builder: (BuildContext context,
                   AsyncSnapshot<TessellationFigure> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
+                  TessellationFigure f = snapshot.data;
                   return new LinesWidget(figure: snapshot.data);
                 } else {
                   return const Text('You have not yet pressed the button');
