@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'tessellationeditor.dart';
 
 class ListDemo extends StatefulWidget {
   const ListDemo({Key key}) : super(key: key);
@@ -34,6 +35,13 @@ class _ListDemoState extends State<ListDemo> {
     });
   }
 
+  void showFigure(BuildContext context, String filename) {
+    Navigator.push(context, new MaterialPageRoute<Null>(
+            builder: (BuildContext context) {
+        return new MyHomePage(title: filename);
+      }));
+  }
+
   Future<List<String>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     List<String> myitems = <String>[];
@@ -46,6 +54,10 @@ class _ListDemoState extends State<ListDemo> {
   Widget buildListTile(BuildContext context, String item) {
     return new ListTile(
       title: new Text('This item represents $item.'),
+      onTap: () {
+      showFigure(context, item);
+
+      }
                         );
   }
 
