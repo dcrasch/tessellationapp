@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 class ListDemo extends StatefulWidget {
@@ -22,10 +26,27 @@ class _ListDemoState extends State<ListDemo> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      items.add('A');
-      items.add('B');
+
+    //_getItems().then((List<String> l) {
+    //  setState(() {
+    //    items = l;
+    //  });
+    //});
+    getApplicationDocumentsDirectory().then((Directory d) {
+      print(d.path);
+      setState(() {
+        items = [];
+      });
     });
+  }
+
+  Future<List<String>> _getItems() async {
+    Directory appDir = await getApplicationDocumentsDirectory();
+    List<String> myitems = <String>[];
+    for (FileSystemEntity file in appDir.listSync(recursive: true)) {
+      myitems.add(file.path);
+    }
+    return myitems;
   }
 
   Widget buildListTile(BuildContext context, String item) {
