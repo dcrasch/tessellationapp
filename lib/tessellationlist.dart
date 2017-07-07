@@ -27,15 +27,9 @@ class _ListDemoState extends State<ListDemo> {
   void initState() {
     super.initState();
 
-    //_getItems().then((List<String> l) {
-    //  setState(() {
-    //    items = l;
-    //  });
-    //});
-    getApplicationDocumentsDirectory().then((Directory d) {
-      print(d.path);
+    _getItems().then((List<String> l) {
       setState(() {
-        items = [];
+        items = l;
       });
     });
   }

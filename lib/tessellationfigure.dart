@@ -62,7 +62,7 @@ class TessellationFigure {
     _json['shifty'] = shifty;
     _json['rotdiv'] = rotdiv;
     _json['sequence'] = sequence;
-    _json['lines'] = _lines.map((value) => value.toJson());
+    _json['lines'] = _lines.map((value) => value.toJson()).toList();
     return _json;
   }
 

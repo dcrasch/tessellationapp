@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: new MyHomePage(title: 'Tessellation'),
-      home:  new ListDemo(),
+      home: new MyHomePage(title: 'Tessellation'),
+      //home:  new ListDemo(),
     );
   }
 }
@@ -54,6 +54,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return new TessellationFigure.fromJson(result);
   }
 
+  Future<File> _getLocalFile() async {
+    // get the path to the document directory.
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String figurefile = '$dir/figure.json';
+    print(figurefile);
+    return new File(figurefile);
+  }
+
+  Future<Null> _saveFigure(TessellationFigure figure) async {
+    final JsonEncoder encoder = new JsonEncoder();
+    final String code = encoder.convert(figure.toJson());
+    await (await _getLocalFile()).writeAsString(code);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -74,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   AsyncSnapshot<TessellationFigure> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   TessellationFigure f = snapshot.data;
+                  _saveFigure(f);
                   return new LinesWidget(figure: snapshot.data);
                 } else {
                   return const Text('You have not yet pressed the button');
@@ -81,10 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
               })),
       floatingActionButton: new FloatingActionButton(
           onPressed: () {
-            showDialog(context: context, child: new ColorWheelDialog());
-            setState(() {
-              _appDocumentsDirectory = getApplicationDocumentsDirectory();
-            });
+            //showDialog(context: context, child: new ColorWheelDialog());
+            //setState(() {
+            //  _appDocumentsDirectory = getApplicationDocumentsDirectory();
+            //});
+            //_saveFigure();
           },
           tooltip: '',
           child: const Text('+')),

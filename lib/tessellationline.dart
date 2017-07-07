@@ -46,7 +46,7 @@ class TessellationLine {
     _json['tx'] = translation[0];
     _json['ty'] = translation[1];
     _json['angle'] = human_angle;
-    _json['points'] = _points.map((value) => {'x': value.dx, 'y': value.dy});
+    _json['points'] = _points.map((value) => {'x': value.dx, 'y': value.dy}).toList();
     return _json;
   }
 
