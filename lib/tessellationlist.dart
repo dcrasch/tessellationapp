@@ -79,11 +79,20 @@ class _ListDemoState extends State<ListDemo> {
             //
               }
           ),
-          new IconButton(
-            icon: const Icon(Icons.more_vert),
-            tooltip: 'Show menu',
-//            onPressed: _bottomSheet == null ? _showConfigurationSheet : null,
-          ),
+          new PopupMenuButton<String>(
+              onSelected: (String value) {
+            print(value); },
+              itemBuilder : (BuildContext context) =>
+              <PopupMenuItem<String>>[
+                const PopupMenuItem<String>(
+                    value: 'Export SVG',
+                    child: const Text('Export SVG')
+                                            ),
+                const PopupMenuItem<String>(
+                    value: 'Share',
+                    child: const Text('Share')
+                                            ),
+                ]),
         ],
       ),
       body: new Scrollbar(
