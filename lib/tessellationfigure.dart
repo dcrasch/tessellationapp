@@ -96,8 +96,8 @@ class TessellationFigure {
     double maxy;
     int row = 0;
     int color;
-    double screenwidth=rect.width;
-    double screenheight=rect.height;
+    double screenwidth = rect.width;
+    double screenheight = rect.height;
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
       rot = 2 * PI * currentdiv / rotdiv;
       minx = -igx * 2;

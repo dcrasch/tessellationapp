@@ -7,13 +7,14 @@ import 'tessellationfigure.dart';
 import 'tessellationline.dart';
 
 class RenderLines extends RenderConstrainedBox {
-  RenderLines(this.figure) : super(additionalConstraints: const BoxConstraints.expand());
+  RenderLines(this.figure)
+      : super(additionalConstraints: const BoxConstraints.expand());
 
   TessellationFigure figure;
   PointIndexPath selectedPoint;
-  
+
   Matrix4 transform = new Matrix4.identity()
-    ..translate(100.0,150.0)
+    ..translate(100.0, 150.0)
     ..scale(200.0);
   Matrix4 ci = new Matrix4.identity();
 
@@ -54,7 +55,7 @@ class RenderLines extends RenderConstrainedBox {
         offset & size, new Paint()..color = const Color(0xFFFFFFFF));
     if (figure != null) {
       Rect rect = offset & size;
-      figure.tessellate(canvas,rect);
+      figure.tessellate(canvas, rect);
       canvas.save();
       canvas.transform(transform.storage);
       figure.paint(canvas, offset);

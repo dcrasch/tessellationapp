@@ -52,16 +52,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('Tessellation'),
-                         actions: <Widget>[
-                         new IconButton(
-                             icon: const Icon(Icons.fullscreen),
-                             onPressed : () {
-                           //
-                         }
-                                        )
-                         ]
-                         ),
+      appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
+        new IconButton(
+            icon: const Icon(Icons.fullscreen),
+            onPressed: () {
+              //
+            })
+      ]),
       body: new Center(
           child: new FutureBuilder<TessellationFigure>(
               future: _getSquare(DefaultAssetBundle.of(context)),

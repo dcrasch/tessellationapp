@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: new MyHomePage(title: 'Tessellation'),
-      home:  new ListDemo(),
+      home: new ListDemo(),
     );
   }
 }
