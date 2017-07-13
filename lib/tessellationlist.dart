@@ -81,6 +81,9 @@ class _TessellationListState extends State<TessellationList> {
                 showDialog<String>(
                         context: context, child: new TessellationCreate())
                     .then((TessellationFigure f) {
+                  setState(() {
+                    items.add(f);
+                  });
                   showFigure(context, f);
                 });
               }),

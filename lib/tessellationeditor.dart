@@ -22,17 +22,21 @@ class FigurePage extends StatefulWidget {
 class _FigurePageState extends State<FigurePage> {
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
-    DateTime _nu = new DateTime.now();
-    String guid = _nu.toString();
-    String filename = "${appDir.path}/${guid}.json";
+    String filename = "${appDir.path}/${widget.figure.uuid}.json";
     return new File(filename);
   }
 
   Future<Null> _saveFigure() async {
+    if (widget.figure.uuid.isEmpty) {
+      DateTime _nu = new DateTime.now();
+      widget.figure.uuid = _nu.toString();
+    }
     final JsonEncoder encoder = new JsonEncoder();
     String code = encoder.convert(widget.figure.toJson());
     await (await _getLocalFile()).writeAsString(code);
   }
+
+  Future<Null> _resizeFigure() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,15 @@ class _FigurePageState extends State<FigurePage> {
         new IconButton(
           icon: const Icon(Icons.save),
           onPressed: _saveFigure,
-        )
+        ),
+        new IconButton(
+          icon: const Icon(Icons.fullscreen),
+          onPressed: _resizeFigure,
+        ),
+        new IconButton(
+          icon: const Icon(Icons.palette),
+          onPressed: _resizeFigure,
+        ),
       ]),
       body: new Center(child: new LinesWidget(figure: widget.figure)),
     );

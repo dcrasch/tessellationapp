@@ -38,6 +38,8 @@ class TessellationFigure {
     sequence = _json['sequence'];
     if (_json.containsKey('uuid')) {
       uuid = _json['uuid'];
+    } else {
+      uuid = '';
     }
 
     _lines = _json['lines']
@@ -61,6 +63,7 @@ class TessellationFigure {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _json = new Map<String, dynamic>();
     _json['description'] = description;
+    _json['uuid'] = uuid;
     _json['gridincx'] = gridincx;
     _json['gridincy'] = gridincy;
     _json['shiftx'] = shiftx;
