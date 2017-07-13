@@ -25,6 +25,7 @@ class TessellationFigure {
   List<TessellationLine> _lines = new List<TessellationLine>();
   List<Color> _colors = new List(4);
   String description;
+  String uuid;
 
   TessellationFigure.fromJson(Map _json) {
     // TODO check for types
@@ -35,6 +36,10 @@ class TessellationFigure {
     shifty = _json['shifty'];
     rotdiv = _json['rotdiv'];
     sequence = _json['sequence'];
+    if (_json.containsKey('uuid')) {
+      uuid = _json['uuid'];
+    }
+
     _lines = _json['lines']
         .map((value) => new TessellationLine.fromJson(value))
         .toList();
