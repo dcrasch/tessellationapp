@@ -19,27 +19,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<Directory> _appDocumentsDirectory;
-  Future<TessellationFigure> _getSquare(AssetBundle bundle) async {
-    final String code = await bundle.loadString('lib/diamond.json') ?? "failed";
-    final JsonDecoder decoder = new JsonDecoder();
-    final Map<String, dynamic> result = decoder.convert(code);
-    return new TessellationFigure.fromJson(result);
-  }
 
-  Future<TessellationFigure> _getTriangle(AssetBundle bundle) async {
-    final String code =
-        await bundle.loadString('lib/triangle.json') ?? "failed";
-    final JsonDecoder decoder = new JsonDecoder();
-    final Map<String, dynamic> result = decoder.convert(code);
-    return new TessellationFigure.fromJson(result);
-  }
+  Future<Directory> _appDocumentsDirectory;
 
   Future<File> _getLocalFile() async {
     // get the path to the document directory.
     String dir = (await getApplicationDocumentsDirectory()).path;
     String figurefile = '$dir/figure.json';
-    print(figurefile);
     return new File(figurefile);
   }
 
@@ -61,17 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ]),
       body: new Center(
           child: new FutureBuilder<TessellationFigure>(
-              future: _getSquare(DefaultAssetBundle.of(context)),
-              builder: (BuildContext context,
-                  AsyncSnapshot<TessellationFigure> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  TessellationFigure f = snapshot.data;
-                  //_saveFigure(f);
-                  return new LinesWidget(figure: snapshot.data);
-                } else {
-                  return const Text('You have not yet pressed the button');
-                }
-              })),
+              return new LinesWidget(figure: figure);
+                                                       )),
       floatingActionButton: new FloatingActionButton(
           onPressed: () {
             //showDialog(context: context, child: new ColorWheelDialog());

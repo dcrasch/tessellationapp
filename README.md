@@ -67,3 +67,16 @@ canvas.drawCircle(width / 2, height / 2, colorWheelRadius, colorWheelPaint);
 file:///Users/david/flutter/dev/docs/doc/flutter/dart-ui/Gradient-class.html
   
   
+PictureRecorder 
+ canvas
+picturerecorder -> picture
+picture -> image
+
+
+image -> to a fricking png!!
+https://github.com/flutter/flutter/issues/6774
+toByteData save!
+
+todo
+----
+write assetfigure?? extended from assetbundle,(like image bundle)>
