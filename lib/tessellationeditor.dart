@@ -12,7 +12,7 @@ import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 
 class FigurePage extends StatefulWidget {
-  FigurePage({Key key, this.title, this.figure }) : super(key: key);
+  FigurePage({Key key, this.title, this.figure}) : super(key: key);
   final String title;
   TessellationFigure figure;
   @override
@@ -20,21 +20,30 @@ class FigurePage extends StatefulWidget {
 }
 
 class _FigurePageState extends State<FigurePage> {
+  Future<File> _getLocalFile() async {
+    Directory appDir = await getApplicationDocumentsDirectory();
+    DateTime _nu = new DateTime.now();
+    String guid = _nu.toString();
+    String filename = "${appDir.path}/${guid}.json";
+    return new File(filename);
+  }
+
+  Future<Null> _saveFigure() async {
+    final JsonEncoder encoder = new JsonEncoder();
+    String code = encoder.convert(widget.figure.toJson());
+    await (await _getLocalFile()).writeAsString(code);
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('Tessellation'), 
-          actions: <Widget>[
+      appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
         new IconButton(
-            icon: const Icon(Icons.fullscreen),
-            onPressed: () {
-              // delegate to widget.figure??
-            })
+          icon: const Icon(Icons.save),
+          onPressed: _saveFigure,
+        )
       ]),
-      body: new Center(
-          child: new LinesWidget(figure: widget.figure)
-                       ),
+      body: new Center(child: new LinesWidget(figure: widget.figure)),
     );
   }
 }

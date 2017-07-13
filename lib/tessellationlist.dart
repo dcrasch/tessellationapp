@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ class _TessellationListState extends State<TessellationList> {
   @override
   void initState() {
     super.initState();
-
     _getItems().then((List<TessellationFigure> l) {
       setState(() {
         items = l;
@@ -36,30 +36,22 @@ class _TessellationListState extends State<TessellationList> {
   void showFigure(BuildContext context, TessellationFigure f) {
     Navigator.push(context,
         new MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return new FigurePage(figure:f);
+      return new FigurePage(figure: f);
     }));
   }
 
-  Future<List<String>> _getItems() async {
+  Future<List<TessellationFigure>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     List<TessellationFigure> myitems = <TessellationFigure>[];
     for (FileSystemEntity file in appDir.listSync(recursive: true)) {
-      //final String code = await bundle.loadString(file.path) ?? "failed";
-      //final JsonDecoder decoder = new JsonDecoder();    
-      //final Map<String, dynamic> result = decoder.convert(code);
-      //return new TessellationFigure.fromJson(result);
-      //myitems.add(await);
+      // TODO skip failed
+      String code = await file.readAsString();
+      final JsonDecoder decoder = new JsonDecoder();
+      final Map<String, dynamic> result = decoder.convert(code);
+      TessellationFigure f = new TessellationFigure.fromJson(result);
+      myitems.add(f);
     }
     return myitems;
-  }
-
-  Future<Null> _createFigure(String figurename) async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String guid = new DateTime.now().format();
-    String filename = "${appDir}/${guid}.json";
-    final String code =
-        await bundle.loadString('lib/${figurename}.json') ?? "failed";
-    await (new File(filename).writeAsString(code));
   }
 
   Widget buildListTile(BuildContext context, TessellationFigure f) {
@@ -85,14 +77,14 @@ class _TessellationListState extends State<TessellationList> {
               tooltip: 'Add',
               onPressed: () {
                 showDialog<String>(
-                    context: context,
-                    child: new TessellationCreate()).then((TessellationFigure f) {
-                      showFigure(context,f);
+                        context: context, child: new TessellationCreate())
+                    .then((TessellationFigure f) {
+                  showFigure(context, f);
                 });
               }),
           new PopupMenuButton<String>(
               onSelected: (String value) {
-                print(value);
+                // TODO
               },
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                     const PopupMenuItem<String>(
