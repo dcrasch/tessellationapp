@@ -11,53 +11,30 @@ import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class FigurePage extends StatefulWidget {
+  FigurePage({Key key, this.title, this.figure }) : super(key: key);
   final String title;
+  TessellationFigure figure;
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _FigurePageState createState() => new _FigurePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  Future<Directory> _appDocumentsDirectory;
-
-  Future<File> _getLocalFile() async {
-    // get the path to the document directory.
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String figurefile = '$dir/figure.json';
-    return new File(figurefile);
-  }
-
-  Future<Null> _saveFigure(TessellationFigure figure) async {
-    final JsonEncoder encoder = new JsonEncoder();
-    final String code = encoder.convert(figure.toJson());
-    await (await _getLocalFile()).writeAsString(code);
-  }
+class _FigurePageState extends State<FigurePage> {
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
+      appBar: new AppBar(title: const Text('Tessellation'), 
+          actions: <Widget>[
         new IconButton(
             icon: const Icon(Icons.fullscreen),
             onPressed: () {
-              //
+              // delegate to widget.figure??
             })
       ]),
       body: new Center(
-          child: new FutureBuilder<TessellationFigure>(
-              return new LinesWidget(figure: figure);
-                                                       )),
-      floatingActionButton: new FloatingActionButton(
-          onPressed: () {
-            //showDialog(context: context, child: new ColorWheelDialog());
-            //setState(() {
-            //  _appDocumentsDirectory = getApplicationDocumentsDirectory();
-            //});
-          },
-          tooltip: '',
-          child: const Text('+')),
+          child: new LinesWidget(figure: widget.figure)
+                       ),
     );
   }
 }

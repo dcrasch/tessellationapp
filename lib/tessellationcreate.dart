@@ -9,11 +9,10 @@ import 'package:flutter/services.dart';
 import 'tessellationfigure.dart';
 
 class TessellationItem extends StatelessWidget {
-  const TessellationItem({Key key, this.figurekey, this.onPressed }) :
+  const TessellationItem({Key key, this.figurekey }) :
     super(key: key);
 
   final String figurekey;
-  final VoidCallback onPressed;
 
   Future<TessellationFigure> _getFigure(String key, AssetBundle bundle) async {
     final String code = await bundle.loadString(key) ?? "failed";
@@ -31,7 +30,7 @@ class TessellationItem extends StatelessWidget {
       if (snapshot.connectionState == ConnectionState.done) {
         TessellationFigure f = snapshot.data;
         return new SimpleDialogOption(
-            onPressed: onPressed,
+            onPressed: () { Navigator.pop(context, f); },
             child: new Text(f.description),
                                       );
       }
@@ -43,18 +42,20 @@ class TessellationItem extends StatelessWidget {
 }     
 
 class TessellationCreate extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+
+  final List<TessellationItem> _createItems = <TessellationItem>[
+    new TessellationItem(figurekey: 'lib/square.json'),
+    new TessellationItem(figurekey: 'lib/square90.json'),
+    new TessellationItem(figurekey: 'lib/diamond.json'),
+    new TessellationItem(figurekey: 'lib/triangle.json'),
+    new TessellationItem(figurekey: 'lib/hexagon.json'),
+    new TessellationItem(figurekey: 'lib/brick.json')
+  ];
+
+  @override Widget build(BuildContext context) {
     return new SimpleDialog(
       title: const Text('Choose figure'),
-      children: <Widget>[
-        new TessellationItem(figurekey: 'lib/square.json',
-            onPressed: () { Navigator.pop(context, 'lib/square.json');  }
-                             ),
-        new TessellationItem(figurekey: 'lib/diamond.json',
-            onPressed: () { Navigator.pop(context, 'lib/diamond.json');  }
-                             ),
-      ],
+      children: _createItems
     );
   }
 }

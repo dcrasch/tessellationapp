@@ -5,45 +5,50 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'tessellationeditor.dart';
 import 'tessellationcreate.dart';
+import 'tessellationfigure.dart';
 
-class ListDemo extends StatefulWidget {
-  const ListDemo({Key key}) : super(key: key);
+class TessellationList extends StatefulWidget {
+  const TessellationList({Key key}) : super(key: key);
 
   static const String routeName = '/material/list';
 
   @override
-  _ListDemoState createState() => new _ListDemoState();
+  _TessellationListState createState() => new _TessellationListState();
 }
 
-class _ListDemoState extends State<ListDemo> {
+class _TessellationListState extends State<TessellationList> {
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
 
-  List<String> items = <String>[];
+  List<TessellationFigure> items = <TessellationFigure>[];
 
   @override
   void initState() {
     super.initState();
 
-    _getItems().then((List<String> l) {
+    _getItems().then((List<TessellationFigure> l) {
       setState(() {
         items = l;
       });
     });
   }
 
-  void showFigure(BuildContext context, String filename) {
+  void showFigure(BuildContext context, TessellationFigure f) {
     Navigator.push(context,
         new MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return new MyHomePage(title: filename);
+      return new FigurePage(figure:f);
     }));
   }
 
   Future<List<String>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
-    List<String> myitems = <String>[];
+    List<TessellationFigure> myitems = <TessellationFigure>[];
     for (FileSystemEntity file in appDir.listSync(recursive: true)) {
-      myitems.add(file.path);
+      //final String code = await bundle.loadString(file.path) ?? "failed";
+      //final JsonDecoder decoder = new JsonDecoder();    
+      //final Map<String, dynamic> result = decoder.convert(code);
+      //return new TessellationFigure.fromJson(result);
+      //myitems.add(await);
     }
     return myitems;
   }
@@ -57,18 +62,18 @@ class _ListDemoState extends State<ListDemo> {
     await (new File(filename).writeAsString(code));
   }
 
-  Widget buildListTile(BuildContext context, String item) {
+  Widget buildListTile(BuildContext context, TessellationFigure f) {
     return new ListTile(
-        title: new Text('This item represents $item.'),
+        title: new Text('${f.description}.'),
         onTap: () {
-          showFigure(context, item);
+          showFigure(context, f);
         });
   }
 
   @override
   Widget build(BuildContext context) {
     Iterable<Widget> listTiles =
-        items.map((String item) => buildListTile(context, item));
+        items.map((TessellationFigure item) => buildListTile(context, item));
 
     return new Scaffold(
       key: scaffoldKey,
@@ -81,8 +86,8 @@ class _ListDemoState extends State<ListDemo> {
               onPressed: () {
                 showDialog<String>(
                     context: context,
-                    child: new TessellationCreate()).then((String x) {
-                  print(x);
+                    child: new TessellationCreate()).then((TessellationFigure f) {
+                      showFigure(context,f);
                 });
               }),
           new PopupMenuButton<String>(
