@@ -10,11 +10,14 @@ import 'package:flutter_color_picker/flutter_color_picker.dart';
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
+import 'tessellationsettings.dart';
 
 class FigurePage extends StatefulWidget {
   FigurePage({Key key, this.title, this.figure}) : super(key: key);
+
   final String title;
   TessellationFigure figure;
+
   @override
   _FigurePageState createState() => new _FigurePageState();
 }
@@ -47,11 +50,16 @@ class _FigurePageState extends State<FigurePage> {
           onPressed: _saveFigure,
         ),
         new IconButton(
-          icon: const Icon(Icons.fullscreen),
-          onPressed: _resizeFigure,
+          icon: const Icon(Icons.palette),
+          onPressed: () {
+            Navigator.push(context,
+                new MaterialPageRoute<Null>(builder: (BuildContext context) {
+              return new FigureSettings(figure: widget.figure);
+            }));
+          },
         ),
         new IconButton(
-          icon: const Icon(Icons.palette),
+          icon: const Icon(Icons.fullscreen),
           onPressed: _resizeFigure,
         ),
       ]),

@@ -23,7 +23,7 @@ class TessellationFigure {
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
   List<TessellationLine> _lines = new List<TessellationLine>();
-  List<Color> _colors = new List(4);
+  List<Color> colors = new List(4);
   String description;
   String uuid;
 
@@ -46,18 +46,10 @@ class TessellationFigure {
         .map((value) => new TessellationLine.fromJson(value))
         .toList();
 
-    _colors[0] = new Paint()
-      ..color = const Color(0xFFFFFFFF)
-      ..style = PaintingStyle.fill;
-    _colors[1] = new Paint()
-      ..color = const Color(0xFF0000FF)
-      ..style = PaintingStyle.fill;
-    _colors[2] = new Paint()
-      ..color = const Color(0xFF000033)
-      ..style = PaintingStyle.fill;
-    _colors[3] = new Paint()
-      ..color = const Color(0xFFFF0000)
-      ..style = PaintingStyle.fill;
+    colors[0] = const Color(0xFFFFFFFF);
+    colors[1] = const Color(0xFF0000FF);
+    colors[2] = const Color(0xFF000033);
+    colors[3] = const Color(0xFFFF0000);
   }
 
   Map<String, dynamic> toJson() {
@@ -130,7 +122,11 @@ class TessellationFigure {
           canvas.translate(sx, sy);
           canvas.scale(dscale, dscale);
           canvas.rotate(rot);
-          Paint p = _colors[color % 4];
+
+          Paint p = new Paint()
+            ..color = colors[color % 4]
+            ..style = PaintingStyle.fill;
+
           canvas.drawPath(fp, p);
           canvas.restore();
           sx += igx;
