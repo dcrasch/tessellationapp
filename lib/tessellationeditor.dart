@@ -41,6 +41,15 @@ class _FigurePageState extends State<FigurePage> {
 
   Future<Null> _resizeFigure() async {}
 
+  Future<Null> _colorSettings() async {
+    List<Color> _newcolors = await Navigator.push(context,
+        new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
+      return new FigureSettings(colors: widget.figure.colors);
+    }));
+    print(_newcolors);
+    widget.figure.colors = _newcolors;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -51,12 +60,7 @@ class _FigurePageState extends State<FigurePage> {
         ),
         new IconButton(
           icon: const Icon(Icons.palette),
-          onPressed: () {
-            Navigator.push(context,
-                new MaterialPageRoute<Null>(builder: (BuildContext context) {
-              return new FigureSettings(figure: widget.figure);
-            }));
-          },
+          onPressed: _colorSettings,
         ),
         new IconButton(
           icon: const Icon(Icons.fullscreen),

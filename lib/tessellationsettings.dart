@@ -10,21 +10,21 @@ import 'package:flutter_color_picker/flutter_color_picker.dart';
 import 'tessellationfigure.dart';
 
 class FigureSettings extends StatefulWidget {
-  FigureSettings({Key key, this.figure}) : super(key: key);
+  FigureSettings({Key key, this.colors}) : super(key: key);
 
-  TessellationFigure figure;
+  List<Color> colors;
 
   @override
   _FigureSettingsState createState() => new _FigureSettingsState();
 }
 
 class _FigureSettingsState extends State<FigureSettings> {
-  Color _color;
+  List<Color> _colors = new List(4);
 
   void initState() {
     super.initState();
     setState(() {
-      _color = const Color(0xFFFF0000);
+      _colors = widget.colors;
     });
   }
 
@@ -41,16 +41,21 @@ class _FigureSettingsState extends State<FigureSettings> {
 
   @override
   Widget build(BuildContext context) {
-    var children = [
-      _buildColorTile("primary color", _color, () async {
+    var children = [];
+    for (int i = 0; i < _colors.length; i++) {
+      children.add(_buildColorTile("${i}", _colors[i], () async {
         Color c = await showDialog(
             context: context, child: new PrimaryColorPickerDialog());
         setState(() {
-          widget.figure.colors[0] = c;
-          _color = c;
+          _colors[i] = c;
         });
-      })
-    ];
+      }));
+    }
+    children.add(new FlatButton(
+        child: const Text("Apply"),
+        onPressed: () {
+          Navigator.pop(context, _colors);
+        }));
 
     return new Scaffold(
         appBar:
