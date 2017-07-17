@@ -4,9 +4,25 @@ import 'dart:convert';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
+
 import 'tessellationeditor.dart';
 import 'tessellationcreate.dart';
 import 'tessellationfigure.dart';
+
+class SweepGradient extends Gradient {
+  const SweepGradient(this.center, this.colors);
+    
+  final Offset center;
+  final List<Color> colors;
+
+  @override
+    Shader createShader(Rect rect) {
+    return new ui.Gradient.sweep(
+        center,
+        colors);
+  }
+}
 
 class TessellationList extends StatefulWidget {
   const TessellationList({Key key}) : super(key: key);
@@ -99,12 +115,25 @@ class _TessellationListState extends State<TessellationList> {
                   ]),
         ],
       ),
-      body: new Scrollbar(
-        child: new ListView(
-          padding: new EdgeInsets.symmetric(vertical: 4.0),
-          children: listTiles.toList(),
-        ),
-      ),
+      body: 
+new Center(
+    child: new ConstrainedBox(
+        constraints: new BoxConstraints.expand(),
+        child: new DecoratedBox(
+            decoration: new BoxDecoration(
+                gradient: new SweepGradient(
+                    new Offset(500.0,400.0),
+                    <Color>[Colors.cyan,const Color(0xFFFF00FF),
+                      Colors.yellow, Colors.cyan]
+                                          ))))),
+
+//new Scrollbar(
+     //   child: new ListView(
+     //     padding: new EdgeInsets.symmetric(vertical: 4.0),
+     //     children: listTiles.toList(),
+//   ),
+         
+//      ),
     );
   }
 }

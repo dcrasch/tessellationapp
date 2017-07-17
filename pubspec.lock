@@ -233,8 +233,14 @@ packages:
     version: "0.2.1"
   sky_engine:
     description:
-      path: "../../flutter/bin/cache/pkg/sky_engine"
-      relative: true
+      path: "/Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine"
+      relative: false
+    source: path
+    version: "0.0.99"
+  sky_services:
+    description:
+      path: "/Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_services"
+      relative: false
     source: path
     version: "0.0.99"
   source_map_stack_trace:

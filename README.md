@@ -1,3 +1,4 @@
+
 # tessellationapp
 
 Tessellation
@@ -65,7 +66,17 @@ ComposeShader composeShader = new ComposeShader(sweepGradient, radialGradient, P
  colorWheelPaint.setShader(composeShader);
 canvas.drawCircle(width / 2, height / 2, colorWheelRadius, colorWheelPaint);
 file:///Users/david/flutter/dev/docs/doc/flutter/dart-ui/Gradient-class.html
+flutter/packages/flutter/lib/src/painting/box_painter.dart
+      gradient: new ui.Gradient.sweep(
+                    new Offset(100.0,100.0),
+                    <Color>[Colors.red,Colors.blue]
+
+aanpassingen aan painting.dart
+    ninja -C out/ios_debug_sim_unopt
+??  flutter update-packages --upgrade --local-engine=ios_debug_sim_unopt
   
+  FLUTTER_ENGINE=/Users/david/src/engine/src/
+  flutter run --local-engine=ios_debug_sim_unopt -d 7493B601-8A6F-4F59-808F-A4AA5AAA1BB9
   
 PictureRecorder 
  canvas
