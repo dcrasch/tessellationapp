@@ -65,7 +65,7 @@ ComposeShader composeShader = new ComposeShader(sweepGradient, radialGradient, P
  colorWheelPaint.setShader(composeShader);
 canvas.drawCircle(width / 2, height / 2, colorWheelRadius, colorWheelPaint);
 file:///Users/david/flutter/dev/docs/doc/flutter/dart-ui/Gradient-class.html
-  
+https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart  
   
 PictureRecorder 
  canvas
