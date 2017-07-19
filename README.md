@@ -65,6 +65,7 @@ ComposeShader composeShader = new ComposeShader(sweepGradient, radialGradient, P
  colorWheelPaint.setShader(composeShader);
 canvas.drawCircle(width / 2, height / 2, colorWheelRadius, colorWheelPaint);
 file:///Users/david/flutter/dev/docs/doc/flutter/dart-ui/Gradient-class.html
+
 flutter/packages/flutter/lib/src/painting/box_painter.dart
       gradient: new ui.Gradient.sweep(
                     new Offset(100.0,100.0),
@@ -76,7 +77,10 @@ aanpassingen aan painting.dart
   
   FLUTTER_ENGINE=/Users/david/src/engine/src/
   flutter run --local-engine=ios_debug_sim_unopt -d 7493B601-8A6F-4F59-808F-A4AA5AAA1BB9
-  
+
+canvas to image
+###
+https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart    
 PictureRecorder 
  canvas
 picturerecorder -> picture
