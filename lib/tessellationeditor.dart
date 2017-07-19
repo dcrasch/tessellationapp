@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,6 +30,13 @@ class _FigurePageState extends State<FigurePage> {
     return new File(filename);
   }
 
+  Future<File> _getLocalImageFile() async {
+    Directory appDir = await getApplicationDocumentsDirectory();
+    String filename = "${appDir.path}/${widget.figure.uuid}.png";
+    return new File(filename);
+  }
+
+
   Future<Null> _saveFigure() async {
     if (widget.figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -50,6 +58,17 @@ class _FigurePageState extends State<FigurePage> {
     widget.figure.colors = _newcolors;
   }
 
+  Future<Null> _savePNG() async {
+    final ui.PictureRecorder recorder = new ui.PictureRecorder();
+    final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 100.0, 100.0);
+    final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
+    widget.figure.tessellate(canvas, paintBounds);
+    final ui.Picture picture = recorder.endRecording();
+    final ui.Image image = picture.toImage(1000,1000);
+    List<int> bytes = ui.encodeImageAsPNG(image);
+    await (await _getLocalImageFile()).writeAsBytes(bytes);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -66,6 +85,10 @@ class _FigurePageState extends State<FigurePage> {
           icon: const Icon(Icons.fullscreen),
           onPressed: _resizeFigure,
         ),
+        new IconButton(
+            icon: const Icon(Icons.import_export),
+        onPressed: _savePNG,
+                       ),
       ]),
       body: new Center(child: new LinesWidget(figure: widget.figure)),
     );

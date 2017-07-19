@@ -1,4 +1,3 @@
-
 # tessellationapp
 
 Tessellation
@@ -23,7 +22,7 @@ addpath and extended path don't join the lines
 ### Read and Parse files
 * https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
 * https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/gallery/example_code_parser.dart
-
+write assetfigure?? extended from assetbundle,(like image bundle)>
 ## Files and Directories
 
 * https://flutter.io/reading-writing-files/#example-of-reading-and-writing-to-a-file
@@ -53,11 +52,11 @@ inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Ico
 inkscape ~/src/tessellationapp/icon.svg -a 0:-6.933:320:313.067 --export-png=Icon-App-83.5x83.5@2x.png -w167 -h167
 
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
-
+Run build parts in de pubspec.yml
 $ flutter packages pub build
 
-Colorwheel
-==============
+## Colorwheel
+
 https://github.com/chiralcode/Android-Color-Picker/blob/master/src/com/chiralcode/colorpicker/ColorPicker.java
 
 SweepGradient sweepGradient = new SweepGradient(width / 2, height / 2, colors, null);
@@ -83,11 +82,31 @@ PictureRecorder
 picturerecorder -> picture
 picture -> image
 
-
 image -> to a fricking png!!
 https://github.com/flutter/flutter/issues/6774
 toByteData save!
 
-todo
-----
-write assetfigure?? extended from assetbundle,(like image bundle)>
+Write to png and svg
+https://skia.org/user/api/canvas
+
+  SkCanvas* recordingCanvas = recorder.beginRecording(SkIntToScalar(width),
+                                                        SkIntToScalar(height));
+    draw(recordingCanvas);
+    sk_sp<SkPicture> picture = recorder.finishRecordingAsPicture();
+    picture->toImage(100,100);
+        
+# Build flutter engine
+## PATH
+export PATH=/Users/david/src/engine/src/third_party/android_tools/sdk/platform-tools/:/Users/david/flutter/depot_tools/:$PATH
+## Create Makefiles
+./flutter/tools/gn --ios --unoptimized --simulator
+## Build code
+ninja -C out/ios_debug_sim_unop
+
+
+/*  Dart_Handle canvasimage = Dart_GetNativeArgument(arguments, 0);
+  if (!Dart_IsNull(canvasimage)) {
+      CanvasImage* decoded = tonic::DartConverter<CanvasImage*>::FromDart(canvasimage);      
+      sk_sp<SkData> png(decoded->image()->encode(SkEncodedImageFormat::kPNG, 100));
+      Dart_Handle result = tonic::DartConverter<tonic::Uint8List>::ToDart((uint8_t*)png->data(),png->size());
+}*/

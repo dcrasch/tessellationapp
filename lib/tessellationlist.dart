@@ -122,7 +122,7 @@ new Center(
         child: new DecoratedBox(
             decoration: new BoxDecoration(
                 gradient: new SweepGradient(
-                    new Offset(500.0,400.0),
+                    new Offset(300.0,200.0),
                     <Color>[Colors.cyan,const Color(0xFFFF00FF),
                       Colors.yellow, Colors.cyan]
                                           ))))),
