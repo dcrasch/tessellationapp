@@ -33,6 +33,7 @@ class _FigurePageState extends State<FigurePage> {
   Future<File> _getLocalImageFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.png";
+    print(filename);
     return new File(filename);
   }
 
@@ -59,6 +60,10 @@ class _FigurePageState extends State<FigurePage> {
   }
 
   Future<Null> _savePNG() async {
+    if (widget.figure.uuid.isEmpty) {
+      DateTime _nu = new DateTime.now();
+      widget.figure.uuid = _nu.toString();
+    }
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 100.0, 100.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
