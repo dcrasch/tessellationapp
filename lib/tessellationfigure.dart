@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -99,7 +99,7 @@ class TessellationFigure {
     double screenwidth = rect.width;
     double screenheight = rect.height;
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
-      rot = 2 * PI * currentdiv / rotdiv;
+      rot = 2 * math.PI * currentdiv / rotdiv;
       minx = -igx * 2;
       maxx = screenwidth + igx;
       miny = -igy * 2;
@@ -209,7 +209,9 @@ class TessellationFigure {
     TessellationLine line1 = _lines[0];
     Rect q = line1.fitrect();
     for (TessellationLine line in _lines) {
-      q = q.intersect(line.fitrect); // union???
+      Rect k = line.fitrect();
+      q = new Rect.fromLTRB(math.min(q.left, k.left), math.min(q.top, k.top),
+          math.max(q.right, k.right), math.max(q.bottom, k.bottom));
     }
     return q;
   }

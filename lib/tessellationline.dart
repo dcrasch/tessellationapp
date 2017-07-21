@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -32,8 +32,8 @@ class TessellationLine {
     // TODO check for types
     transform = new Matrix4.identity()
       ..translate(_json['tx'], _json['ty'])
-      ..rotateZ(_json['angle'] / 180.0 * PI);
-    ci = new Matrix4.inverted(transform);
+      ..rotateZ(_json['angle'] / 180.0 * math.PI);
+    this.ci = new Matrix4.inverted(transform);
     human_angle = _json['angle'];
     _points = _json['points']
         .map((value) => new Offset(value['x'], value['y']))
@@ -161,17 +161,19 @@ class TessellationLine {
 
   Rect fitrect() {
     Offset minPoint = _points[0];
-    Ofsset maxPoint = _points[0];
+    Offset maxPoint = _points[0];
     for (Offset current in _points) {
-      maxPoint.dx = math.max(current.dx, maxPoint.dx);
-      maxPoint.dy = math.max(current.dy, maxPoint.dy);
-      minPoint.dx = math.min(current.dx, minPoint.dx);
-      minPoint.dy = math.min(current.dy, minPoint.dy);
-      Offset cpoint = correspondingpoint(current);
-      maxPoint.dx = math.max(cpoint.dx, maxPoint.dx);
-      maxPoint.dy = math.max(cpoint.dy, maxPoint.dy);
-      minPoint.dx = math.min(cpoint.dx, minPoint.dx);
-      minPoint.dy = math.min(cpoint.dy, minPoint.dy);
+      maxPoint = new Offset(
+          math.max(current.dx, maxPoint.dx), math.max(current.dy, maxPoint.dy));
+      minPoint = new Offset(
+          math.min(current.dx, minPoint.dx), math.min(current.dy, minPoint.dy));
+
+      Offset cpoint = MatrixUtils.transformPoint(transform, current);
+
+      maxPoint = new Offset(
+          math.max(cpoint.dx, maxPoint.dx), math.max(cpoint.dy, maxPoint.dy));
+      minPoint = new Offset(
+          math.min(cpoint.dx, minPoint.dx), math.min(cpoint.dy, minPoint.dy));
     }
     return new Rect.fromPoints(minPoint, maxPoint);
   }

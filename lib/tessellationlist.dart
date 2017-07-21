@@ -12,15 +12,13 @@ import 'tessellationfigure.dart';
 
 class SweepGradient extends Gradient {
   const SweepGradient(this.center, this.colors);
-    
+
   final Offset center;
   final List<Color> colors;
 
   @override
-    Shader createShader(Rect rect) {
-    return new ui.Gradient.sweep(
-        center,
-        colors);
+  Shader createShader(Rect rect) {
+    return new ui.Gradient.sweep(center, colors);
   }
 }
 
@@ -115,8 +113,14 @@ class _TessellationListState extends State<TessellationList> {
                   ]),
         ],
       ),
-      body: 
-new Center(
+      body: new Scrollbar(
+        child: new ListView(
+          padding: new EdgeInsets.symmetric(vertical: 4.0),
+          children: listTiles.toList(),
+        ),
+      ),
+
+/*new Center(
     child: new ConstrainedBox(
         constraints: new BoxConstraints.expand(),
         child: new DecoratedBox(
@@ -126,14 +130,7 @@ new Center(
                     <Color>[Colors.cyan,const Color(0xFFFF00FF),
                       Colors.yellow, Colors.cyan]
                                           ))))),
-
-//new Scrollbar(
-     //   child: new ListView(
-     //     padding: new EdgeInsets.symmetric(vertical: 4.0),
-     //     children: listTiles.toList(),
-//   ),
-         
-//      ),
+*/
     );
   }
 }

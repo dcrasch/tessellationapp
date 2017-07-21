@@ -27,6 +27,7 @@ class _FigurePageState extends State<FigurePage> {
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.json";
+    print(filename);
     return new File(filename);
   }
 
@@ -36,7 +37,6 @@ class _FigurePageState extends State<FigurePage> {
     print(filename);
     return new File(filename);
   }
-
 
   Future<Null> _saveFigure() async {
     if (widget.figure.uuid.isEmpty) {
@@ -48,14 +48,15 @@ class _FigurePageState extends State<FigurePage> {
     await (await _getLocalFile()).writeAsString(code);
   }
 
-  Future<Null> _resizeFigure() async {}
+  Future<Null> _resizeFigure() async {
+    print(widget.figure.fit());
+  }
 
   Future<Null> _colorSettings() async {
     List<Color> _newcolors = await Navigator.push(context,
         new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
       return new FigureSettings(colors: widget.figure.colors);
     }));
-    print(_newcolors);
     widget.figure.colors = _newcolors;
   }
 
@@ -69,13 +70,14 @@ class _FigurePageState extends State<FigurePage> {
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
     widget.figure.tessellate(canvas, paintBounds);
     final ui.Picture picture = recorder.endRecording();
-    final ui.Image image = picture.toImage(1000,1000);
+    final ui.Image image = picture.toImage(1000, 1000);
     List<int> bytes = ui.encodeImageAsPNG(image);
     await (await _getLocalImageFile()).writeAsBytes(bytes);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size);
     return new Scaffold(
       appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
         new IconButton(
@@ -91,11 +93,13 @@ class _FigurePageState extends State<FigurePage> {
           onPressed: _resizeFigure,
         ),
         new IconButton(
-            icon: const Icon(Icons.import_export),
-        onPressed: _savePNG,
-                       ),
+          icon: const Icon(Icons.import_export),
+          onPressed: _savePNG,
+        ),
       ]),
-      body: new Center(child: new LinesWidget(figure: widget.figure)),
+      body: new Center(
+          child: new LinesWidget(
+              key: new Key("lineswidget"), figure: widget.figure)),
     );
   }
 }
