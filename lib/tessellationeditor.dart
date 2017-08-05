@@ -115,10 +115,18 @@ class _FigurePageState extends State<FigurePage> {
           onPressed: _savePNG,
         ),
       ]),
-      body: new Center(
-          child: new TessellationTiled(
-              key: new Key(""), 
-              figure: figure))
+      body: new Stack(
+          children: <Widget>[
+            new Center(
+                child: new TessellationTiled(
+                    key: new Key(""), 
+                    figure: figure)),
+            new Center(
+                child: new TessellationWidget(
+                    key: new Key("tessellationeditor"),
+                    figure: figure,
+                    onChanged : _handleFigureChanged)),
+          ])
     );
   }
 }
