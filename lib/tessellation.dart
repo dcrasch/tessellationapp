@@ -52,58 +52,66 @@ class TessellationWidget extends StatefulWidget {
 
 class TessellationState extends State<TessellationWidget> {
   TessellationFigure figure;
-  
+  Offset selectedPoint;
+
   @override
   void initState() {
     super.initState();
     figure = widget.figure;
   }
-
-  @override
-  void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
-    ci = new Matrix4.inverted(transform);
-    Offset touchPoint = MatrixUtils.transformPoint(ci, event.position);
-    if (event is PointerDownEvent) {
-      selectedPoint = figure.leftdown(touchPoint);
-      if (selectedPoint != null) {
-        setState(() {
-          figure.drag(touchPoint, selectedPoint);
-        });
-      } else {
-        selectedPoint = figure.leftcreate(touchPoint);
-        if (selectedPoint != null) {
-          setState(() {
-            figure.addPoint(touchPoint, selectedPoint);
-          });
-        }
-      }
-    }
-    if (event is PointerMoveEvent) {
-      if (selectedPoint != null) {
-        setState(() {
-          figure.drag(touchPoint, selectedPoint);
-        });        
-      }
-    }
-    if (event is PointerUpEvent) {
-      selectedPoint = null;
-    }
-    if (widget.onChanged != null) {
-      widget.onChanged(figure);
-    }
-  }
-
+    
   @override
   Widget build(BuildContext context) {
     return new ConstrainedBox(
         constraints: new BoxConstraints.expand(),
         child: new GestureDetector(
-            
-            //behaviour: HitTestBehavior.opaque,
+            onPanStart: (details) {
+              ci = new Matrix4.inverted(transform);
+              RenderBox box = context.findRenderObject();
+              Offset touchPoint = box.globalToLocal(details.globalPosition);
+              touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+              selectedPoint = figure.leftdown(touchPoint);
+              if (selectedPoint != null) {
+                setState(() {
+                  figure.drag(touchPoint, selectedPoint);                  
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged(figure);
+                }
+              }
+              else {
+                selectedPoint = figure.leftcreate(touchPoint);
+                if (selectedPoint != null) {
+                  setState(() {
+                    figure.addPoint(touchPoint, selectedPoint);
+                  });
+                  if (widget.onChanged != null) {
+                    widget.onChanged(figure);
+                  }
+                }
+              }
+            },
+            onPanUpdate: (details) {
+              ci = new Matrix4.inverted(transform);
+              RenderBox box = context.findRenderObject();
+              Offset touchPoint = box.globalToLocal(details.globalPosition);
+              touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+               if (selectedPoint != null) {
+                setState(() {
+                  figure.drag(touchPoint, selectedPoint);
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged(figure);
+                }
+               }
+            },
+            onPanEnd: (details) {
+              selectedPoint = null;
+            },
             child: new CustomPaint(
                 painter: new TessellationPainter(figure)
-                )),
-                             );
+                                   )),
+                              );
   }
 
   @override
