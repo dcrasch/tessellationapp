@@ -52,8 +52,12 @@ class TessellationWidget extends StatefulWidget {
 
 class TessellationState extends State<TessellationWidget> {
   TessellationFigure figure;
-  Offset selectedPoint;
-
+  PointIndexPath selectedPoint;
+  Matrix4 transform = new Matrix4.identity()
+    ..translate (100.0, 150.0)
+    ..scale (200.0);
+  Matrix4 ci = new Matrix4.identity();
+  
   @override
   void initState() {
     super.initState();
