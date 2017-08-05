@@ -12,6 +12,7 @@ import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 import 'tessellationsettings.dart';
+import 'tessellationtiled.dart';
 
 class FigurePage extends StatefulWidget {
   FigurePage({Key key, this.title, this.figure}) : super(key: key);
@@ -24,6 +25,15 @@ class FigurePage extends StatefulWidget {
 }
 
 class _FigurePageState extends State<FigurePage> {
+
+  TessellationFigure figure;
+  
+  @override
+  void initState() {
+    super.initState();
+    figure = widget.figure;
+  }
+
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.json";
@@ -41,10 +51,10 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _saveFigure() async {
     if (widget.figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
-      widget.figure.uuid = _nu.toString();
+      figure.uuid = _nu.toString();
     }
     final JsonEncoder encoder = new JsonEncoder();
-    String code = encoder.convert(widget.figure.toJson());
+    String code = encoder.convert(figure.toJson());
     await (await _getLocalFile()).writeAsString(code);
   }
 
@@ -55,24 +65,32 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _colorSettings() async {
     List<Color> _newcolors = await Navigator.push(context,
         new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
-      return new FigureSettings(colors: widget.figure.colors);
+      return new FigureSettings(colors: figure.colors);
     }));
-    widget.figure.colors = _newcolors;
+    setState() {
+      figure.colors = _newcolors;
+    }
   }
 
   Future<Null> _savePNG() async {
-    if (widget.figure.uuid.isEmpty) {
+    if (figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
       widget.figure.uuid = _nu.toString();
     }
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 100.0, 100.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
-    widget.figure.tessellate(canvas, paintBounds);
+    figure.tessellate(canvas, paintBounds);
     final ui.Picture picture = recorder.endRecording();
     final ui.Image image = picture.toImage(1000, 1000);
     List<int> bytes = ui.encodeImageAsPNG(image);
     await (await _getLocalImageFile()).writeAsBytes(bytes);
+  }
+
+  void _handleFigureChanged(TessellationFigure figure) {
+    setState(() {
+      this.figure = figure;
+    });
   }
 
   @override
@@ -98,8 +116,9 @@ class _FigurePageState extends State<FigurePage> {
         ),
       ]),
       body: new Center(
-          child: new LinesWidget(
-              key: new Key("lineswidget"), figure: widget.figure)),
+          child: new TessellationTiled(
+              key: new Key(""), 
+              figure: figure))
     );
   }
 }

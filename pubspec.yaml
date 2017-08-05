@@ -18,11 +18,11 @@ dev_dependencies:
   path:
   flutter_color_picker: {path: flutter_color_picker-0.0.1}
 
-dependency_overrides:
-  sky_engine:
-    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine
-  sky_services:
-    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_services
+#dependency_overrides:
+#  sky_engine:
+#    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine
+#  sky_services:
+#    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_services
 
 flutter:
   uses-material-design: true

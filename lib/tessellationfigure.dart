@@ -80,9 +80,8 @@ class TessellationFigure {
     return p;
   }
 
-  void tessellate(Canvas canvas, Rect rect) {
+  void tessellate(Canvas canvas, Rect rect, double dscale) {
     final Path fp = toPath();
-    double dscale = 80.0; //0.5; // @TODO !!
     double sx = 0.0;
     double sy = 0.0;
     double rot = 0.0;

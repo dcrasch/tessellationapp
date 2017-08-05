@@ -70,7 +70,7 @@ packages:
   flutter:
     description: flutter
     source: sdk
-    version: "0.0.31"
+    version: "0.0.32"
   flutter_color_picker:
     description:
       path: "flutter_color_picker-0.0.1"
@@ -80,7 +80,7 @@ packages:
   flutter_test:
     description: flutter
     source: sdk
-    version: "0.0.9"
+    version: "0.0.10"
   front_end:
     description:
       name: front_end
@@ -233,14 +233,8 @@ packages:
     version: "0.2.1"
   sky_engine:
     description:
-      path: "/Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine"
-      relative: false
-    source: path
-    version: "0.0.99"
-  sky_services:
-    description:
-      path: "/Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_services"
-      relative: false
+      path: "../../flutter/bin/cache/pkg/sky_engine"
+      relative: true
     source: path
     version: "0.0.99"
   source_map_stack_trace:
