@@ -15,28 +15,25 @@ class TessellationTiledPainter extends CustomPainter {
   final double dscale;
 
   TessellationTiledPainter(this.figure, this.dscale);
-  
-  @override 
+
+  @override
   void paint(Canvas canvas, Size size) {
-    figure.tessellate(canvas, 
-        new Rect.fromPoints(Offset.zero, size.bottomLeft(Offset.zero)),
-        dscale);
+    figure.tessellate(canvas,
+        new Rect.fromPoints(Offset.zero, size.bottomLeft(Offset.zero)), dscale);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-
 }
 
 class TessellationTiled extends StatelessWidget {
   TessellationFigure figure;
-  TessellationTiled({Key key, this.figure}) : super(key:key);
+  TessellationTiled({Key key, this.figure}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new CustomPaint(painter: new TessellationTiledPainter(figure,80.0));
-  } 
-}  
-  
+    return new CustomPaint(painter: new TessellationTiledPainter(figure, 80.0));
+  }
+}

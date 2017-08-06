@@ -10,14 +10,15 @@ dependencies:
     sdk: flutter
   vector_math: any
   path_provider:
-
+  flutter_color_picker: {path: flutter_color_picker-0.0.1}
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
   barback:
   path:
-  flutter_color_picker: {path: flutter_color_picker-0.0.1}
-
+  
+  
 #dependency_overrides:
 #  sky_engine:
 #    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine

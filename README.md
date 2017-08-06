@@ -78,6 +78,8 @@ aanpassingen aan painting.dart
   FLUTTER_ENGINE=/Users/david/src/engine/src/
   flutter run --local-engine=ios_debug_sim_unopt -d 7493B601-8A6F-4F59-808F-A4AA5AAA1BB9
 
+
+
 canvas to image
 ###
 https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart    
@@ -118,3 +120,9 @@ ninja -C out/ios_debug_sim_unop
 # controllers
 https://docs.flutter.io/flutter/widgets/TextEditingController-class.html
 set the zoom and the figure?
+
+
+#colors
+https://github.com/MichaelFenwick/Color/blob/master/lib/hex_color.dart
+toRadixString(16).padLeft(2, '0') 
+int.parse(_json['color1'],radix:16)

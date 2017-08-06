@@ -63,19 +63,27 @@ class _TessellationListState extends State<TessellationList> {
         String code = await file.readAsString();
         final JsonDecoder decoder = new JsonDecoder();
         final Map<String, dynamic> result = decoder.convert(code);
-        TessellationFigure f = new TessellationFigure.fromJson(result);
-        myitems.add(f);
+        try {
+          TessellationFigure f = new TessellationFigure.fromJson(result);
+          myitems.add(f);
+        } catch (e) {
+          print(e);
+        }
       }
     }
     return myitems;
   }
 
   Widget buildListTile(BuildContext context, TessellationFigure f) {
-    return new ListTile(
-        title: new Text('${f.description}.'),
-        onTap: () {
-          showFigure(context, f);
-        });
+    if (f != null) {
+      return new ListTile(
+          title: new Text('${f.description}.'),
+          onTap: () {
+            showFigure(context, f);
+          });
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -95,10 +103,12 @@ class _TessellationListState extends State<TessellationList> {
                 showDialog<String>(
                         context: context, child: new TessellationCreate())
                     .then((TessellationFigure f) {
-                  setState(() {
-                    items.add(f);
-                  });
-                  showFigure(context, f);
+                  if (f != null) {
+                    setState(() {
+                      items.add(f);
+                    });
+                    showFigure(context, f);
+                  }
                 });
               }),
           new PopupMenuButton<String>(

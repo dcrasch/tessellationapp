@@ -12,7 +12,7 @@ class TessellationPainter extends CustomPainter {
   TessellationPainter(this.figure, this.transform);
   final TessellationFigure figure;
   Matrix4 transform;
-  @override 
+  @override
   void paint(Canvas canvas, Size size) {
     Offset offset = Offset.zero;
     canvas.drawRect(
@@ -29,12 +29,11 @@ class TessellationPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-
 }
 
 class TessellationWidget extends StatefulWidget {
-
-  TessellationWidget({Key key, this.figure, this.onChanged, this.zoom}) : super(key:key);
+  TessellationWidget({Key key, this.figure, this.onChanged, this.zoom})
+      : super(key: key);
   TessellationFigure figure;
   ValueChanged<TessellationFigure> onChanged;
   ValueNotifier<double> zoom;
@@ -42,24 +41,22 @@ class TessellationWidget extends StatefulWidget {
   PointIndexPath selectedPoint;
   @override
   TessellationState createState() => new TessellationState();
-
 }
-
 
 class TessellationState extends State<TessellationWidget> {
   TessellationFigure figure;
   PointIndexPath selectedPoint;
   Matrix4 transform;
   Matrix4 ci;
-  
+
   @override
   void initState() {
     super.initState();
     setState(() {
       figure = widget.figure;
       transform = new Matrix4.identity()
-      ..translate (100.0, 150.0)
-        ..scale (widget.zoom.value);
+        ..translate(100.0, 150.0)
+        ..scale(widget.zoom.value);
       ci = new Matrix4.identity();
     });
     widget.zoom.addListener(_setRemoteZoom);
@@ -67,71 +64,69 @@ class TessellationState extends State<TessellationWidget> {
 
   @override
   void dispose() {
-      widget.zoom.removeListener(_setRemoveZoom);
+    if (_setRemoveZoom) widget.zoom.removeListener(_setRemoveZoom);
   }
 
-  void _setRemoteZoom() {   
-     setState(() {
+  void _setRemoteZoom() {
+    setState(() {
       figure = widget.figure;
       transform = new Matrix4.identity()
-        ..translate (100.0, 150.0)
-        ..scale (widget.zoom.value);
+        ..translate(100.0, 150.0)
+        ..scale(widget.zoom.value);
       ci = new Matrix4.identity();
     });
   }
-    
+
   @override
   Widget build(BuildContext context) {
     return new ConstrainedBox(
-        constraints: new BoxConstraints.expand(),
-        child: new GestureDetector(
-            onPanStart: (details) {
-              ci = new Matrix4.inverted(transform);
-              RenderBox box = context.findRenderObject();
-              Offset touchPoint = box.globalToLocal(details.globalPosition);
-              touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
-              selectedPoint = figure.leftdown(touchPoint);
+      constraints: new BoxConstraints.expand(),
+      child: new GestureDetector(
+          onPanStart: (details) {
+            ci = new Matrix4.inverted(transform);
+            RenderBox box = context.findRenderObject();
+            Offset touchPoint = box.globalToLocal(details.globalPosition);
+            touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+            selectedPoint = figure.leftdown(touchPoint);
+            if (selectedPoint != null) {
+              setState(() {
+                figure.drag(touchPoint, selectedPoint);
+              });
+              if (widget.onChanged != null) {
+                widget.onChanged(figure);
+              }
+            } else {
+              selectedPoint = figure.leftcreate(touchPoint);
               if (selectedPoint != null) {
                 setState(() {
-                  figure.drag(touchPoint, selectedPoint);                  
+                  figure.addPoint(touchPoint, selectedPoint);
                 });
                 if (widget.onChanged != null) {
                   widget.onChanged(figure);
                 }
               }
-              else {
-                selectedPoint = figure.leftcreate(touchPoint);
-                if (selectedPoint != null) {
-                  setState(() {
-                    figure.addPoint(touchPoint, selectedPoint);
-                  });
-                  if (widget.onChanged != null) {
-                    widget.onChanged(figure);
-                  }
-                }
+            }
+          },
+          onPanUpdate: (details) {
+            //ci = new Matrix4.inverted(transform);
+            RenderBox box = context.findRenderObject();
+            Offset touchPoint = box.globalToLocal(details.globalPosition);
+            touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+            if (selectedPoint != null) {
+              setState(() {
+                figure.drag(touchPoint, selectedPoint);
+              });
+              if (widget.onChanged != null) {
+                widget.onChanged(figure);
               }
-            },
-            onPanUpdate: (details) {
-              //ci = new Matrix4.inverted(transform);
-              RenderBox box = context.findRenderObject();
-              Offset touchPoint = box.globalToLocal(details.globalPosition);
-              touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
-               if (selectedPoint != null) {
-                setState(() {
-                  figure.drag(touchPoint, selectedPoint);
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged(figure);
-                }
-               }
-            },
-            onPanEnd: (details) {
-              selectedPoint = null;
-            },
-            child: new CustomPaint(
-                painter: new TessellationPainter(figure, transform)
-                                   )),
-                              );
+            }
+          },
+          onPanEnd: (details) {
+            selectedPoint = null;
+          },
+          child: new CustomPaint(
+              painter: new TessellationPainter(figure, transform))),
+    );
   }
 }
 

@@ -46,10 +46,17 @@ class TessellationFigure {
         .map((value) => new TessellationLine.fromJson(value))
         .toList();
 
-    colors[0] = const Color(0xFFFFFFFF);
-    colors[1] = const Color(0xFF0000FF);
-    colors[2] = const Color(0xFF000033);
-    colors[3] = const Color(0xFFFF0000);
+    if (_json.containsKey('color1')) {
+      colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
+      colors[1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
+      colors[2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
+      colors[3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
+    } else {
+      colors[0] = const Color(0xff931f1d);
+      colors[1] = const Color(0xFF936b63);
+      colors[2] = const Color(0xFF8a9b68);
+      colors[3] = const Color(0xFFB6C197);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +70,19 @@ class TessellationFigure {
     _json['rotdiv'] = rotdiv;
     _json['sequence'] = sequence;
     _json['lines'] = _lines.map((value) => value.toJson()).toList();
+    _json['color1'] = colors[0].red.toRadixString(16).padLeft(2, '0') +
+        colors[0].green.toRadixString(16).padLeft(2, '0') +
+        colors[0].blue.toRadixString(16).padLeft(2, '0');
+    _json['color2'] = colors[1].red.toRadixString(16).padLeft(2, '0') +
+        colors[1].green.toRadixString(16).padLeft(2, '0') +
+        colors[1].blue.toRadixString(16).padLeft(2, '0');
+    _json['color3'] = colors[2].red.toRadixString(16).padLeft(2, '0') +
+        colors[2].green.toRadixString(16).padLeft(2, '0') +
+        colors[2].blue.toRadixString(16).padLeft(2, '0');
+    _json['color4'] = colors[3].red.toRadixString(16).padLeft(2, '0') +
+        colors[3].green.toRadixString(16).padLeft(2, '0') +
+        colors[3].blue.toRadixString(16).padLeft(2, '0');
+
     return _json;
   }
 

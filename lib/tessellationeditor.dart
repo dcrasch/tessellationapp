@@ -26,10 +26,9 @@ class FigurePage extends StatefulWidget {
 }
 
 class _FigurePageState extends State<FigurePage> {
-
   TessellationFigure figure;
   ValueNotifier<double> zoom = new ValueNotifier<double>(200.0);
-  
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +64,7 @@ class _FigurePageState extends State<FigurePage> {
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
     if (r.width > r.height) {
       zoom.value = 0.8 / r.width * s.size.width;
-    }
-    else {
+    } else {
       zoom.value = 0.8 / r.height * s.size.height;
     }
   }
@@ -76,9 +74,11 @@ class _FigurePageState extends State<FigurePage> {
         new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
       return new FigureSettings(colors: figure.colors);
     }));
-    setState(() {
-      figure.colors = _newcolors;
-    });
+    if (_newcolors != null) {
+      setState(() {
+        figure.colors = _newcolors;
+      });
+    }
   }
 
   Future<Null> _savePNG() async {
@@ -105,37 +105,33 @@ class _FigurePageState extends State<FigurePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
-        new IconButton(
-          icon: const Icon(Icons.save),
-          onPressed: _saveFigure,
-        ),
-        new IconButton(
-          icon: const Icon(Icons.palette),
-          onPressed: _colorSettings,
-        ),
-        new IconButton(
-          icon: const Icon(Icons.fullscreen),
-          onPressed: _resizeFigure,
-        ),
-        new IconButton(
-          icon: const Icon(Icons.import_export),
-          onPressed: _savePNG,
-        ),
-      ]),
-      body: new Stack(
-          children: <Widget>[
-            new Center(
-                child: new TessellationTiled(
-                    key: new Key(""), 
-                    figure: figure)),
-            new Center(
-                child: new TessellationWidget(
-                    key: new Key("tessellationeditor"),
-                    figure: figure,
-                    onChanged : _handleFigureChanged,
-                    zoom: zoom)),
-          ])
-    );
+        appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
+          new IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: _saveFigure,
+          ),
+          new IconButton(
+            icon: const Icon(Icons.palette),
+            onPressed: _colorSettings,
+          ),
+          new IconButton(
+            icon: const Icon(Icons.fullscreen),
+            onPressed: _resizeFigure,
+          ),
+          new IconButton(
+            icon: const Icon(Icons.import_export),
+            onPressed: _savePNG,
+          ),
+        ]),
+        body: new Stack(children: <Widget>[
+          new Center(
+              child: new TessellationTiled(key: new Key(""), figure: figure)),
+          new Center(
+              child: new TessellationWidget(
+                  key: new Key("tessellationeditor"),
+                  figure: figure,
+                  onChanged: _handleFigureChanged,
+                  zoom: zoom)),
+        ]));
   }
 }
