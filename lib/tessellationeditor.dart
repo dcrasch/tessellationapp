@@ -27,12 +27,13 @@ class FigurePage extends StatefulWidget {
 
 class _FigurePageState extends State<FigurePage> {
   TessellationFigure figure;
-  ValueNotifier<double> zoom = new ValueNotifier<double>(200.0);
+  ValueNotifier<Matrix4> zoom = new ValueNotifier<Matrix4>(new Matrix4.identity());
 
   @override
   void initState() {
     super.initState();
     figure = widget.figure;
+    _resizeFigure();
   }
 
   Future<File> _getLocalFile() async {
@@ -62,11 +63,10 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _resizeFigure() async {
     Rect r = figure.fit();
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
-    if (r.width > r.height) {
-      zoom.value = 0.8 / r.width * s.size.width;
-    } else {
-      zoom.value = 0.8 / r.height * s.size.height;
-    }
+    Matrix4 transform = new Matrix4.identity()
+    ..translate(10.0, 15.0)
+    ..scale(0.7*math.min( s.size.width / r.width, s.size.height / r.height));
+    zoom.value=transform;
   }
 
   Future<Null> _colorSettings() async {

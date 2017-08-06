@@ -36,7 +36,7 @@ class TessellationWidget extends StatefulWidget {
       : super(key: key);
   TessellationFigure figure;
   ValueChanged<TessellationFigure> onChanged;
-  ValueNotifier<double> zoom;
+  ValueNotifier<Matrix4> zoom;
 
   PointIndexPath selectedPoint;
   @override
@@ -49,31 +49,26 @@ class TessellationState extends State<TessellationWidget> {
   Matrix4 transform;
   Matrix4 ci;
 
+
   @override
   void initState() {
     super.initState();
-    setState(() {
-      figure = widget.figure;
-      transform = new Matrix4.identity()
-        ..translate(100.0, 150.0)
-        ..scale(widget.zoom.value);
-      ci = new Matrix4.identity();
-    });
+    widget.zoom.removeListener(_setRemoteZoom);
     widget.zoom.addListener(_setRemoteZoom);
+    _setRemoteZoom();
   }
 
   @override
   void dispose() {
-    if (_setRemoveZoom) widget.zoom.removeListener(_setRemoveZoom);
+    //widget.zoom.removeListener(_setRemoveZoom);
+    super.dispose();
   }
 
   void _setRemoteZoom() {
     setState(() {
       figure = widget.figure;
-      transform = new Matrix4.identity()
-        ..translate(100.0, 150.0)
-        ..scale(widget.zoom.value);
-      ci = new Matrix4.identity();
+      transform = widget.zoom.value;
+      ci = new Matrix4.inverted(transform);
     });
   }
 
@@ -83,7 +78,6 @@ class TessellationState extends State<TessellationWidget> {
       constraints: new BoxConstraints.expand(),
       child: new GestureDetector(
           onPanStart: (details) {
-            ci = new Matrix4.inverted(transform);
             RenderBox box = context.findRenderObject();
             Offset touchPoint = box.globalToLocal(details.globalPosition);
             touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
@@ -108,7 +102,6 @@ class TessellationState extends State<TessellationWidget> {
             }
           },
           onPanUpdate: (details) {
-            //ci = new Matrix4.inverted(transform);
             RenderBox box = context.findRenderObject();
             Offset touchPoint = box.globalToLocal(details.globalPosition);
             touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
@@ -129,5 +122,3 @@ class TessellationState extends State<TessellationWidget> {
     );
   }
 }
-
-//TODO add zoom controller?
