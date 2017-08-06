@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
@@ -27,6 +28,7 @@ class FigurePage extends StatefulWidget {
 class _FigurePageState extends State<FigurePage> {
 
   TessellationFigure figure;
+  ValueNotifier<double> zoom = new ValueNotifier<double>(200.0);
   
   @override
   void initState() {
@@ -59,7 +61,14 @@ class _FigurePageState extends State<FigurePage> {
   }
 
   Future<Null> _resizeFigure() async {
-    print(widget.figure.fit());
+    Rect r = figure.fit();
+    MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
+    if (r.width > r.height) {
+      zoom.value = 0.8 / r.width * s.size.width;
+    }
+    else {
+      zoom.value = 0.8 / r.height * s.size.height;
+    }
   }
 
   Future<Null> _colorSettings() async {
@@ -67,15 +76,15 @@ class _FigurePageState extends State<FigurePage> {
         new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
       return new FigureSettings(colors: figure.colors);
     }));
-    setState() {
+    setState(() {
       figure.colors = _newcolors;
-    }
+    });
   }
 
   Future<Null> _savePNG() async {
     if (figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
-      widget.figure.uuid = _nu.toString();
+      figure.uuid = _nu.toString();
     }
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 100.0, 100.0);
@@ -95,7 +104,6 @@ class _FigurePageState extends State<FigurePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size);
     return new Scaffold(
       appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
         new IconButton(
@@ -125,7 +133,8 @@ class _FigurePageState extends State<FigurePage> {
                 child: new TessellationWidget(
                     key: new Key("tessellationeditor"),
                     figure: figure,
-                    onChanged : _handleFigureChanged)),
+                    onChanged : _handleFigureChanged,
+                    zoom: zoom)),
           ])
     );
   }

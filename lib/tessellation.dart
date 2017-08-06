@@ -9,22 +9,15 @@ import 'tessellationfigure.dart';
 import 'tessellationline.dart';
 
 class TessellationPainter extends CustomPainter {
+  TessellationPainter(this.figure, this.transform);
   final TessellationFigure figure;
-  TessellationPainter(this.figure);
-
-  Matrix4 transform = new Matrix4.identity()
-    ..translate(100.0, 150.0)
-    ..scale(200.0);
-  Matrix4 ci = new Matrix4.identity();
-
+  Matrix4 transform;
   @override 
   void paint(Canvas canvas, Size size) {
     Offset offset = Offset.zero;
     canvas.drawRect(
         offset & size, new Paint()..color = const Color(0x00FFFFFF));
     if (figure != null) {
-      Rect rect = offset & size;
-      //figure.tessellate(canvas, rect);
       canvas.save();
       canvas.transform(transform.storage);
       figure.paint(canvas, offset);
@@ -40,28 +33,51 @@ class TessellationPainter extends CustomPainter {
 }
 
 class TessellationWidget extends StatefulWidget {
+
+  TessellationWidget({Key key, this.figure, this.onChanged, this.zoom}) : super(key:key);
   TessellationFigure figure;
-  TessellationWidget({Key key, this.figure, this.onChanged}) : super(key:key);
+  ValueChanged<TessellationFigure> onChanged;
+  ValueNotifier<double> zoom;
 
   PointIndexPath selectedPoint;
-  ValueChanged<TessellationFigure> onChanged;
-
   @override
   TessellationState createState() => new TessellationState();
+
 }
+
 
 class TessellationState extends State<TessellationWidget> {
   TessellationFigure figure;
   PointIndexPath selectedPoint;
-  Matrix4 transform = new Matrix4.identity()
-    ..translate (100.0, 150.0)
-    ..scale (200.0);
-  Matrix4 ci = new Matrix4.identity();
+  Matrix4 transform;
+  Matrix4 ci;
   
   @override
   void initState() {
     super.initState();
-    figure = widget.figure;
+    setState(() {
+      figure = widget.figure;
+      transform = new Matrix4.identity()
+      ..translate (100.0, 150.0)
+        ..scale (widget.zoom.value);
+      ci = new Matrix4.identity();
+    });
+    widget.zoom.addListener(_setRemoteZoom);
+  }
+
+  @override
+  void dispose() {
+      widget.zoom.removeListener(_setRemoveZoom);
+  }
+
+  void _setRemoteZoom() {   
+     setState(() {
+      figure = widget.figure;
+      transform = new Matrix4.identity()
+        ..translate (100.0, 150.0)
+        ..scale (widget.zoom.value);
+      ci = new Matrix4.identity();
+    });
   }
     
   @override
@@ -96,7 +112,7 @@ class TessellationState extends State<TessellationWidget> {
               }
             },
             onPanUpdate: (details) {
-              ci = new Matrix4.inverted(transform);
+              //ci = new Matrix4.inverted(transform);
               RenderBox box = context.findRenderObject();
               Offset touchPoint = box.globalToLocal(details.globalPosition);
               touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
@@ -113,15 +129,10 @@ class TessellationState extends State<TessellationWidget> {
               selectedPoint = null;
             },
             child: new CustomPaint(
-                painter: new TessellationPainter(figure)
+                painter: new TessellationPainter(figure, transform)
                                    )),
                               );
   }
-
-  @override
-  bool hitTestSelf(Offset position) => true;
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-  }
 }
+
+//TODO add zoom controller?

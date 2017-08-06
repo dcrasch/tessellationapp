@@ -114,3 +114,7 @@ ninja -C out/ios_debug_sim_unop
       sk_sp<SkData> png(decoded->image()->encode(SkEncodedImageFormat::kPNG, 100));
       Dart_Handle result = tonic::DartConverter<tonic::Uint8List>::ToDart((uint8_t*)png->data(),png->size());
 }*/
+
+# controllers
+https://docs.flutter.io/flutter/widgets/TextEditingController-class.html
+set the zoom and the figure?
