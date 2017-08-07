@@ -27,7 +27,8 @@ class FigurePage extends StatefulWidget {
 
 class _FigurePageState extends State<FigurePage> {
   TessellationFigure figure;
-  ValueNotifier<Matrix4> zoom = new ValueNotifier<Matrix4>(new Matrix4.identity());
+  ValueNotifier<Matrix4> zoom =
+      new ValueNotifier<Matrix4>(new Matrix4.identity());
 
   @override
   void initState() {
@@ -63,13 +64,14 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _resizeFigure() async {
     Rect r = figure.fit();
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
-    double scale = 0.7 * math.min( s.size.width / r.width, s.size.height / r.height);
-    double tx = -r.left * scale +(s.size.width  - r.width * scale)/2;
-    double ty = -42.0 + -r.top  * scale +(s.size.height - r.height * scale)/2;
+    double scale =
+        0.7 * math.min(s.size.width / r.width, s.size.height / r.height);
+    double tx = -r.left * scale + (s.size.width - r.width * scale) / 2;
+    double ty = -42.0 + -r.top * scale + (s.size.height - r.height * scale) / 2;
     Matrix4 transform = new Matrix4.identity()
-    ..translate(tx,ty)
-    ..scale(scale);
-    zoom.value=transform;
+      ..translate(tx, ty)
+      ..scale(scale);
+    zoom.value = transform;
   }
 
   Future<Null> _colorSettings() async {
@@ -121,20 +123,30 @@ class _FigurePageState extends State<FigurePage> {
             icon: const Icon(Icons.fullscreen),
             onPressed: _resizeFigure,
           ),
+          /* not yet implemented
           new IconButton(
             icon: const Icon(Icons.import_export),
             onPressed: _savePNG,
           ),
+          new PopupMenuButton<String>(
+              onSelected: (String value) {
+                // TODO
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                    const PopupMenuItem<String>(
+                        value: 'Export SVG', child: const Text('Export SVG')),
+                    const PopupMenuItem<String>(
+                        value: 'Share', child: const Text('Share')),
+                  ]),
+          */
         ]),
         body: new Stack(children: <Widget>[
-          new Center(
-              child: new TessellationTiled(key: new Key(""), figure: figure)),
-          new Center(
-              child: new TessellationWidget(
-                  key: new Key("tessellationeditor"),
-                  figure: figure,
-                  onChanged: _handleFigureChanged,
-                  zoom: zoom)),
+          new TessellationTiled(key: new Key(""), figure: figure),
+          new TessellationWidget(
+              key: new Key("tessellationeditor"),
+              figure: figure,
+              onChanged: _handleFigureChanged,
+              zoom: zoom),
         ]));
   }
 }

@@ -95,33 +95,6 @@ class _TessellationListState extends State<TessellationList> {
       key: scaffoldKey,
       appBar: new AppBar(
         title: new Text('Figure List'),
-        actions: <Widget>[
-          new IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'Add',
-              onPressed: () {
-                showDialog<String>(
-                        context: context, child: new TessellationCreate())
-                    .then((TessellationFigure f) {
-                  if (f != null) {
-                    setState(() {
-                      items.add(f);
-                    });
-                    showFigure(context, f);
-                  }
-                });
-              }),
-          new PopupMenuButton<String>(
-              onSelected: (String value) {
-                // TODO
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                    const PopupMenuItem<String>(
-                        value: 'Export SVG', child: const Text('Export SVG')),
-                    const PopupMenuItem<String>(
-                        value: 'Share', child: const Text('Share')),
-                  ]),
-        ],
       ),
       body: new Scrollbar(
         child: new ListView(
@@ -129,8 +102,21 @@ class _TessellationListState extends State<TessellationList> {
           children: listTiles.toList(),
         ),
       ),
-
-/*new Center(
+      floatingActionButton: new FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            showDialog<String>(
+                context: context,
+                child: new TessellationCreate()).then((TessellationFigure f) {
+              if (f != null) {
+                setState(() {
+                  items.add(f);
+                });
+                showFigure(context, f);
+              }
+            });
+          }),
+      /*new Center(
     child: new ConstrainedBox(
         constraints: new BoxConstraints.expand(),
         child: new DecoratedBox(

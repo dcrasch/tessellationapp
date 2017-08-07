@@ -49,7 +49,6 @@ class TessellationState extends State<TessellationWidget> {
   Matrix4 transform;
   Matrix4 ci;
 
-
   @override
   void initState() {
     super.initState();
