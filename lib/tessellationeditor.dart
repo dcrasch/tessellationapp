@@ -63,9 +63,12 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _resizeFigure() async {
     Rect r = figure.fit();
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
+    double scale = 0.7 * math.min( s.size.width / r.width, s.size.height / r.height);
+    double tx = -r.left * scale +(s.size.width  - r.width * scale)/2;
+    double ty = -42.0 + -r.top  * scale +(s.size.height - r.height * scale)/2;
     Matrix4 transform = new Matrix4.identity()
-    ..translate(s.size.width*0.15, s.size.height*0.15)
-    ..scale(0.7*math.min( s.size.width / r.width, s.size.height / r.height));
+    ..translate(tx,ty)
+    ..scale(scale);
     zoom.value=transform;
   }
 
