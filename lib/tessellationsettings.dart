@@ -20,6 +20,8 @@ class FigureSettings extends StatefulWidget {
 
 class _FigureSettingsState extends State<FigureSettings> {
   List<Color> _colors = new List(4);
+  final TextEditingController _descriptionController =
+      new TextEditingController();
 
   void initState() {
     super.initState();
@@ -41,7 +43,13 @@ class _FigureSettingsState extends State<FigureSettings> {
 
   @override
   Widget build(BuildContext context) {
-    var children = [];
+    var children = [
+      new TextField(
+          controller: _descriptionController,
+          decoration: const InputDecoration(
+            hintText: 'Description',
+          ))
+    ];
     for (int i = 0; i < _colors.length; i++) {
       children.add(_buildColorTile("${i}", _colors[i], () async {
         Color c = await showDialog(

@@ -15,8 +15,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  barback:
-  path:
+  ##barback:
+  ##path:
   
   
 #dependency_overrides:
