@@ -77,7 +77,7 @@ class _FigurePageState extends State<FigurePage> {
   Future<Null> _colorSettings() async {
     List<Color> _newcolors = await Navigator.push(context,
         new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
-      return new FigureSettings(figure);
+      return new FigureSettings(colors:figure.colors);
     }));
     if (_newcolors != null) {
       setState(() {
