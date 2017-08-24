@@ -31,7 +31,7 @@ class _FigureSettingsState extends State<FigureSettings> {
   Widget _buildColorTile(String text, Color color, VoidCallback onTap) {
     return new ListTile(
         title: new Row(children: [
-          new Expanded(child: new Text(text)),
+          //new Expanded(child: new Text(text)),
           new Padding(
               padding: new EdgeInsets.only(right: 14.0),
               child: new ColorTile(color: color, size: 40.0, rounded: true)),

@@ -70,7 +70,7 @@ packages:
   flutter:
     description: flutter
     source: sdk
-    version: "0.0.32"
+    version: "0.0.33"
   flutter_color_picker:
     description:
       path: "flutter_color_picker-0.0.1"
@@ -80,7 +80,7 @@ packages:
   flutter_test:
     description: flutter
     source: sdk
-    version: "0.0.10"
+    version: "0.0.11"
   front_end:
     description:
       name: front_end
@@ -129,6 +129,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  js:
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   kernel:
     description:
       name: kernel
@@ -159,6 +165,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.3"
+  node_preamble:
+    description:
+      name: node_preamble
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   package_config:
     description:
       name: package_config
@@ -284,7 +296,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.21"
+    version: "0.12.24+2"
   typed_data:
     description:
       name: typed_data
@@ -322,4 +334,4 @@ packages:
     source: hosted
     version: "2.1.12"
 sdks:
-  dart: ">=1.23.0-dev.0.0 <2.0.0"
+  dart: ">=1.23.0 <2.0.0-dev.infinity"
