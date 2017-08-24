@@ -134,3 +134,9 @@ set the zoom and the figure?
 https://github.com/MichaelFenwick/Color/blob/master/lib/hex_color.dart
 toRadixString(16).padLeft(2, '0') 
 int.parse(_json['color1'],radix:16)
+
+#android
+
+##emulator
+~/Library/Android/sdk/tools/emulator -avd Android_Accelerated_x86
+https://developer.android.com/studio/run/emulator-commandline.html
