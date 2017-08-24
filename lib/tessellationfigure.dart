@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
@@ -144,9 +143,14 @@ class TessellationFigure {
 
           Paint p = new Paint()
             ..color = colors[color % 4]
-            ..style = PaintingStyle.fill;
-
+            ..style = PaintingStyle.stroke;
           canvas.drawPath(fp, p);
+
+          Paint p2 = new Paint()
+            ..color = colors[color % 4]
+            ..style = PaintingStyle.fill; //strokeAndFill
+          canvas.drawPath(fp, p2);
+
           canvas.restore();
           sx += igx;
           //sy += shy;
