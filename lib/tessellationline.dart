@@ -83,15 +83,29 @@ class TessellationLine {
 
   void addToPath(Path p) {
     if (_points.length == 0) return;
-    for (Offset p2 in _points) {
+    for (Offset p2 in _points.skip(1)) {
       p.lineTo(p2.dx, p2.dy);
     }
   }
 
   void addToPathC(Path p) {
-    for (Offset p3 in _points.reversed) {
+    for (Offset p3 in _points.reversed.skip(1)) {
       Offset p4 = MatrixUtils.transformPoint(transform, p3);
       p.lineTo(p4.dx, p4.dy);
+    }
+  }
+
+  void addToPoly(List<Offset> p) {
+   if (_points.length == 0) return;
+   for (Offset p2 in _points) {
+     if (p.length==0 || p.last!=p2) p.add(p2);
+   }
+  }
+
+  void addToPolyC(List<Offset> p) {
+    for (Offset p3 in _points.reversed) {
+      Offset p4 = MatrixUtils.transformPoint(transform, p3);
+      if (p.length==0 || p.last!=p4) p.add(p4);
     }
   }
 

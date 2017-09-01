@@ -16,7 +16,8 @@ class TessellationFigure {
   final Paint _paint = new Paint()
     ..color = const Color(0xFFFFFF00)
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0 / 50;
+    ..strokeWidth = 2.0 / 50
+    ..strokeJoin = StrokeJoin.round;
 
   double rectsize = 2.0 / 50;
 
@@ -97,6 +98,18 @@ class TessellationFigure {
     } else {
       _lines.reversed.forEach((line3) => line3.addToPathC(p));
     }
+    
+    return p;
+  }
+
+  List<Offset> toPoly() {
+    final List<Offset> p = new List<Offset>();
+    _lines.forEach((line1) => line1.addToPoly(p));
+    if (sequence == 0) {
+      _lines.forEach((line3) => line3.addToPolyC(p));
+    } else {
+      _lines.reversed.forEach((line3) => line3.addToPolyC(p));
+    }
     return p;
   }
 
@@ -164,7 +177,10 @@ class TessellationFigure {
   }
 
   void paint(Canvas canvas, _) {
-    canvas.drawPath(toPath(), _paint);
+    List<Offset> poly = toPoly();
+    Path p = new Path();
+    p.addPolygon(poly, true);
+    canvas.drawPath(p, _paint);
   }
 
   void addPoint(Offset point, PointIndexPath i) {

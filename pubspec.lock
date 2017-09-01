@@ -230,7 +230,7 @@ packages:
       name: shelf_packages_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   shelf_static:
     description:
       name: shelf_static
