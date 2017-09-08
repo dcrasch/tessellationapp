@@ -52,10 +52,10 @@ class TessellationFigure {
       colors[2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
       colors[3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
     } else {
-      colors[0] = const Color(0xff931f1d);
-      colors[1] = const Color(0xFF936b63);
-      colors[2] = const Color(0xFF8a9b68);
-      colors[3] = const Color(0xFFB6C197);
+      colors[0] = const Color(0xFFFFFFFF);
+      colors[1] = const Color(0xFF000000);
+      colors[2] = const Color(0xFF545454);
+      colors[3] = const Color(0xFFA8A8A8);
     }
   }
 
