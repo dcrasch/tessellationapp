@@ -97,7 +97,7 @@ class TessellationFigure {
     } else {
       _lines.reversed.forEach((line3) => line3.addToPathC(p));
     }
-    
+
     return p;
   }
 
@@ -142,25 +142,38 @@ class TessellationFigure {
           color = row % 2;
         }
         while (sx <= maxx) {
+          // todo rewrite to generator or something
           if (sequence == 1) {
             color = currentdiv - 1;
           }
-          if ((sequence == 0) && (gridincy < gridincx)) {
-            // for hexagons
-            color = row % 4;
+          if (sequence == 0) {
+            if (gridincy == gridincx) {
+              if ((shiftx == 0.0)){
+                color = color % 2;
+              }
+              else {
+                color = color % 4;
+              }
+            }
+            if (gridincy < gridincx) {
+              // for hexagons
+              color = row % 3;
+            }
           }
+
           canvas.save();
           canvas.translate(sx, sy);
           canvas.scale(dscale, dscale);
           canvas.rotate(rot);
+          Color c = colors[color % 4];
 
           Paint p = new Paint()
-            ..color = colors[color % 4]
+            ..color = c
             ..style = PaintingStyle.stroke;
           canvas.drawPath(fp, p);
 
           Paint p2 = new Paint()
-            ..color = colors[color % 4]
+            ..color = c
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
 
