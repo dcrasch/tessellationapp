@@ -140,3 +140,6 @@ int.parse(_json['color1'],radix:16)
 ##emulator
 ~/Library/Android/sdk/tools/emulator -avd Android_Accelerated_x86
 https://developer.android.com/studio/run/emulator-commandline.html
+
+#zoomable
+https://github.com/perlatus/flutter_zoomable_image/

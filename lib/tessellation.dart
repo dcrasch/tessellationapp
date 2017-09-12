@@ -49,6 +49,15 @@ class TessellationState extends State<TessellationWidget> {
   Matrix4 transform;
   Matrix4 ci;
 
+  // zoom
+  Offset _startingFocalPoint;
+
+  Offset _previousOffset;
+  Offset _offset = Offset.zero;
+
+  double _previousZoom;
+  double _zoom = 1.0;
+
   @override
   void initState() {
     super.initState();
@@ -116,6 +125,9 @@ class TessellationState extends State<TessellationWidget> {
           onPanEnd: (details) {
             selectedPoint = null;
           },
+
+          //onScaleStart: _handleScaleStart,
+          //onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
           child: new CustomPaint(
               painter: new TessellationPainter(figure, transform))),
     );
