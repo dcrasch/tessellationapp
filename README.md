@@ -143,3 +143,34 @@ https://developer.android.com/studio/run/emulator-commandline.html
 
 #zoomable
 https://github.com/perlatus/flutter_zoomable_image/
+
+##introduction
+show overaly image with move zoom etc.
+
+## color bar kiezen kleuren
+pull up
+met swipe left right kleuren palette
+- red
+- pink
+- purple
+- deep purple
+
+- indigo
+- blue
+- light blue
+- teal 
+
+- green
+- light green
+- lime
+- yellow
+
+- amber
+- orange
+- deep orange
+- brown
+
+- black
+
+21 * 10 
+https://material.io/guidelines/style/color.html#color-color-palette
