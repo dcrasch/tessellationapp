@@ -117,6 +117,23 @@ class AccentColorPickerGrid extends ColorPickerGrid {
             selected: selected);
 }
 
+class CompleteColorPickerGrid extends ColorPickerGrid {
+  CompleteColorPickerGrid(
+      {@required ValueChanged<Color> onTap, bool rounded, Color selected})
+    :super(
+        colors: const <Color>[
+          Colors.red,          Colors.pink,          Colors.purple,
+          Colors.deepPurple,   Colors.indigo,        Colors.blue,
+          Colors.lightBlue,    Colors.cyan,          Colors.teal,
+          Colors.green,        Colors.lightGreen,    Colors.lime,
+          Colors.yellow,       Colors.amber,         Colors.orange,
+          Colors.deepOrange,   Colors.grey,          Colors.blueGrey,
+          Colors.white,        Colors.black],
+        onTap: onTap,
+        rounded: rounded,
+        selected: selected);
+}
+
 class ColorPickerDialog extends StatelessWidget {
   final Widget title;
   final Widget body;
@@ -176,6 +193,25 @@ class AccentColorPickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return new ColorPickerDialog(
         body: new AccentColorPickerGrid(
+            onTap: (Color color) {
+              Navigator.pop(context, color);
+            },
+            rounded: rounded,
+            selected: selected)
+        );
+  }
+}
+
+class CompleteColorPickerDialog extends StatelessWidget {
+  final bool rounded;
+  final Color selected;
+
+  CompleteColorPickerDialog({this.rounded, this.selected});
+
+  @override
+  Widget build(BuildContext context) {
+    return new ColorPickerDialog(
+        body: new CompleteColorPickerGrid(
             onTap: (Color color) {
               Navigator.pop(context, color);
             },

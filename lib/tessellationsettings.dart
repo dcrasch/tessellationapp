@@ -53,7 +53,7 @@ class _FigureSettingsState extends State<FigureSettings> {
     for (int i = 0; i < _colors.length; i++) {
       children.add(_buildColorTile("${i}", _colors[i], () async {
         Color c = await showDialog(
-            context: context, child: new PrimaryColorPickerDialog());
+            context: context, child: new CompleteColorPickerDialog());
         setState(() {
           _colors[i] = c;
         });
