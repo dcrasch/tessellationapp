@@ -58,10 +58,11 @@ inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png -w192 -h192
 
 
-
+### image transformer
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
 Run build parts in de pubspec.yml
 $ flutter packages pub build
+https://github.com/Fox32/image_transformer/blob/master/lib/image_transformer.dart
 
 ## Colorwheel
 
