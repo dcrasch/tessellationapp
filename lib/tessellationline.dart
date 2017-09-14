@@ -96,16 +96,16 @@ class TessellationLine {
   }
 
   void addToPoly(List<Offset> p) {
-   if (_points.length == 0) return;
-   for (Offset p2 in _points) {
-     if (p.length==0 || p.last!=p2) p.add(p2);
-   }
+    if (_points.length == 0) return;
+    for (Offset p2 in _points) {
+      if (p.length == 0 || p.last != p2) p.add(p2);
+    }
   }
 
   void addToPolyC(List<Offset> p) {
     for (Offset p3 in _points.reversed) {
       Offset p4 = MatrixUtils.transformPoint(transform, p3);
-      if (p.length==0 || p.last!=p4) p.add(p4);
+      if (p.length == 0 || p.last != p4) p.add(p4);
     }
   }
 

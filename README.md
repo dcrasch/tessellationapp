@@ -87,8 +87,6 @@ aanpassingen aan painting.dart
   FLUTTER_ENGINE=/Users/david/src/engine/src/
   flutter run --local-engine=ios_debug_sim_unopt -d 7493B601-8A6F-4F59-808F-A4AA5AAA1BB9
 
-
-
 canvas to image
 ###
 https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart    
@@ -100,7 +98,7 @@ picture -> image
 image -> to a fricking png!!
 https://github.com/flutter/flutter/issues/6774
 toByteData save!
-
+toBytes
 Write to png and svg
 https://skia.org/user/api/canvas
 
@@ -144,6 +142,7 @@ https://developer.android.com/studio/run/emulator-commandline.html
 
 #zoomable
 https://github.com/perlatus/flutter_zoomable_image/
+https://material.io/guidelines/patterns/gestures.html
 
 ##introduction
 show overaly image with move zoom etc.
@@ -175,3 +174,4 @@ met swipe left right kleuren palette
 
 21 * 10 
 https://material.io/guidelines/style/color.html#color-color-palette
+https://github.com/dart-flitter/flutter_color_picker
