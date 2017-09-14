@@ -148,10 +148,9 @@ class TessellationFigure {
           }
           if (sequence == 0) {
             if (gridincy == gridincx) {
-              if ((shiftx == 0.0)){
+              if ((shiftx == 0.0)) {
                 color = color % 2;
-              }
-              else {
+              } else {
                 color = color % 4;
               }
             }

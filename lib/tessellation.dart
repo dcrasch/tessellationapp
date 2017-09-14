@@ -57,6 +57,7 @@ class TessellationState extends State<TessellationWidget> {
 
   double _previousZoom;
   double _zoom = 1.0;
+  double _scale = 16.0;
 
   @override
   void initState() {
@@ -85,51 +86,94 @@ class TessellationState extends State<TessellationWidget> {
     return new ConstrainedBox(
       constraints: new BoxConstraints.expand(),
       child: new GestureDetector(
-          onPanStart: (details) {
-            RenderBox box = context.findRenderObject();
-            Offset touchPoint = box.globalToLocal(details.globalPosition);
-            touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
-            selectedPoint = figure.leftdown(touchPoint);
-            if (selectedPoint != null) {
-              setState(() {
-                figure.drag(touchPoint, selectedPoint);
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged(figure);
-              }
+          onScaleStart: (details) {
+            _handlePanStart(context, details);
+            _handleScaleStart(details);
+          },
+          onScaleUpdate: (details) {
+            if (details.scale == 1.0) {
+              _handlePanUpdate(context, details);
             } else {
-              selectedPoint = figure.leftcreate(touchPoint);
-              if (selectedPoint != null) {
-                setState(() {
-                  figure.addPoint(touchPoint, selectedPoint);
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged(figure);
-                }
-              }
+              // two finger drag is with scale ~ 1 maybe long press drag
+              _handleScaleUpdate(context.size, details);
             }
           },
-          onPanUpdate: (details) {
-            RenderBox box = context.findRenderObject();
-            Offset touchPoint = box.globalToLocal(details.globalPosition);
-            touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
-            if (selectedPoint != null) {
-              setState(() {
-                figure.drag(touchPoint, selectedPoint);
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged(figure);
-              }
-            }
+          onScaleEnd: (details) {
+            _handlePanEnd(details);
           },
-          onPanEnd: (details) {
-            selectedPoint = null;
-          },
-
-          //onScaleStart: _handleScaleStart,
-          //onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
           child: new CustomPaint(
               painter: new TessellationPainter(figure, transform))),
     );
+  }
+
+  void _handlePanStart(BuildContext context, ScaleStartDetails details) {
+    RenderBox box = context.findRenderObject();
+    Offset touchPoint = box.globalToLocal(details.focalPoint);
+    print(touchPoint);
+    touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+    selectedPoint = figure.leftdown(touchPoint);
+    if (selectedPoint != null) {
+      setState(() {
+        figure.drag(touchPoint, selectedPoint);
+      });
+      if (widget.onChanged != null) {
+        widget.onChanged(figure);
+      }
+    } else {
+      selectedPoint = figure.leftcreate(touchPoint);
+      if (selectedPoint != null) {
+        setState(() {
+          figure.addPoint(touchPoint, selectedPoint);
+        });
+        if (widget.onChanged != null) {
+          widget.onChanged(figure);
+        }
+      }
+    }
+  }
+
+  void _handlePanUpdate(BuildContext, ScaleUpdateDetails details) {
+    RenderBox box = context.findRenderObject();
+    Offset touchPoint = box.globalToLocal(details.focalPoint);
+    touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+    if (selectedPoint != null) {
+      setState(() {
+        figure.drag(touchPoint, selectedPoint);
+      });
+      if (widget.onChanged != null) {
+        widget.onChanged(figure);
+      }
+    }
+  }
+
+  void _handlePanEnd(ScaleEndDetails details) {
+    selectedPoint = null;
+  }
+
+  void _handleScaleStart(ScaleStartDetails d) {
+    print(d);
+    _startingFocalPoint = d.focalPoint / _scale;
+    _previousOffset = _offset;
+    _previousZoom = _zoom;
+  }
+
+  void _handleScaleUpdate(Size size, ScaleUpdateDetails d) {
+    double newZoom = _previousZoom * d.scale;
+    bool tooZoomedIn = 400.0 * _scale / newZoom <= size.width ||
+        300.0 * _scale / newZoom <= size.height;
+    if (tooZoomedIn) {
+      return;
+    }
+
+    // Ensure that item under the focal point stays in the same place despite zooming
+    final Offset normalizedOffset =
+        (_startingFocalPoint - _previousOffset) / _previousZoom;
+    final Offset newOffset = d.focalPoint / _scale - normalizedOffset * _zoom;
+
+    print(d);
+    setState(() {
+      _zoom = newZoom;
+      _offset = newOffset;
+    });
   }
 }

@@ -98,7 +98,7 @@ class _FigurePageState extends State<FigurePage> {
     figure.tessellate(canvas, paintBounds);
     final ui.Picture picture = recorder.endRecording();
     final ui.Image image = picture.toImage(1000, 1000);
-    List<int> bytes = ui.encodeImageAsPNG(image);
+    List<int> bytes = ui.encodeImageAsPNG(image); // custom function
     await (await _getLocalImageFile()).writeAsBytes(bytes);
   }
 
