@@ -49,8 +49,6 @@ class TessellationState extends State<TessellationWidget> {
   Matrix4 transform;
   Matrix4 ci;
 
-
-
   // zoom
   Matrix4 _oldTransform;
   Offset _startingFocalPoint;
@@ -159,7 +157,7 @@ class TessellationState extends State<TessellationWidget> {
       ..translate(-_startingFocalPoint.dx + focal.dx,
           -_startingFocalPoint.dy + focal.dy);
     setState(() {
-      transform = newTransform*_oldTransform;
+      transform = newTransform * _oldTransform;
       ci = new Matrix4.inverted(transform);
     });
   }

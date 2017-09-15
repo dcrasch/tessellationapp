@@ -56,6 +56,20 @@ class TessellationFigure {
       colors[1] = const Color(0xFF000000);
       colors[2] = const Color(0xFF545454);
       colors[3] = const Color(0xFFA8A8A8);
+
+      if (sequence == 0) {
+        if (gridincy == gridincx) {
+          if ((shiftx == 0.0)) {
+            colors[2] = colors[0];
+            colors[3] = colors[1];
+          }
+        }
+      } else {
+        if (rotdiv % 2 == 0) {
+          colors[2] = colors[0];
+          colors[3] = colors[1];
+        }
+      }
     }
   }
 
@@ -147,13 +161,6 @@ class TessellationFigure {
             color = currentdiv - 1;
           }
           if (sequence == 0) {
-            if (gridincy == gridincx) {
-              if ((shiftx == 0.0)) {
-                color = color % 2;
-              } else {
-                color = color % 4;
-              }
-            }
             if (gridincy < gridincx) {
               // for hexagons
               color = row % 3;
