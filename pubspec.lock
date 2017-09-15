@@ -7,6 +7,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.30.0+2"
+  archive:
+    description:
+      name: archive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.31"
   args:
     description:
       name: args
@@ -31,6 +37,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  browser:
+    description:
+      name: browser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0+2"
   charcode:
     description:
       name: charcode
@@ -73,9 +85,9 @@ packages:
     version: "0.0.34"
   flutter_color_picker:
     description:
-      path: "flutter_color_picker-0.0.1"
-      relative: true
-    source: path
+      name: flutter_color_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   flutter_test:
     description: flutter
@@ -117,6 +129,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  image:
+    description:
+      name: image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.28"
   intl:
     description:
       name: intl
@@ -195,6 +213,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1+1"
+  petitparser:
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.1"
   plugin:
     description:
       name: plugin
@@ -327,6 +351,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  xml:
+    description:
+      name: xml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.6.0"
   yaml:
     description:
       name: yaml
