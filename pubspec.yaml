@@ -10,8 +10,9 @@ dependencies:
     sdk: flutter
   vector_math: any
   path_provider:
-  flutter_color_picker: {path: flutter_color_picker-0.0.1}
-  
+  flutter_color_picker:
+  image:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

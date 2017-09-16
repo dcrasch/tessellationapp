@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 import 'tessellationfigure.dart';
+import 'colorpicker.dart';
 
 class FigureSettings extends StatefulWidget {
   FigureSettings({Key key, this.colors}) : super(key: key);
@@ -53,7 +54,7 @@ class _FigureSettingsState extends State<FigureSettings> {
     for (int i = 0; i < _colors.length; i++) {
       children.add(_buildColorTile("${i}", _colors[i], () async {
         Color c = await showDialog(
-            context: context, child: new CompleteColorPickerDialog());
+            context: context, child: new TessellationColorPickerDialog());
         setState(() {
           _colors[i] = c;
         });

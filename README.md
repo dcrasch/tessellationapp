@@ -175,3 +175,12 @@ met swipe left right kleuren palette
 21 * 10 
 https://material.io/guidelines/style/color.html#color-color-palette
 https://github.com/dart-flitter/flutter_color_picker
+
+
+##Fill polygon
+
+###Point in polygon
+http://alienryderflex.com/polygon/
+
+###Fill polygon
+http://alienryderflex.com/polygon_fill/

@@ -50,14 +50,8 @@ class TessellationState extends State<TessellationWidget> {
   Matrix4 ci;
 
   // zoom
+  Matrix4 _oldTransform;
   Offset _startingFocalPoint;
-
-  Offset _previousOffset;
-  Offset _offset = Offset.zero;
-
-  double _previousZoom;
-  double _zoom = 1.0;
-  double _scale = 16.0;
 
   @override
   void initState() {
@@ -151,29 +145,20 @@ class TessellationState extends State<TessellationWidget> {
   }
 
   void _handleScaleStart(ScaleStartDetails d) {
-    print(d);
-    _startingFocalPoint = d.focalPoint / _scale;
-    _previousOffset = _offset;
-    _previousZoom = _zoom;
+    _startingFocalPoint = d.focalPoint;
+    _oldTransform = transform;
   }
 
   void _handleScaleUpdate(Size size, ScaleUpdateDetails d) {
-    double newZoom = _previousZoom * d.scale;
-    bool tooZoomedIn = 400.0 * _scale / newZoom <= size.width ||
-        300.0 * _scale / newZoom <= size.height;
-    if (tooZoomedIn) {
-      return;
-    }
-
-    // Ensure that item under the focal point stays in the same place despite zooming
-    final Offset normalizedOffset =
-        (_startingFocalPoint - _previousOffset) / _previousZoom;
-    final Offset newOffset = d.focalPoint / _scale - normalizedOffset * _zoom;
-
-    print(d);
+    Offset focal = d.focalPoint - _startingFocalPoint;
+    Matrix4 newTransform = new Matrix4.identity()
+      ..translate(_startingFocalPoint.dx, _startingFocalPoint.dy)
+      ..scale(d.scale)
+      ..translate(-_startingFocalPoint.dx + focal.dx,
+          -_startingFocalPoint.dy + focal.dy);
     setState(() {
-      _zoom = newZoom;
-      _offset = newOffset;
+      transform = newTransform * _oldTransform;
+      ci = new Matrix4.inverted(transform);
     });
   }
 }

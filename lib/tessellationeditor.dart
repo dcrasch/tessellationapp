@@ -7,7 +7,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
