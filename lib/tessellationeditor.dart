@@ -91,14 +91,11 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    final ui.PictureRecorder recorder = new ui.PictureRecorder();
-    final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 100.0, 100.0);
-    final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
-    figure.tessellate(canvas, paintBounds);
-    final ui.Picture picture = recorder.endRecording();
-    final ui.Image image = picture.toImage(1000, 1000);
-    List<int> bytes = ui.encodeImageAsPNG(image); // custom function
-    await (await _getLocalImageFile()).writeAsBytes(bytes);
+    Image image = new Image(320, 240);
+    List<Offset> poly = figure.toPoly();
+    fillPolygon(image, poly);
+    List<int> png = encodePng(image);
+    await (await _getLocalImageFile()).writeAsBytes(png);
   }
 
   void _handleFigureChanged(TessellationFigure figure) {

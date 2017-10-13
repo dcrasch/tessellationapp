@@ -111,7 +111,6 @@ class TessellationFigure {
     } else {
       _lines.reversed.forEach((line3) => line3.addToPathC(p));
     }
-
     return p;
   }
 
@@ -128,34 +127,18 @@ class TessellationFigure {
 
   void tessellate(Canvas canvas, Rect rect, double dscale) {
     final Path fp = toPath();
-    double sx = 0.0;
-    double sy = 0.0;
-    double rot = 0.0;
-    double igx = dscale * gridincx;
-    double igy = dscale * gridincy;
-    double shx = dscale * shiftx;
-    double shy = dscale * shifty;
-    double minx;
-    double maxx;
-    double miny;
-    double maxy;
+    List<Offset> grid = figuregrid(rect, dscale);
     int row = 0;
+    double rot = 0.0;
     int color;
-    double screenwidth = rect.width;
-    double screenheight = rect.height;
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
       rot = 2 * math.PI * currentdiv / rotdiv;
-      minx = -igx * 2;
-      maxx = screenwidth + igx;
-      miny = -igy * 2;
-      maxy = screenheight + igy;
-      while (miny <= maxy) {
-        sx = minx;
-        sy = miny;
+
+      for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
           color = row % 2;
         }
-        while (sx <= maxx) {
+        for (Offset gridpoint in gridrow) {
           // todo rewrite to generator or something
           if (sequence == 1) {
             color = currentdiv - 1;
@@ -166,9 +149,8 @@ class TessellationFigure {
               color = row % 3;
             }
           }
-
           canvas.save();
-          canvas.translate(sx, sy);
+          canvas.translate(gridpoint.dx, gridpoint.dy);
           canvas.scale(dscale, dscale);
           canvas.rotate(rot);
           Color c = colors[color % 4];
@@ -182,21 +164,51 @@ class TessellationFigure {
             ..color = c
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
-
           canvas.restore();
-          sx += igx;
-          //sy += shy;
-          color++;
-        }
-        minx += shx;
-        miny += igy;
-        if (minx > -igx) {
-          minx -= igx;
-          maxy -= shy;
         }
         row++;
       }
     }
+  }
+
+  List<List<Offset>> figuregrid(Rect rect, double dscale) {
+    List<List<Offset>> grid = [[]];
+    double sx = 0.0;
+    double sy = 0.0;
+
+    double igx = dscale * gridincx;
+    double igy = dscale * gridincy;
+    double shx = dscale * shiftx;
+    double shy = dscale * shifty;
+    double minx;
+    double maxx;
+    double miny;
+    double maxy;
+    int row = 0;
+    double screenwidth = rect.width;
+    double screenheight = rect.height;
+    minx = -igx * 2;
+    maxx = screenwidth + igx;
+    miny = -igy * 2;
+    maxy = screenheight + igy;
+    while (miny <= maxy) {
+      sx = minx;
+      sy = miny;
+      List<Offset> gridrow = [];
+      while (sx <= maxx) {
+        sx += igx;
+        //sy += shy;
+        gridrow.add(new Offset(sx, sy));
+      }
+      grid.add(gridrow);
+      minx += shx;
+      miny += igy;
+      if (minx > -igx) {
+        minx -= igx;
+        maxy -= shy;
+      }
+    }
+    return grid;
   }
 
   void paint(Canvas canvas, _) {

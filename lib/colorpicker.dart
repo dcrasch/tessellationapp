@@ -3,36 +3,33 @@ import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 class TessellationColorPickerGrid extends ColorPickerGrid {
   TessellationColorPickerGrid(
-      {@required ValueChanged<Color> onTap, bool rounded, Color selected})
-      : super(
-            colors: const <Color>[
-              Colors.red,
-              Colors.redAccent,
-              Colors.pink,
-              Colors.purple,
-              Colors.deepPurple,
-              Colors.indigo,
-              Colors.blue,
-              Colors.blueAccent,
-              Colors.lightBlue,
-              Colors.cyan,
-              Colors.teal,
-              Colors.green,
-              Colors.greenAccent,
-              Colors.lightGreen,
-              Colors.lime,
-              Colors.yellow,
-              Colors.amber,
-              Colors.orange,
-              Colors.deepOrange,
-              Colors.brown,
-              Colors.grey,
-              Colors.blueGrey,
-              Colors.white,
-              Colors.black],            
-            onTap: onTap,
-            rounded: rounded,
-            selected: selected);
+      {ValueChanged<Color> onTap, bool rounded, Color selected})
+      : super(colors: const <Color>[
+          Colors.red,
+          Colors.redAccent,
+          Colors.pink,
+          Colors.purple,
+          Colors.deepPurple,
+          Colors.indigo,
+          Colors.blue,
+          Colors.blueAccent,
+          Colors.lightBlue,
+          Colors.cyan,
+          Colors.teal,
+          Colors.green,
+          Colors.greenAccent,
+          Colors.lightGreen,
+          Colors.lime,
+          Colors.yellow,
+          Colors.amber,
+          Colors.orange,
+          Colors.deepOrange,
+          Colors.brown,
+          Colors.grey,
+          Colors.blueGrey,
+          Colors.white,
+          Colors.black
+        ], onTap: onTap, rounded: rounded, selected: selected);
 }
 
 class TessellationColorPickerDialog extends StatelessWidget {

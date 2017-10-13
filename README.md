@@ -97,8 +97,10 @@ picture -> image
 
 image -> to a fricking png!!
 https://github.com/flutter/flutter/issues/6774
+
 toByteData save!
-toBytes
+https://github.com/flutter/flutter/issues/11648
+
 Write to png and svg
 https://skia.org/user/api/canvas
 
