@@ -95,7 +95,7 @@ class _FigurePageState extends State<FigurePage> {
     }
     Im.Image image = new Im.Image(320, 240);
     List<Offset> poly = figure.toPoly();
-    fillPolygon(image, poly);
+    await fillPolygon(image, poly);
     List<int> png = Im.encodePng(image);
     await (await _getLocalImageFile()).writeAsBytes(png);
   }
