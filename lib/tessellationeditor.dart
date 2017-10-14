@@ -7,12 +7,14 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:image/image.dart' as Im;
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
+import 'polygonfill.dart';
 
 class FigurePage extends StatefulWidget {
   FigurePage({Key key, this.title, this.figure}) : super(key: key);
@@ -91,10 +93,10 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Image image = new Image(320, 240);
+    Im.Image image = new Im.Image(320, 240);
     List<Offset> poly = figure.toPoly();
     fillPolygon(image, poly);
-    List<int> png = encodePng(image);
+    List<int> png = Im.encodePng(image);
     await (await _getLocalImageFile()).writeAsBytes(png);
   }
 
@@ -120,11 +122,11 @@ class _FigurePageState extends State<FigurePage> {
             icon: const Icon(Icons.fullscreen),
             onPressed: _resizeFigure,
           ),
-          /* not yet implemented
           new IconButton(
             icon: const Icon(Icons.import_export),
             onPressed: _savePNG,
           ),
+          /* not implemented yet
           new PopupMenuButton<String>(
               onSelected: (String value) {
                 // TODO
