@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:async';
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 
+import 'package:image/image.dart' as Im;
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
+import 'polygonfill.dart';
 import 'tessellationline.dart';
 
 class TessellationFigure {
@@ -125,6 +129,7 @@ class TessellationFigure {
     return p;
   }
 
+  
   void tessellate(Canvas canvas, Rect rect, double dscale) {
     final Path fp = toPath();
     List<Offset> grid = figuregrid(rect, dscale);
@@ -165,6 +170,45 @@ class TessellationFigure {
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
           canvas.restore();
+        }
+        row++;
+      }
+    }
+  }
+
+Future<Null>  tessellateimage(Im.Image image, double dscale) async {
+    Rect rect = const Offset(0.0, 0.0) & const Size(320.0, 240.0);
+    List<Offset> grid = figuregrid(rect, dscale);
+    int row = 0;
+    double rot = 0.0;
+    int color;
+    List<Offset> poly = this.toPoly();
+    for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
+      rot = 2 * math.PI * currentdiv / rotdiv;
+
+      for (List<Offset> gridrow in grid) {
+        if (sequence == 0) {
+          color = row % 2;
+        }
+        for (Offset gridpoint in gridrow) {
+          // todo rewrite to generator or something
+          if (sequence == 1) {
+            color = currentdiv - 1;
+          }
+          if (sequence == 0) {
+            if (gridincy < gridincx) {
+              // for hexagons
+              color = row % 3;
+            }
+          }
+          Color c = colors[color % 4];
+
+          Matrix4 t = new Matrix4.identity()
+            ..translate(gridpoint.dx, gridpoint.dy)
+            ..scale(dscale)
+            ..rotateZ(rot);
+          
+          await fillPolygon(image, poly, t, c);
         }
         row++;
       }

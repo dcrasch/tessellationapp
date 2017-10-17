@@ -10,13 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:image/image.dart' as Im;
 
-void fillPolygon(image, points) {
+void fillPolygon(image, points, transform, c) {
   List<Offset>poly = [];
-  Matrix4 t = new Matrix4.identity()
-    ..translate(60.0, 60.0)
-    ..scale(50.0);
   for (Offset o in points) {
-    Offset p = MatrixUtils.transformPoint(t, o);
+    Offset p = MatrixUtils.transformPoint(transform, o);
     poly.add(p);
   }
   poly.remove(poly.first);
@@ -34,7 +31,7 @@ void fillPolygon(image, points) {
   int nodes, pixelX, pixelY, i, j, swap;
   List<int> nodeX = new List(polyCorners);
 
-  for (pixelY = 0; pixelY < 240; pixelY++) {
+  for (pixelY = 0; pixelY < image.height; pixelY++) {
 
     // build nodes
     nodes = 0;
@@ -65,16 +62,16 @@ void fillPolygon(image, points) {
 
     // fill pixels
     for (i = 0; i < nodes; i += 2) {
-      if (nodeX[i] >= 320) break;
+      if (nodeX[i] >= image.width) break;
       if (nodeX[i + 1] > 0) {
         if (nodeX[i] < 0) {
           nodeX[i] = 0;
         }
-        if (nodeX[i + 1] > 320) {
-          nodeX[i + 1] = 320;
+        if (nodeX[i + 1] > image.width) {
+          nodeX[i + 1] = image.width;
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
-          Im.drawPixel(image, pixelX, pixelY, Im.getColor(255, 0, 0));
+          Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
         }
       }
     }

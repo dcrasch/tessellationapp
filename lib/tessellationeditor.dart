@@ -14,7 +14,7 @@ import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
-import 'polygonfill.dart';
+
 
 class FigurePage extends StatefulWidget {
   FigurePage({Key key, this.title, this.figure}) : super(key: key);
@@ -94,8 +94,7 @@ class _FigurePageState extends State<FigurePage> {
       figure.uuid = _nu.toString();
     }
     Im.Image image = new Im.Image(320, 240);
-    List<Offset> poly = figure.toPoly();
-    await fillPolygon(image, poly);
+    await this.figure.tessellateimage(image, 20.0);
     List<int> png = Im.encodePng(image);
     await (await _getLocalImageFile()).writeAsBytes(png);
   }
