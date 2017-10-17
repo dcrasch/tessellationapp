@@ -170,6 +170,8 @@ class TessellationFigure {
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
           canvas.restore();
+
+          color++;
         }
         row++;
       }
