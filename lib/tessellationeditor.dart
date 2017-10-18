@@ -94,7 +94,7 @@ class _FigurePageState extends State<FigurePage> {
       figure.uuid = _nu.toString();
     }
     Im.Image image = new Im.Image(1024, 1024);
-    await this.figure.tessellateimage(image, 50.0);
+    await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
     await (await _getLocalImageFile()).writeAsBytes(png);
   }

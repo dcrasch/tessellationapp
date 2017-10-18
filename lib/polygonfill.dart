@@ -72,13 +72,13 @@ void fillPolygon(image, points, transform, c) {
           nodeX[i + 1] = image.width;
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
-         // Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
+          Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
         }
       }
     }
   }
 
-
+  /*
   Offset oldp = poly.last;
   for (Offset p2 in poly) {
     Im.drawLine(image,
@@ -88,5 +88,6 @@ void fillPolygon(image, points, transform, c) {
                 antialias:false);
     oldp=p2;
   }
+  */
 
 }
