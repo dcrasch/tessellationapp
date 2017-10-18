@@ -93,8 +93,8 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(320, 240);
-    await this.figure.tessellateimage(image, 20.0);
+    Im.Image image = new Im.Image(1024, 1024);
+    await this.figure.tessellateimage(image, 50.0);
     List<int> png = Im.encodePng(image);
     await (await _getLocalImageFile()).writeAsBytes(png);
   }
