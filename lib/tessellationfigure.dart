@@ -170,6 +170,8 @@ class TessellationFigure {
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
           canvas.restore();
+
+          color++;
         }
         row++;
       }
@@ -177,7 +179,7 @@ class TessellationFigure {
   }
 
 Future<Null>  tessellateimage(Im.Image image, double dscale) async {
-    Rect rect = const Offset(0.0, 0.0) & const Size(320.0, 240.0);
+    Rect rect = const Offset(0.0, 0.0) & const Size(1024.0, 1024.0);
     List<Offset> grid = figuregrid(rect, dscale);
     int row = 0;
     double rot = 0.0;
@@ -205,10 +207,11 @@ Future<Null>  tessellateimage(Im.Image image, double dscale) async {
 
           Matrix4 t = new Matrix4.identity()
             ..translate(gridpoint.dx, gridpoint.dy)
-            ..scale(dscale)
-            ..rotateZ(rot);
+            ..scale(dscale);
+            //..rotateZ(rot);
           
           await fillPolygon(image, poly, t, c);
+          color++;
         }
         row++;
       }

@@ -11,6 +11,7 @@ import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:image/image.dart' as Im;
 
 void fillPolygon(image, points, transform, c) {
+  
   List<Offset>poly = [];
   for (Offset o in points) {
     Offset p = MatrixUtils.transformPoint(transform, o);
@@ -71,20 +72,21 @@ void fillPolygon(image, points, transform, c) {
           nodeX[i + 1] = image.width;
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
-          Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
+         // Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
         }
       }
     }
   }
 
-  /*
+
   Offset oldp = poly.last;
   for (Offset p2 in poly) {
     Im.drawLine(image,
         oldp.dx.ceil(), oldp.dy.ceil(),
         p2.dx.ceil(), p2.dy.ceil(),
-        Im.getColor(0, 255, 0));
+        Im.getColor(c.red, c.green, c.blue),
+                antialias:false);
     oldp=p2;
   }
-  */
+
 }
