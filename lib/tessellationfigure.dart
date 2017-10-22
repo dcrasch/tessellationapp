@@ -186,8 +186,12 @@ Future<Null>  tessellateimage(Im.Image image, double dscale) async {
     int color;
     List<Offset> poly = this.toPoly();
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
-      rot = 2 * math.PI * currentdiv / rotdiv;
-
+      if (rotdiv==currentdiv) {
+        rot = 0.0;
+      }
+      else {
+        rot = 2.0 * math.PI * currentdiv / rotdiv;
+      }
       for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
           color = row % 2;
@@ -207,8 +211,8 @@ Future<Null>  tessellateimage(Im.Image image, double dscale) async {
 
           Matrix4 t = new Matrix4.identity()
             ..translate(gridpoint.dx, gridpoint.dy)
-            ..scale(dscale);
-            //..rotateZ(rot);
+            ..scale(dscale)
+            ..rotateZ(rot);
           
           await fillPolygon(image, poly, t, c);
           color++;
