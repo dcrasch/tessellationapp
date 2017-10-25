@@ -11,11 +11,19 @@ import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:image/image.dart' as Im;
 
 void fillPolygon(image, points, transform, c) {
-  
+  Offset minPoint, maxPoint;
   List<Offset>poly = [];
   for (Offset o in points) {
     Offset p = MatrixUtils.transformPoint(transform, o);
     poly.add(p);
+    if (maxPoint == null) {
+      maxPoint = p;
+      minPoint = p;
+    }
+    maxPoint = new Offset(math.max(p.dx, maxPoint.dx),
+        math.max(p.dy, maxPoint.dy));
+    minPoint = new Offset(math.min(p.dx, minPoint.dx),
+        math.min(p.dy, minPoint.dy));      
   }
   poly.remove(poly.first);
 
@@ -32,7 +40,7 @@ void fillPolygon(image, points, transform, c) {
   int nodes, pixelX, pixelY, i, j, swap;
   List<int> nodeX = new List(polyCorners);
 
-  for (pixelY = 0; pixelY < image.height; pixelY++) {
+  for (pixelY = minPoint.dy.ceil(); pixelY < maxPoint.dy.ceil(); pixelY++) {
 
     // build nodes
     nodes = 0;
@@ -63,13 +71,13 @@ void fillPolygon(image, points, transform, c) {
 
     // fill pixels
     for (i = 0; i < nodes; i += 2) {
-      if (nodeX[i] >= image.width) break;
-      if (nodeX[i + 1] > 0) {
-        if (nodeX[i] < 0) {
-          nodeX[i] = 0;
+      if (nodeX[i] >= maxPoint.dx.ceil()) break;
+      if (nodeX[i + 1] > minPoint.dx.ceil()) {
+        if (nodeX[i] < minPoint.dx.ceil()) {
+          nodeX[i] = minPoint.dx.ceil();
         }
-        if (nodeX[i + 1] > image.width) {
-          nodeX[i + 1] = image.width;
+        if (nodeX[i + 1] > maxPoint.dx.ceil()) {
+          nodeX[i + 1] = maxPoint.dx.ceil();
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
           Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
@@ -78,8 +86,7 @@ void fillPolygon(image, points, transform, c) {
     }
   }
 
-  /*
-  Offset oldp = poly.last;
+/*  Offset oldp = poly.last;    
   for (Offset p2 in poly) {
     Im.drawLine(image,
         oldp.dx.ceil(), oldp.dy.ceil(),
