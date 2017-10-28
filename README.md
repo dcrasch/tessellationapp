@@ -186,3 +186,24 @@ http://alienryderflex.com/polygon/
 
 ###Fill polygon
 http://alienryderflex.com/polygon_fill/
+
+# share image
+
+## android
+
+File f=new File("full image path");
+Uri uri = Uri.parse("file://"+f.getAbsolutePath());
+Intent share = new Intent(Intent.ACTION_SEND);
+share.putExtra(Intent.EXTRA_STREAM, uri);
+share.setType("image/*");
+share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+context.startActivity(Intent.createChooser(share, "Share image File"));
+
+## ios
+NSData *compressedImage = UIImageJPEGRepresentation(self.resultImage, 0.8 );
+NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+NSString *imagePath = [docsPath stringByAppendingPathComponent:@"image.jpg"];
+NSURL *imageUrl     = [NSURL fileURLWithPath:imagePath];
+
+[compressedImage writeToURL:imageUrl atomically:YES]; // save the file
+UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[ @"Check this out!", imageUrl ] applicationActivities:nil];

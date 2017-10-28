@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:share/share.dart';
 import 'package:image/image.dart' as Im;
 
 import 'tessellation.dart';
@@ -14,7 +15,6 @@ import 'tessellationfigure.dart';
 import 'tessellationlist.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
-
 
 class FigurePage extends StatefulWidget {
   FigurePage({Key key, this.title, this.figure}) : super(key: key);
@@ -96,7 +96,23 @@ class _FigurePageState extends State<FigurePage> {
     Im.Image image = new Im.Image(1024, 1024);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
+
     await (await _getLocalImageFile()).writeAsBytes(png);
+  }
+
+  Future<Null> _shareFigure() async {
+    if (figure.uuid.isEmpty) {
+      DateTime _nu = new DateTime.now();
+      figure.uuid = _nu.toString();
+    }
+    Im.Image image = new Im.Image(1024, 1024);
+    await this.figure.tessellateimage(image, 150.0);
+    List<int> png = Im.encodePng(image);
+    Directory appDir = await getApplicationDocumentsDirectory();
+    String filename = "${appDir.path}/${widget.figure.uuid}.png";
+    File f = new File(filename);
+    await f.writeAsBytes(png);
+    shareImage("file://" + filename);
   }
 
   void _handleFigureChanged(TessellationFigure figure) {
@@ -123,12 +139,12 @@ class _FigurePageState extends State<FigurePage> {
           ),
           new IconButton(
             icon: const Icon(Icons.import_export),
-            onPressed: _savePNG,
+            onPressed: _shareFigure,
           ),
-          /* not implemented yet
+          /*
           new PopupMenuButton<String>(
               onSelected: (String value) {
-                // TODO
+                 _handleMenu(context, value);            
               },
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                     const PopupMenuItem<String>(

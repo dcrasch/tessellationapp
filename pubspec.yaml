@@ -12,6 +12,7 @@ dependencies:
   path_provider:
   flutter_color_picker:
   share:
+    path: plugins/share
   image:
 
 dev_dependencies:

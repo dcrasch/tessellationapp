@@ -129,7 +129,6 @@ class TessellationFigure {
     return p;
   }
 
-  
   void tessellate(Canvas canvas, Rect rect, double dscale) {
     final Path fp = toPath();
     List<Offset> grid = figuregrid(rect, dscale);
@@ -178,7 +177,7 @@ class TessellationFigure {
     }
   }
 
-Future<Null>  tessellateimage(Im.Image image, double dscale) async {
+  Future<Null> tessellateimage(Im.Image image, double dscale) async {
     Rect rect = const Offset(0.0, 0.0) & const Size(1024.0, 1024.0);
     List<Offset> grid = figuregrid(rect, dscale);
     int row = 0;
@@ -186,10 +185,9 @@ Future<Null>  tessellateimage(Im.Image image, double dscale) async {
     int color;
     List<Offset> poly = this.toPoly();
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
-      if (rotdiv==currentdiv) {
+      if (rotdiv == currentdiv) {
         rot = 0.0;
-      }
-      else {
+      } else {
         rot = 2.0 * math.PI * currentdiv / rotdiv;
       }
       for (List<Offset> gridrow in grid) {
@@ -213,7 +211,7 @@ Future<Null>  tessellateimage(Im.Image image, double dscale) async {
             ..translate(gridpoint.dx, gridpoint.dy)
             ..scale(dscale)
             ..rotateZ(rot);
-          
+
           await fillPolygon(image, poly, t, c);
           color++;
         }

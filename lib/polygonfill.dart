@@ -12,7 +12,7 @@ import 'package:image/image.dart' as Im;
 
 void fillPolygon(image, points, transform, c) {
   Offset minPoint, maxPoint;
-  List<Offset>poly = [];
+  List<Offset> poly = [];
   for (Offset o in points) {
     Offset p = MatrixUtils.transformPoint(transform, o);
     poly.add(p);
@@ -20,10 +20,10 @@ void fillPolygon(image, points, transform, c) {
       maxPoint = p;
       minPoint = p;
     }
-    maxPoint = new Offset(math.max(p.dx, maxPoint.dx),
-        math.max(p.dy, maxPoint.dy));
-    minPoint = new Offset(math.min(p.dx, minPoint.dx),
-        math.min(p.dy, minPoint.dy));      
+    maxPoint =
+        new Offset(math.max(p.dx, maxPoint.dx), math.max(p.dy, maxPoint.dy));
+    minPoint =
+        new Offset(math.min(p.dx, minPoint.dx), math.min(p.dy, minPoint.dy));
   }
   poly.remove(poly.first);
 
@@ -41,17 +41,15 @@ void fillPolygon(image, points, transform, c) {
   List<int> nodeX = new List(polyCorners);
 
   for (pixelY = minPoint.dy.ceil(); pixelY < maxPoint.dy.ceil(); pixelY++) {
-
     // build nodes
     nodes = 0;
     j = polyCorners - 1;
     for (i = 0; i < polyCorners; i++) {
       Offset p = poly[i];
       Offset q = poly[j];
-      if (p.dy < pixelY && q.dy >= pixelY ||
-          q.dy < pixelY && p.dy >= pixelY) {
+      if (p.dy < pixelY && q.dy >= pixelY || q.dy < pixelY && p.dy >= pixelY) {
         nodeX[nodes++] =
-          (p.dx + (pixelY - p.dy) / (q.dy - p.dy) * (q.dx - p.dx)).ceil();
+            (p.dx + (pixelY - p.dy) / (q.dy - p.dy) * (q.dx - p.dx)).ceil();
       }
       j = i;
     }
@@ -80,7 +78,8 @@ void fillPolygon(image, points, transform, c) {
           nodeX[i + 1] = maxPoint.dx.ceil();
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
-          Im.drawPixel(image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
+          Im.drawPixel(
+              image, pixelX, pixelY, Im.getColor(c.red, c.green, c.blue));
         }
       }
     }
@@ -96,5 +95,4 @@ void fillPolygon(image, points, transform, c) {
     oldp=p2;
   }
   */
-
 }
