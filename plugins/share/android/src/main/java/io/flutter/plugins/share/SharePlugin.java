@@ -67,7 +67,7 @@ public class SharePlugin implements MethodChannel.MethodCallHandler {
 
     private void shareImage(String filename) {
         File image = new File(filename);
-        Uri fileuri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, image);
+        Uri fileuri = FileProvider.getUriForFile(context, "nl.cloudscripting.fileprovider", image);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, fileuri);

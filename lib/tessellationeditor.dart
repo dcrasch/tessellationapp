@@ -108,9 +108,7 @@ class _FigurePageState extends State<FigurePage> {
     Im.Image image = new Im.Image(1024, 1024);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
-    Directory storageDir;
-    storageDir = await getApplicationDocumentsDirectory();
-    storageDir = await getExternalStorageDirectory();
+    Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
     new File(filename).create(recursive:true).then((File f) {
       f.writeAsBytes(png);
