@@ -109,10 +109,13 @@ class _FigurePageState extends State<FigurePage> {
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
     final Directory systemTempDir = Directory.systemTemp;
-    String filename = "${systemTempDir.path}/f.png";
-    File f = new File(filename);
-    await f.writeAsBytes(png);
-    shareImage(filename);
+    String filename = "/storage/emulated/0/Pictures/Tessellation/f.png";
+    print(filename);
+
+    new File(filename).create(recursive:true).then((File f) {
+      f.writeAsBytes(png);
+      shareImage(filename);
+    });
   }
 
   void _handleFigureChanged(TessellationFigure figure) {

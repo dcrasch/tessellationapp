@@ -7,6 +7,7 @@ package io.flutter.plugins.share;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import java.io.*;
 import android.os.Environment;
 import io.flutter.plugin.common.MethodCall;
@@ -64,26 +65,13 @@ public class SharePlugin implements MethodChannel.MethodCallHandler {
   }
 
   private void shareImage(String filename) {
+      File image = new File(filename);
       File path = Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES);
-    File dst = new File(path, "ha.png");
-    File src = new File(filename);
-    try {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        out.close();    
-        in.close();
-    } catch (IOException e){
-        
-    }
-
-
-    Uri fileuri = Uri.fromFile(dst);
+                                                                Environment.DIRECTORY_PICTURES);
+      Log.d("tessellation",path.getAbsolutePath());
+      Log.d("tessellation",image.getAbsolutePath());
+      
+    Uri fileuri = Uri.fromFile(image);
     Intent shareIntent = new Intent(Intent.ACTION_SEND);
     shareIntent.setType("image/*");
     shareIntent.putExtra(Intent.EXTRA_STREAM, fileuri);

@@ -191,6 +191,8 @@ http://alienryderflex.com/polygon_fill/
 
 ## android
 
+https://stackoverflow.com/questions/31162638/grant-permission-required-for-external-storage-in-android-m
+
 File f=new File("full image path");
 Uri uri = Uri.parse("file://"+f.getAbsolutePath());
 Intent share = new Intent(Intent.ACTION_SEND);
@@ -207,3 +209,14 @@ NSURL *imageUrl     = [NSURL fileURLWithPath:imagePath];
 
 [compressedImage writeToURL:imageUrl atomically:YES]; // save the file
 UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[ @"Check this out!", imageUrl ] applicationActivities:nil];
+
+# open simulator
+
+## ios
+$ open -a Simulator.app
+
+## android
+https://developer.android.com/studio/run/emulator-commandline.html
+ 
+ $ ~/Library/Android/sdk/tools/emulator @nexus &
+ 
