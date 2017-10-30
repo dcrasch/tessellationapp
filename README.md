@@ -201,6 +201,10 @@ share.setType("image/*");
 share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 context.startActivity(Intent.createChooser(share, "Share image File"));
 
+### use file content provider
+import com.android.support.v4
+/Users/david/flutter/examples/plugins/packages/local_auth/android
+
 ## ios
 NSData *compressedImage = UIImageJPEGRepresentation(self.resultImage, 0.8 );
 NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
