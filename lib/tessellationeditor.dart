@@ -41,14 +41,12 @@ class _FigurePageState extends State<FigurePage> {
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.json";
-    print(filename);
     return new File(filename);
   }
 
   Future<File> _getLocalImageFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.png";
-    print(filename);
     return new File(filename);
   }
 

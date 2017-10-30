@@ -103,7 +103,6 @@ class TessellationState extends State<TessellationWidget> {
   void _handlePanStart(BuildContext context, ScaleStartDetails details) {
     RenderBox box = context.findRenderObject();
     Offset touchPoint = box.globalToLocal(details.focalPoint);
-    print(touchPoint);
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
     selectedPoint = figure.leftdown(touchPoint);
     if (selectedPoint != null) {

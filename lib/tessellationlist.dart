@@ -54,7 +54,7 @@ class _TessellationListState extends State<TessellationList> {
           TessellationFigure f = new TessellationFigure.fromJson(result);
           myitems.add(f);
         } catch (e) {
-          print(e);
+          //print(e);
         }
       }
     }

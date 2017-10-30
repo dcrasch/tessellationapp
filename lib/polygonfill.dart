@@ -33,7 +33,6 @@ void fillPolygon(image, points, transform, c) {
     content = content +  "${p.dx},${p.dy}\n ";
   }
   content = content + '\"/></svg>';
-  print(content);
   */
 
   int polyCorners = poly.length;
