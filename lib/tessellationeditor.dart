@@ -108,10 +108,14 @@ class _FigurePageState extends State<FigurePage> {
     Im.Image image = new Im.Image(1024, 1024);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
-    final Directory systemTempDir = Directory.systemTemp;
-    String filename = "/storage/emulated/0/Pictures/Tessellation/f.png";
-    print(filename);
-
+    Directory storageDir;
+    if (Platform.isIOS) {
+      storageDir = await getApplicationDocumentsDirectory();
+    }
+    else {
+      storageDir = await getExternalStorageDirectory();
+    }
+    String filename = "${storageDir.path}/Tessellations/${figure.uuid}.png";
     new File(filename).create(recursive:true).then((File f) {
       f.writeAsBytes(png);
       shareImage(filename);

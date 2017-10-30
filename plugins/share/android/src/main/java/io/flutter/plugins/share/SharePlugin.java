@@ -67,10 +67,7 @@ public class SharePlugin implements MethodChannel.MethodCallHandler {
   private void shareImage(String filename) {
       File image = new File(filename);
       File path = Environment.getExternalStoragePublicDirectory(
-                                                                Environment.DIRECTORY_PICTURES);
-      Log.d("tessellation",path.getAbsolutePath());
-      Log.d("tessellation",image.getAbsolutePath());
-      
+                                                                Environment.DIRECTORY_PICTURES);      
     Uri fileuri = Uri.fromFile(image);
     Intent shareIntent = new Intent(Intent.ACTION_SEND);
     shareIntent.setType("image/*");
