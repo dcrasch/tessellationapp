@@ -108,11 +108,11 @@ class _FigurePageState extends State<FigurePage> {
     Im.Image image = new Im.Image(1024, 1024);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String filename = "${appDir.path}/${widget.figure.uuid}.png";
+    final Directory systemTempDir = Directory.systemTemp;
+    String filename = "${systemTempDir.path}/f.png";
     File f = new File(filename);
     await f.writeAsBytes(png);
-    shareImage("file://" + filename);
+    shareImage(filename);
   }
 
   void _handleFigureChanged(TessellationFigure figure) {
