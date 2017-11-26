@@ -91,7 +91,7 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(1024, 1024);
+    Im.Image image = new Im.Image(128, 128);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
 
@@ -103,7 +103,7 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(1024, 1024);
+    Im.Image image = new Im.Image(128, 128);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
     Directory storageDir = await getTemporaryDirectory();
