@@ -158,17 +158,21 @@ class TessellationFigure {
           canvas.scale(dscale, dscale);
           canvas.rotate(rot);
           Color c = colors[color % 4];
-
+/*
           Paint p = new Paint()
             ..color = c
             ..style = PaintingStyle.stroke;
           canvas.drawPath(fp, p);
+*/
 
           Paint p2 = new Paint()
             ..color = c
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
+
+
           canvas.restore();
+
 
           color++;
         }
