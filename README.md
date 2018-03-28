@@ -226,3 +226,8 @@ https://developer.android.com/studio/run/emulator-commandline.html
  
  $ ~/Library/Android/sdk/tools/emulator @nexus &
  
+# build system
+
+## gradle
+upgrade to gradle 4.1
+https://github.com/flutter/flutter/wiki/Updating-Flutter-projects-to-Gradle-4.1-and-Android-Studio-Gradle-plugin-3.0.1
