@@ -103,23 +103,20 @@ class TessellationState extends State<TessellationWidget> {
   void _handlePanStart(BuildContext context, ScaleStartDetails details) {
     RenderBox box = context.findRenderObject();
     Offset touchPoint = box.globalToLocal(details.focalPoint);
+    bool _changed = false;
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
     selectedPoint = figure.leftdown(touchPoint);
     if (selectedPoint != null) {
-      setState(() {
-        figure.drag(touchPoint, selectedPoint);
-      });
-      if (widget.onChanged != null) {
+      _changed = figure.drag(touchPoint, selectedPoint);
+      if (_changed && widget.onChanged != null) {
         widget.onChanged(figure);
       }
     } else {
       selectedPoint = figure.leftcreate(touchPoint);
       if (selectedPoint != null) {
-        setState(() {
-          figure.addPoint(touchPoint, selectedPoint);
-        });
+        figure.addPoint(touchPoint, selectedPoint);
         if (widget.onChanged != null) {
-          widget.onChanged(figure);
+          //widget.onChanged(figure);
         }
       }
     }
@@ -129,11 +126,10 @@ class TessellationState extends State<TessellationWidget> {
     RenderBox box = context.findRenderObject();
     Offset touchPoint = box.globalToLocal(details.focalPoint);
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
+    bool _changed = false;
     if (selectedPoint != null) {
-      setState(() {
-        figure.drag(touchPoint, selectedPoint);
-      });
-      if (widget.onChanged != null) {
+      _changed = figure.drag(touchPoint, selectedPoint);
+      if (_changed == true && widget.onChanged != null) {
         widget.onChanged(figure);
       }
     }

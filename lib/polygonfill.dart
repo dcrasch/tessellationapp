@@ -84,6 +84,7 @@ void fillPolygon(image, points, transform, c) {
     }
   }
 
+  // draw borders
 /*  Offset oldp = poly.last;    
   for (Offset p2 in poly) {
     Im.drawLine(image,

@@ -30,6 +30,7 @@ class _FigurePageState extends State<FigurePage> {
   TessellationFigure figure;
   ValueNotifier<Matrix4> zoom =
       new ValueNotifier<Matrix4>(new Matrix4.identity());
+  bool _editing = true;
 
   @override
   void initState() {
@@ -91,7 +92,7 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(128, 128);
+    Im.Image image = new Im.Image(1280, 1280);
     await this.figure.tessellateimage(image, 150.0);
     List<int> png = Im.encodePng(image);
 
@@ -99,16 +100,22 @@ class _FigurePageState extends State<FigurePage> {
   }
 
   Future<Null> _shareFigure() async {
+    setState(() {
+      _editing = false;
+    });
+
     if (figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(128, 128);
-    await this.figure.tessellateimage(image, 150.0);
+    Im.Image image = new Im.Image(1024, 1024);
+    await this.figure.tessellateimage(image, 1.0);
+
     List<int> png = Im.encodePng(image);
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-    new File(filename).create(recursive:true).then((File f) {
+
+    new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytes(png);
       shareImage(filename);
     });
@@ -143,7 +150,7 @@ class _FigurePageState extends State<FigurePage> {
           /*
           new PopupMenuButton<String>(
               onSelected: (String value) {
-                 _handleMenu(context, value);            
+                 _handleMenu(context, value);
               },
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                     const PopupMenuItem<String>(
@@ -155,11 +162,13 @@ class _FigurePageState extends State<FigurePage> {
         ]),
         body: new Stack(children: <Widget>[
           new TessellationTiled(key: new Key(""), figure: figure),
-          new TessellationWidget(
-              key: new Key("tessellationeditor"),
-              figure: figure,
-              onChanged: _handleFigureChanged,
-              zoom: zoom),
+          _editing
+              ? new TessellationWidget(
+                  key: new Key("tessellationeditor"),
+                  figure: figure,
+                  onChanged: _handleFigureChanged,
+                  zoom: zoom)
+              : const Center(child: const CircularProgressIndicator()),
         ]));
   }
 }

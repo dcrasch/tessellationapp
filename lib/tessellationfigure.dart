@@ -170,9 +170,7 @@ class TessellationFigure {
             ..style = PaintingStyle.fill; //strokeAndFill
           canvas.drawPath(fp, p2);
 
-
           canvas.restore();
-
 
           color++;
         }
@@ -317,8 +315,10 @@ class TessellationFigure {
       } else {
         p1 = point;
       }
-      _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
-      return true;
+      if (_lines[i.lineIndex].getPointAt(i.pointIndex) != p1) {
+        _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
+        return true;
+      }
     }
     return false;
   }
