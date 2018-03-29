@@ -92,17 +92,17 @@ class _TessellationListState extends State<TessellationList> {
       floatingActionButton: new FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            showDialog<String>(
+            showDialog<TessellationFigure>(
                 context: context,
                 child: new TessellationCreate()).then((TessellationFigure f) {
-              if (f != null) {
-                setState(() {
-                  items.add(f);
+                  if (f != null) {
+                    setState(() {
+                      items.add(f);
+                    });
+                    showFigure(context, f);
+                  }
                 });
-                showFigure(context, f);
-              }
-            });
-          }),
-    );
+      }),
+                        );
   }
 }

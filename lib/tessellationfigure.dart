@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math' as math;
 import 'dart:async';
 
@@ -8,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:image/image.dart' as Im;
-import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 import 'polygonfill.dart';
 import 'tessellationline.dart';
@@ -46,9 +43,8 @@ class TessellationFigure {
       uuid = '';
     }
 
-    _lines = _json['lines']
-        .map((value) => new TessellationLine.fromJson(value))
-        .toList();
+    _lines = List.from(_json['lines']
+        .map((value) => new TessellationLine.fromJson(value)));
 
     if (_json.containsKey('color1')) {
       colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
@@ -131,7 +127,7 @@ class TessellationFigure {
 
   void tessellate(Canvas canvas, Rect rect, double dscale) {
     final Path fp = toPath();
-    List<Offset> grid = figuregrid(rect, dscale);
+    List<List<Offset>> grid = figuregrid(rect, dscale);
     int row = 0;
     double rot = 0.0;
     int color;
@@ -181,7 +177,7 @@ class TessellationFigure {
 
   Future<Null> tessellateimage(Im.Image image, double dscale) async {
     Rect rect = const Offset(0.0, 0.0) & const Size(1024.0, 1024.0);
-    List<Offset> grid = figuregrid(rect, dscale);
+    List<List<Offset>> grid = figuregrid(rect, dscale);
     int row = 0;
     double rot = 0.0;
     int color;

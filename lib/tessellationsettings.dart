@@ -1,10 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_color_picker/flutter_color_picker.dart';
 
 import 'tessellationfigure.dart';
@@ -44,7 +38,7 @@ class _FigureSettingsState extends State<FigureSettings> {
 
   @override
   Widget build(BuildContext context) {
-    var children = [
+    List<Widget> children = [
       new TextField(
           controller: _descriptionController,
           decoration: const InputDecoration(

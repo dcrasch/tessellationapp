@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class TessellationItem extends StatelessWidget {
         builder:
             (BuildContext context, AsyncSnapshot<TessellationFigure> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            TessellationFigure f = snapshot.data;
+            TessellationFigure f = snapshot.data as TessellationFigure;
             return new SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, f);

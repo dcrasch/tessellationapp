@@ -1,13 +1,9 @@
 import 'dart:math' as math;
-import 'dart:io';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
 
-import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:image/image.dart' as Im;
 
 void fillPolygon(image, points, transform, c) {
