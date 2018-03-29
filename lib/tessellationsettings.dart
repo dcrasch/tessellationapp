@@ -14,7 +14,7 @@ class FigureSettings extends StatefulWidget {
 }
 
 class _FigureSettingsState extends State<FigureSettings> {
-  List<Color> _colors = new List(4);
+  List<Color> _colors = new List<Color>(4);
   final TextEditingController _descriptionController =
       new TextEditingController();
 
