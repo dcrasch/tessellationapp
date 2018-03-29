@@ -44,10 +44,10 @@ class _TessellationListState extends State<TessellationList> {
   Future<List<TessellationFigure>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     List<TessellationFigure> myitems = <TessellationFigure>[];
-    for (FileSystemEntity file in appDir.listSync(recursive: false)) {
+    for (FileSystemEntity entity in appDir.listSync(recursive: false)) {
       // TODO skip failed
-      if (file.path.endsWith('.json')) {
-        String code = await file.readAsString();
+      if (entity is File && entity.path.endsWith('.json')) {
+        String code = (entity as File).readAsStringSync();
         final JsonDecoder decoder = new JsonDecoder();
         final Map<String, dynamic> result = decoder.convert(code);
         try {
