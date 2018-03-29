@@ -26,7 +26,7 @@ class TessellationItem extends StatelessWidget {
         builder:
             (BuildContext context, AsyncSnapshot<TessellationFigure> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            TessellationFigure f = snapshot.data as TessellationFigure;
+            TessellationFigure f = snapshot.data;
             return new SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, f);

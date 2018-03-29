@@ -47,7 +47,7 @@ class _TessellationListState extends State<TessellationList> {
     for (FileSystemEntity entity in appDir.listSync(recursive: false)) {
       // TODO skip failed
       if (entity is File && entity.path.endsWith('.json')) {
-        String code = (entity as File).readAsStringSync();
+        String code = entity.readAsStringSync();
         final JsonDecoder decoder = new JsonDecoder();
         final Map<String, dynamic> result = decoder.convert(code);
         try {

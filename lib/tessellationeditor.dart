@@ -43,12 +43,6 @@ class _FigurePageState extends State<FigurePage> {
     return new File(filename);
   }
 
-  Future<File> _getLocalImageFile() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String filename = "${appDir.path}/${widget.figure.uuid}.png";
-    return new File(filename);
-  }
-
   Future<Null> _saveFigure() async {
     if (widget.figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -83,18 +77,6 @@ class _FigurePageState extends State<FigurePage> {
         //figure.description = _description;
       });
     }
-  }
-
-  Future<Null> _savePNG() async {
-    if (figure.uuid.isEmpty) {
-      DateTime _nu = new DateTime.now();
-      figure.uuid = _nu.toString();
-    }
-    Im.Image image = new Im.Image(1280, 1280);
-    await this.figure.tessellateimage(image, 150.0);
-    List<int> png = Im.encodePng(image);
-
-    await (await _getLocalImageFile()).writeAsBytes(png);
   }
 
   Future<Null> _shareFigure() async {

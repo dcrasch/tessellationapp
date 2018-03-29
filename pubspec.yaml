@@ -19,15 +19,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  ##barback:
-  ##path:
-  
-  
-#dependency_overrides:
-#  sky_engine:
-#    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_engine
-#  sky_services:
-#    path: /Users/david/src/engine/src/out/ios_debug_sim_unopt/gen/dart-pkg/sky_services
 
 flutter:
   uses-material-design: true
@@ -38,7 +29,3 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
-
-#transformers:
-#  - tessellationapp/icon_resizer:
-#      $include: "lib/icon.svg"

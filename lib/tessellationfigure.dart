@@ -11,7 +11,7 @@ import 'polygonfill.dart';
 import 'tessellationline.dart';
 
 class TessellationFigure {
-  TessellationFigure() {}
+  TessellationFigure();
 
   final Paint _paint = new Paint()
     ..color = const Color(0xFFFFFF00)
@@ -132,7 +132,7 @@ class TessellationFigure {
     double rot = 0.0;
     int color;
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
-      rot = 2 * math.PI * currentdiv / rotdiv;
+      rot = 2 * math.pi * currentdiv / rotdiv;
 
       for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
@@ -186,7 +186,7 @@ class TessellationFigure {
       if (rotdiv == currentdiv) {
         rot = 0.0;
       } else {
-        rot = 2.0 * math.PI * currentdiv / rotdiv;
+        rot = 2.0 * math.pi * currentdiv / rotdiv;
       }
       for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
@@ -210,7 +210,7 @@ class TessellationFigure {
             ..scale(dscale)
             ..rotateZ(rot);
 
-          await fillPolygon(image, poly, t, c);
+          fillPolygon(image, poly, t, c);
           color++;
         }
         row++;
@@ -231,7 +231,6 @@ class TessellationFigure {
     double maxx;
     double miny;
     double maxy;
-    int row = 0;
     double screenwidth = rect.width;
     double screenheight = rect.height;
     minx = -igx * 2;

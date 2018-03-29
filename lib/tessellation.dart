@@ -120,7 +120,7 @@ class TessellationState extends State<TessellationWidget> {
     }
   }
 
-  void _handlePanUpdate(BuildContext, ScaleUpdateDetails details) {
+  void _handlePanUpdate(BuildContext context, ScaleUpdateDetails details) {
     RenderBox box = context.findRenderObject();
     Offset touchPoint = box.globalToLocal(details.focalPoint);
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);

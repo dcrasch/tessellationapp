@@ -14,7 +14,7 @@ class PointIndexPath {
 }
 
 class TessellationLine {
-  double human_angle = 0.0;
+  double humanAngle = 0.0;
   List<Offset> _points = new List<Offset>();
   Matrix4 transform = new Matrix4.identity();
   Matrix4 ci = new Matrix4.identity();
@@ -23,18 +23,13 @@ class TessellationLine {
     ci = new Matrix4.inverted(transform);
   }
 
-  final Paint _paint = new Paint()
-    ..color = const Color(0xFF00FF00)
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0;
-
   TessellationLine.fromJson(Map _json) {
     // TODO check for types
     transform = new Matrix4.identity()
       ..translate(_json['tx'], _json['ty'])
-      ..rotateZ(_json['angle'] / 180.0 * math.PI);
+      ..rotateZ(_json['angle'] / 180.0 * math.pi);
     this.ci = new Matrix4.inverted(transform);
-    human_angle = _json['angle'];
+    humanAngle = _json['angle'];
     _points = List.from(_json['points']
         .map((value) => new Offset(value['x'], value['y'])));
   }
@@ -44,7 +39,7 @@ class TessellationLine {
     Vector3 translation = transform.getTranslation();
     _json['tx'] = translation[0];
     _json['ty'] = translation[1];
-    _json['angle'] = human_angle;
+    _json['angle'] = humanAngle;
     _json['points'] =
         _points.map((value) => {'x': value.dx, 'y': value.dy}).toList();
     return _json;
