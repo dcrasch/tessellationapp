@@ -73,36 +73,40 @@ class _TessellationListState extends State<TessellationList> {
     }
   }
 
+  Future<Null> _onPressed() async {
+    TessellationFigure f = await showDialog<TessellationFigure>(
+        context: context, builder: _buildDialog);
+    if (f != null) {
+      setState(() {
+        items.add(f);
+      });
+      showFigure(context, f);
+    }
+  }
+
+  Widget _buildDialog(BuildContext context) {
+    return new TessellationCreate();
+  }
+
   @override
   Widget build(BuildContext context) {
     Iterable<Widget> listTiles =
         items.map((TessellationFigure item) => buildListTile(context, item));
 
     return new Scaffold(
-      key: scaffoldKey,
-      appBar: new AppBar(
-        title: new Text('Figure List'),
-      ),
-      body: new Scrollbar(
-        child: new ListView(
-          padding: new EdgeInsets.symmetric(vertical: 4.0),
-          children: listTiles.toList(),
+        key: scaffoldKey,
+        appBar: new AppBar(
+          title: new Text('Figure List'),
         ),
-      ),
-      floatingActionButton: new FloatingActionButton(
+        body: new Scrollbar(
+          child: new ListView(
+            padding: new EdgeInsets.symmetric(vertical: 4.0),
+            children: listTiles.toList(),
+          ),
+        ),
+        floatingActionButton: new FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {
-            showDialog<TessellationFigure>(
-                context: context,
-                child: new TessellationCreate()).then((TessellationFigure f) {
-                  if (f != null) {
-                    setState(() {
-                      items.add(f);
-                    });
-                    showFigure(context, f);
-                  }
-                });
-      }),
-                        );
+          onPressed: _onPressed,
+        ));
   }
 }

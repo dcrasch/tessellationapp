@@ -43,8 +43,8 @@ class TessellationFigure {
       uuid = '';
     }
 
-    _lines = List.from(_json['lines']
-        .map((value) => new TessellationLine.fromJson(value)));
+    _lines = List.from(
+        _json['lines'].map((value) => new TessellationLine.fromJson(value)));
 
     if (_json.containsKey('color1')) {
       colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));

@@ -1,0 +1,1132 @@
+/*
+    Copyright 2000, University of Washington
+
+    Permission to use, copy, modify, and distribute this software and its
+    documentation for any purpose and without fee is hereby granted,
+    provided that the above copyright notice appear in all copies and that
+    both the copyright notice and this permission notice and warranty
+    disclaimer appear in supporting documentation, and that the names of
+    the authors or their employers not be used in advertising or publicity
+    pertaining to distribution of the software without specific, written
+    prior permission.
+
+    The authors and their employers disclaim all warranties with regard to
+    this software, including all implied warranties of merchantability and
+    fitness.  In no event shall the authors or their employers be liable
+    for any special, indirect or consequential damages or any damages
+    whatsoever resulting from loss of use, data or profits, whether in an
+    action of contract, negligence or other tortious action, arising out of
+    or in connection with the use or performance of this software.
+*/
+
+/*
+    isohedral.ih
+
+    This file contains the set of information used by our software 
+    to encode the isohedral tilings.  The only element missing is the
+    set of tiling vertex parameterizations, which can be found in 
+    params.py.
+
+    The format of this file is slightly different than what's described
+    in the paper (the paper's version is altered to simplify the exposition).
+    Here are the important differences:
+
+    * Some incidence symbols are _rotated_ with respect to the 
+      presentation in Grunbaum and Shephard.  That means that we 
+      start the enumeration of edges at a different tiling edge, 
+      resulting in a different (but equivalent) symbol.  I did this
+      in the cases that the incidence symbols weren't compatible with
+      their topological types.
+
+    * The twelve IH types that can only be represented with marked
+      tiles are not given (see figure 6.2.5 of G+S).  These tiles are
+      uninteresting from an ornamental point of view, since their edges
+      cannot be modified.
+
+    * Indices are zero-based, not one-based.  This affects the 
+      assignment of colours to indices, the two colour permutations,
+      and the edge numbers given in the rules section.
+
+    * Aspects have explicit names, not just indices.  When a rule 
+      refers to an aspect, it refers to that aspect by name.
+    
+    * The format for rules is a little more rich.  Instead of always 
+      starting from the first aspect in the translational unit at
+      the origin, you can start from _any_ aspect by naming it.  Thus
+      the rule
+
+          aspect 2r 1r:2,3
+    
+      means "to obtain the transform for aspect "2r", start from aspect
+      "1r", hop across the edge in that tile with index 2, then across
+      the edge of the next tile with index 3."  Each hop multiplies on
+      a transform matrix.  Each hop is taken from the tile arrived at 
+      via the previous hop, and edge indices (zero-based) are measured
+      from the start of the incidence symbol.
+
+
+    Please contact me at csk@cs.washington.edu if you have questions
+    about the information in this file.
+
+    For more details about our system, see the paper "Escherization",
+    by Craig S. Kaplan and David H. Salesin, in the SIGGRAPH 2000 
+    Conference Proceedings.
+
+    Craig S. Kaplan
+*/
+
+/*
+    December 1st, 2000
+
+        Many of the colourings have been updated.  There was a bug in
+        my implementation that reversed translation vectors, and this
+        file was correct relative to that bug.  It should be fixed now.
+        Big thanks to Jens Kilian for finding this problem.
+
+        Note: there are probably still implementation problems related to 
+        dependencies in the order that aspect rules are computed.  Use a 
+        topological sort.
+
+        Note: at some point, provide perfect colourings.
+*/
+
+/* 
+    May 8th, 2002
+
+        Recently, I noticed a problem in the way the tiling vertex
+        parameterizations interact with the incidence symbols given
+        here.  There should be no reason why you can't use the
+        vertex parameterizations to create tile shapes with degenerate
+        tiling edges (i.e., collapse two tiling edges of the hexagon
+        in IH1 down to zero, and obtain a parallelogram).  The
+        problem is that the computation of aspect transforms or 
+        translation vectors can get messed up with you allow 
+        degenerate edges, since you then can't determine the 
+        rotation or reflection across that edge.
+
+        I don't have a really good solution at this time.  The 
+        answer might be to offer alternate versions of some tiling
+        types that avoid the bug.  For example, because aspect "2"
+        of IH27 is computed by jumping across edge 0, that edge
+        can't be degenerate.  You need an alternate IH27 that doesn't
+        use edge 0 to get the transform for aspect "2".  On the 
+        other hand, it might turn out that the correct transform
+        across a degenerate edge is _always_ either a 180 degree
+        rotation or a reflection across an easily-determined line.
+        I'll think about this problem some more.
+*/
+
+template IH01 {
+    symbol [a+b+c+d+e+f+;d+e+f+a+b+c+]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH02 {
+    symbol [a+b+c+d+e+f+;b-a-f+e-d-c+]
+    topology 3^6
+    aspects 1,1r
+    colouring 3 (0 1) (1 2 0) (0 1 2)
+    rules
+        aspect 1r 1:0
+        translate T1 1:2
+        translate T2 1r:3
+}
+
+template IH03 {
+    symbol [a+b+c+d+e+f+;c-e+a-f-b+d-]
+    topology 3^6
+    aspects 1,1r
+    colouring 3 (0 1) (2 0 1) (2 0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1:1
+        translate T2 1r:5
+}
+
+template IH04 {
+    symbol [a+b+c+d+e+f+;a+e+c+d+b+f+]
+    topology 3^6
+    aspects 1,2
+    colouring 3 (0 1) (2 0 1) (2 0 1)
+    rules
+        aspect 2 1:0
+        translate T1 1:1
+        translate T2 2:3
+}
+
+template IH05 {
+    symbol [a+b+c+d+e+f+;a+e+d-c-b+f+]
+    topology 3^6
+    aspects 1,2,1r,2r
+    colouring 3 (0 1 2 1) (2 0 1) (2 0 1)
+    rules
+        aspect 2 1:0
+        aspect 1r 1:3
+        aspect 2r 1r:5
+        translate T1 1:1
+        translate T2 1:3,5,2,0
+}
+
+template IH06 {
+    symbol [a+b+c+d+e+f+;a+e-c+f-b-d-]
+    topology 3^6
+    aspects 1,2,1r,2r
+    colouring 3 (0 1 2 2) (1 2 0) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 1r 1:1
+        aspect 2r 2:1
+        translate T1 1r:1
+        translate T2 2r:5
+}
+
+template IH07 {
+    symbol [a+b+c+d+e+f+;b+a+d+c+f+e+]
+    topology 3^6
+    aspects 1,2,3
+    colouring 3 (0 1 2 ) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 1:1
+        translate T1 2:3
+        translate T2 3:4
+}
+
+template IH08 {
+    symbol [a+b+c+a+b+c+;a+b+c+]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules 
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH09 {
+    symbol [a+b+c+a+b+c+;a+c-b-]
+    topology 3^6
+    aspects 1,1r
+    colouring 3 (0 1) (2 0 1) (0 1 2)
+    rules
+        aspect 1r 1:1
+        translate T1 1:0
+        translate T2 1r:4
+}
+
+template IH10 {
+    symbol [a+b+a+b+a+b+;b+a+]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0 
+        translate T2 1:5
+}
+
+template IH11 {
+    symbol [a+a+a+a+a+a+;a+]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH12 {
+    symbol [a b+c+d c-b-;d c-b-a]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH13 {
+    symbol [a b+c+ d c-b-;d b+c+a]
+    topology 3^6
+    aspects 1,1r
+    colouring 3 (0 1) (2 0 1) (0 1 2)
+    rules 
+        aspect 1r 1:1
+        translate T1 1:0
+        translate T2 1r:5
+}
+
+template IH14 {
+    symbol [a+b+c+c-b-a-;c-b-a-]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules 
+        translate T1 1:0
+        translate T2 1:5
+}
+
+template IH15 {
+    symbol [a+b+c+c-b-a-;a+b-c+]
+    topology 3^6
+    aspects 1,2
+    colouring 3 (0 1) (2 0 1) (0 1 2)
+    rules 
+        aspect 2 1:0
+        translate T1 1:1
+        translate T2 2:2
+}
+
+template IH16 {
+    symbol [a+b+c+c-b-a-;a-c+b+]
+    topology 3^6
+    aspects 1,2,3
+    colouring 3 (0 1 2) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 1:5
+        translate T1 2:4
+        translate T2 2:2
+}
+
+template IH17 {
+    symbol [a b+b-a b+b-;a b+]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH18 {
+    symbol [a b a b a b;b a]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+// IH19 is only representable with marked templates.
+
+template IH20 {
+    symbol [a a a a a a;a]
+    topology 3^6
+    aspects 1
+    colouring 3 (0) (1 2 0) (2 0 1)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH21 {
+    // The incidence symbol here is rotated WRT the book to account
+    // for the inconsistency with the topology type.
+    symbol [a+b+c+d+e+;a+c+b+e+d+]
+    topology 3^4.6
+    aspects 1,2,3,4,5,6
+    colouring 3 (0 1 0 1 0 1) (1 2 0) (2 0 1)
+    rules
+        aspect 2 1:4
+        aspect 3 2:4
+        aspect 4 3:4
+        aspect 5 4:4
+        aspect 6 5:4
+        translate T1 3:1
+        translate T2 4:0
+}
+
+template IH22 {
+    // This one was rotated too.
+    symbol [a+b+c+d+e+;b-a-e+d-c+]
+    topology 3^3.4^2
+    aspects 1,1r
+    colouring 3 (0 1) (2 0 1) (0 1 2)
+    rules
+        aspect 1r 1:3
+        translate T1 1r:0
+        translate T2 1r:1
+}
+
+template IH23 {
+    symbol [a+b+c+d+e+;a+b+e+d+c+]
+    topology 3^3.4^2
+    aspects 1,2
+    colouring 3 (0 1) (1 2 0) (2 0 1)
+    rules
+        aspect 2 1:0
+        translate T1 1:2
+        translate T2 2:3
+}
+
+template IH24 {
+    symbol [a+b+c+d+e+;a+b+e+d-c+]
+    topology 3^3.4^2
+    aspects 1,2,1r,2r
+    colouring 3 (0 1 2 0) (2 0 1) (1 2 0) 
+    rules
+        aspect 2 1:0
+        aspect 1r 2r:0
+        aspect 2r 2:3
+        translate T1 1:4
+        translate T2 1r:3
+}
+
+template IH25 {
+    symbol [a+b+c+d+e+;b-a-e+d+c+]
+    topology 3^3.4^2
+    aspects 1,2,1r,2r
+    colouring 3 (0 1 2 0) (2 0 1) (0 1 2) 
+    rules
+        aspect 2 1:3
+        aspect 1r 2r:3
+        aspect 2r 2:1
+        translate T1 1:2
+        translate T2 1r:1
+}
+
+template IH26 {
+    symbol [a+a-b+c b-;a+b-c]
+    topology 3^3.4^2
+    aspects 1,2
+    colouring 3 (0 1) (1 2 0) (0 1 2) 
+    rules 
+        aspect 2 1:3
+        translate T1 1:2
+        translate T2 2:0
+}
+
+template IH27 {
+    symbol [a+b+c+d+e+;a+d-e-b-c-]
+    topology 3^2.4.3.4
+    aspects 1,2,1r,2r
+    colouring 3 (0 1 2 2) (0 1 2) (1 2 0) 
+    rules
+        aspect 2 1:0
+        aspect 1r 1:1
+        aspect 2r 2:1
+        translate T1 2r:4
+        translate T2 1r:1
+}
+
+template IH28 {
+    symbol [a+b+c+d+e+;a+c+b+e+d+]
+    topology 3^2.4.3.4
+    aspects 1,2,3,4
+    // After reading G.C. Shephard's "What Escher Might Have Done" in
+    // _M.C. Escher: Art and Science_, I realized something interesting:
+    // this colouring isn't perfect.  The paper doesn't claim that all
+    // our colourings are perfect, but I was operating under the tacit
+    // assumption that they were.  So it's somewhat ambiguous whether
+    // Escher would have used this colouring in one of his tilings.
+    // The fish on the cover of _Visions of Symmetry_ are of this tiling
+    // type and use a colouring with four colours.  In fact, Shephard
+    // shows that a perfect 3-colouring of this tiling type cannot exist.
+    colouring 3 (0 1 2 0) (1 2 0) (0 1 2) 
+    rules
+        aspect 2 1:0
+        aspect 3 2:2
+        aspect 4 2:3
+        translate T1 4:3
+        translate T2 3:2
+}
+
+template IH29 {
+    symbol [a b+c+c-b-;a c+b+]
+    topology 3^2.4.3.4
+    aspects 1,2,3,4
+    colouring 3 (0 1 2 2) (1 2 0) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 1:1
+        aspect 4 1:4
+        translate T1 3:4
+        translate T2 4:4
+}
+
+template IH30 {
+    symbol [a+b+c+d+;d+b-c-a+]
+    topology 3.4.6.4
+    aspects 1,2,3,1r,2r,3r
+    colouring 3 (0 1 2 1 2 0) (1 2 0) (2 0 1) 
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 1r 1:1
+        aspect 2r 1r:0
+        aspect 3r 2r:0
+        translate T1 3r:2
+        translate T2 3:2,1
+}
+
+template IH31 {
+    symbol [a+b+c+d+;d+c+b+a+]
+    topology 3.4.6.4
+    aspects 1,2,3,4,5,6
+    // This tiling has a simpler but visually less appealing alternate
+    // colouring:
+    // colouring 3 (0 1 0 1 0 1) (2 0 1) (1 2 0)
+
+    // I prefer this colouring:
+    colouring 3 (0 1 2 0 1 2) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:1
+        aspect 3 2:1
+        aspect 4 3:1
+        aspect 5 4:1
+        aspect 6 5:1
+        translate T1 3:0
+        translate T2 5:3
+}
+
+template IH32 {
+    symbol [a+b+b-a-;a-b-]
+    topology 3.4.6.4
+    aspects 1,2,3,4,5,6
+    colouring 3 (0 2 1 1 0 2) (1 2 0) (2 0 1) 
+    rules
+        aspect 2 1:3
+        aspect 3 2:3
+        aspect 4 1:1
+        aspect 5 4:3
+        aspect 6 5:3
+        translate T1 5:2
+        translate T2 2:2,2
+}
+
+template IH33 {
+    symbol [a+b+c+d+;d+c+b+a+]
+    topology 3.6.3.6
+    aspects 1,2,3
+    colouring 3 (0 1 2) (0 1 2) (0 1 2)
+    rules 
+        aspect 2 1:0
+        aspect 3 2:0
+        translate T1 2:1
+        translate T2 3:2
+}
+
+template IH34 {
+    symbol [a+b+a+b+;b+a+]
+    topology 3.6.3.6
+    aspects 1,2,3
+    colouring 3 (0 1 2) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        translate T1 2:3
+        translate T2 3:0
+}
+
+// IH35 can only be realized with marked templates.
+
+template IH36 {
+    symbol [a+a-b+b-;b-a-]
+    topology 3.6.3.6
+    aspects 1,2,3
+    colouring 3 (0 1 2) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 1:3
+        translate T1 2:0
+        translate T2 3:2
+}
+
+template IH37 {
+    symbol [a+a-a+a-;a-]
+    topology 3.6.3.6
+    aspects 1,2,3
+    colouring 3 (0 1 2) (0 1 2) (0 1 2)
+    rules
+        aspect 2 1:0
+        aspect 3 2:3
+        translate T1 2:2
+        translate T2 3:1
+}
+
+template IH38 {
+    symbol [a+b+c+;c+b-a+]
+    topology 3.12^2
+    aspects 1,2,3,1r,2r,3r
+    colouring 3 (0 2 1 1 0 2) (1 2 0) (2 0 1)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 1r 3r:0
+        aspect 2r 2:1
+        aspect 3r 2r:0
+        translate T1 3r:1
+        translate T2 3:1,2,1
+}
+
+template IH39 {
+    symbol [a+b+c+;c+b+a+]
+    topology 3.12^2
+    aspects 1,2,3,4,5,6
+    colouring 3 (0 2 1 0 1 2) (2 0 1) (1 2 0)
+    rules 
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 4 2:1
+        aspect 5 4:0
+        aspect 6 5:0
+        translate T1 3:1,0,1
+        translate T2 6:1
+}
+
+template IH40 {
+    symbol [a+b a-;a-b]
+    topology 3.12^2
+    aspects 1,2,3,4,5,6
+    colouring 3 (1 0 2 2 0 1) (1 2 0) (2 0 1)
+    rules
+        aspect 2 1:2
+        aspect 3 2:2
+        aspect 4 2:1
+        aspect 5 4:2
+        aspect 6 5:2
+        translate T1 6:1
+        translate T2 5:1,2
+}
+
+template IH41 {
+    symbol [a+b+c+d+;c+d+a+b+]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH42 {
+    symbol [a+b+c+d+;c+b-a+d-]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (1 0) (0 1)
+    rules
+        aspect 1r 1:1
+        translate T1 1:0
+        translate T2 1r:3
+}
+
+template IH43 {
+    symbol [a+b+c+d+;c-d+a-b+]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (1 0) (0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1:1
+        translate T2 1r:0
+}
+
+template IH44 {
+    symbol [a+b+c+d+;b-a-d-c-]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1r:0
+        translate T2 1r:2
+}
+
+template IH45 {
+    symbol [a+b+c+d+;c-b-a-d-]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1r:0
+        translate T2 1r:1
+}
+
+template IH46 {
+    symbol [a+b+c+d+;a+b+c+d+]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:2
+        translate T2 2:1
+}
+
+template IH47 {
+    symbol [a+b+c+d+;c+b+a+d+]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (1 0) (0 1)
+    rules
+        aspect 2 1:1
+        translate T1 1:0
+        translate T2 2:3
+}
+
+template IH49 {
+    symbol [a+b+c+d+;a-b+c-d+]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:1
+        aspect 1r 1:0
+        aspect 2r 2:0
+        translate T1 1r:2
+        translate T2 2:3
+}
+
+template IH50 {
+    symbol [a+b+c+d+;c+b-a+d+]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (1 0)
+    rules
+        aspect 2 1:3
+        aspect 1r 1:1
+        aspect 2r 2:1
+        translate T1 2r:3,1
+        translate T2 1:0
+}
+
+template IH51 {
+    symbol [a+b+c+d+;c-b+a-d+]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:3
+        aspect 1r 1:0
+        aspect 2r 2:2
+        translate T1 1r:0
+        translate T2 2:1
+}
+
+template IH52 {
+    symbol [a+b+c+d+;c-d-a-b-]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 0 1 1) (0 1) (0 1)
+    rules
+        aspect 2 1r:3
+        aspect 1r 1:0
+        aspect 2r 2:0
+        translate T1 2r:1
+        translate T2 1r:0
+}
+
+template IH53 {
+    symbol [a+b+c+d+;b-a-c+d+]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:2
+        aspect 1r 1:0
+        aspect 2r 2:0
+        translate T1 2:3
+        translate T2 1:3,0,2,1
+}
+
+template IH54 {
+    symbol [a+b+c+d+;a-b-c-d+]
+    topology 4^4
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:3
+        aspect 1r 1:0
+        aspect 2r 2:2
+        translate T1 1r:2
+        translate T2 2:1
+}
+
+template IH55 {
+    symbol [a+b+c+d+;b+a+d+c+]
+    topology 4^4
+    aspects 1,2,3,4
+    colouring 2 (0 1 0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:1
+        aspect 3 2:1
+        aspect 4 3:1
+        translate T1 2:2
+        translate T2 4:3
+}
+
+template IH56 {
+    symbol [a+b+c+d+;b+a+c-d-]
+    topology 4^4
+    aspects 1,2,3,4,1r,2r,3r,4r
+    colouring 2 (0 1 0 1 1 0 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:1
+        aspect 3 2:1
+        aspect 4 3:1
+        aspect 1r 2r:0
+        aspect 2r 2:2
+        aspect 3r 2r:1
+        aspect 4r 3r:1
+        translate T1 1r:3
+        translate T2 2r:3,1
+}
+
+template IH57 {
+    symbol [a+b+a+b+;a+b+]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH58 {
+    symbol [a+b+a+b+;a-b+]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (1 0) (0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1:1
+        translate T2 1r:2
+}
+
+template IH59 {
+    symbol [a+b+a+b+;b-a-]
+    topology 4^4
+    aspects 1,1r
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 1r 1:0
+        translate T1 1r:2
+        translate T2 1r:3
+}
+
+// IH60 can only be realized with marked templates.
+
+template IH61 {
+    symbol [a+b+a+b+;b+a+]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:0
+        translate T2 2:2
+}
+
+template IH62 {
+    symbol [a+a+a+a+;a+]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+// IH63 can only be realized with marked templates.
+
+template IH64 {
+    symbol [a b+ c b-;c b- a]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+// IH65 can only be realized with marked templates.
+
+template IH66 {
+    symbol [a b+ c b-;c b+ a]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (1 0) (0 1)
+    rules
+        aspect 2 1:1
+        translate T1 1:0
+        translate T2 2:3
+}
+
+template IH67 {
+    symbol [a b+ c b-;a b+ c]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}
+
+template IH68 {
+    symbol [a+b+b-a-;b-a-]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH69 {
+    symbol [a+b+b-a-;a+b+]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}
+
+// IH70 can only be realized with marked templates.
+
+template IH71 {
+    symbol [a+b+b-a-;b+a+]
+    topology 4^4
+    aspects 1,2,3,4
+    colouring 2 (0 1 0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 4 3:0
+        translate T1 4:2
+        translate T2 2:3
+}
+
+template IH72 {
+    symbol [abab;ab]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH73 {
+    symbol [a b a b;b a]
+    topology 4^4
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:0
+        translate T2 2:2
+}
+
+template IH74 {
+    symbol [a+a-a+a-;a+]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+// IH75 can only be realized with marked templates.
+
+template IH76 {
+    symbol [a a a a;a]
+    topology 4^4
+    aspects 1
+    colouring 2 (0) (1 0) (1 0)
+    rules
+        translate T1 1:0
+        translate T2 1:1
+}
+
+template IH77 {
+    symbol [a+b+c+;a-b-c-]
+    topology 4.6.12
+    aspects 1,2,3,4,5,6,1r,2r,3r,4r,5r,6r
+    colouring 2 (0 0 0 0 0 0 1 1 1 1 1 1) (0 1) (0 1)
+    rules
+        aspect 2 1r:1
+        aspect 3 2r:1
+        aspect 4 3r:1
+        aspect 5 4r:1
+        aspect 6 5r:1
+
+        aspect 1r 1:2
+        aspect 2r 2:2
+        aspect 3r 3:2
+        aspect 4r 4:2
+        aspect 5r 5:2
+        aspect 6r 6:2
+
+        translate T1 4r:0
+        translate T2 3:0,1
+}
+
+template IH78 {
+    symbol [a+b+c+;a-b+c-]
+    topology 4.8^2
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (1 0)
+    rules
+        aspect 2 1:1
+        aspect 1r 2r:1
+        aspect 2r 2:2
+        translate T1 1r:2
+        translate T2 2r:0
+}
+
+template IH79 {
+    symbol [a+b+c+;c+b+a+]
+    topology 4.8^2
+    aspects 1,2,3,4
+    colouring 2 (0 1 0 1) (1 0) (1 0)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 4 3:0
+        translate T1 3:1
+        translate T2 2:1,0
+}
+
+// IH80 can only be realized with marked templates.
+
+template IH81 {
+    symbol [a+b+c+;c+b-a+]
+    topology 4.8^2
+    aspects 1,2,3,4,1r,2r,3r,4r
+    colouring 2 (0 1 0 1 1 0 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 4 3:0
+        aspect 1r 4r:0
+        aspect 2r 2:1
+        aspect 3r 2r:0
+        aspect 4r 3r:0
+        translate T1 3r:1
+        translate T2 4r:1,0
+}
+
+template IH82 {
+    symbol [a+b a-;a-b]
+    topology 4.8^2
+    aspects 1,2,3,4
+    colouring 2 (0 1 0 1) (1 0) (1 0)
+    rules
+        aspect 2 1:2
+        aspect 3 2:2
+        aspect 4 3:2
+        translate T1 3:1
+        translate T2 2:1,2
+}
+
+template IH83 {
+    symbol [a+b+c+;b-a-c-]
+    topology 6^3
+    aspects 1,1r
+    colouring 2 (0 1) (0 1) (0 1)
+    rules 
+        aspect 1r 1:2
+        translate T1 1r:0
+        translate T2 1r:1
+}
+
+template IH84 {
+    symbol [a+b+c+;a+b+c+]
+    topology 6^3
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}
+
+template IH85 {
+    symbol [a+b+c+;a-b+c+]
+    topology 6^3
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 1:1
+        aspect 1r 2r:1
+        aspect 2r 2:0
+        translate T1 2:2
+        translate T2 1r:0
+}
+
+template IH86 {
+    symbol [a+b+c+;b-a-c+]
+    topology 6^3
+    aspects 1,2,1r,2r
+    colouring 2 (0 1 1 0) (0 1) (0 1)
+    rules
+        aspect 2 2r:0
+        aspect 1r 1:0
+        aspect 2r 1r:2
+        translate T1 1r:0
+        translate T2 2:2
+}
+
+// IH87 can only be realized with marked templates.
+
+template IH88 {
+    symbol [a+b+c+;b+a+c+]
+    topology 6^3
+    aspects 1,2,3,4,5,6
+    colouring 2 (0 1 0 1 0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        aspect 3 2:0
+        aspect 4 3:0
+        aspect 5 4:0
+        aspect 6 5:0
+        translate T1 4:2
+        translate T2 5:2,1
+}
+
+// IH89 can only be realized with marked templates.
+
+template IH90 {
+    symbol [a+a+a+;a+]
+    topology 6^3
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}
+
+template IH91 {
+    symbol [a b+b-;a b+]
+    topology 6^3
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}
+
+// IH92 can only be realized with marked templates.
+
+template IH93 {
+    symbol [a a a;a]
+    topology 6^3
+    aspects 1,2
+    colouring 2 (0 1) (0 1) (0 1)
+    rules
+        aspect 2 1:0
+        translate T1 2:1
+        translate T2 2:2
+}

@@ -1,0 +1,772 @@
+#
+# Copyright 2000, University of Washington
+# 
+# Permission to use, copy, modify, and distribute this software and its
+# documentation for any purpose and without fee is hereby granted,
+# provided that the above copyright notice appear in all copies and that
+# both the copyright notice and this permission notice and warranty
+# disclaimer appear in supporting documentation, and that the names of
+# the authors or their employers not be used in advertising or publicity
+# pertaining to distribution of the software without specific, written
+# prior permission.
+# 
+# The authors and their employers disclaim all warranties with regard to
+# this software, including all implied warranties of merchantability and
+# fitness.  In no event shall the authors or their employers be liable
+# for any special, indirect or consequential damages or any damages
+# whatsoever resulting from loss of use, data or profits, whether in an
+# action of contract, negligence or other tortious action, arising out of
+# or in connection with the use or performance of this software.
+# 
+
+#
+# params.py
+#
+# This script encodes tiling vertex parameterizations for the 93
+# isohedral tiling types.  It can be run from the command line and
+# produces a polygon as output, one point per line.  Example:
+#
+#    % python params.py IH1 0.9 0.3 0.4 0.5
+#    -0.4 0.5
+#    0 0
+#    0.9 0.3
+#    1.3 0.8
+#    0.9 1.3
+#    0 1
+#
+# Written by Craig S. Kaplan (csk@cs.washington.edu), April 2000.
+# See the paper "Escherization", by Craig S. Kaplan and David H. Salesin
+# in the SIGGRAPH 2000 Conference Proceedings. 
+#
+# 24 October 2003 -- removed extraneous junk from l488_params.
+# Thanks to Chris Horn for finding this.
+#
+
+import math
+import sys
+
+from geo import *
+
+def polyArea( pts ):
+	area = 0.0
+
+	for i in range( len( pts ) ):
+		ip1 = (i+1)%len(pts)
+		area = area + pts[i].x*pts[ip1].y - pts[i].y*pts[ip1].x
+
+	return abs( area * 0.5 )
+
+def polyCenter( pts ):
+	mid = Point(0.0,0.0)
+
+	for i in range( len( pts ) ):
+		mid = mid + pts[i]
+
+	pf = 1.0 / float(len(pts))
+	return mid.scale( pf, pf )
+
+# 
+# This routine is used to scale and translate the polygon (in a fairly
+# mindless way) so that it lies close to the origin and so that all
+# tiling polygons have roughly the same size.  But rescaling obfuscates
+# the connection between the parameters you put in and the point positions
+# you get out, so I'm commenting it out for now.
+#
+def rescale( pts, morescale = 1.0 ):
+	pass
+
+	# a = polyArea( pts )
+	# m = polyCenter( pts )
+
+	# sc = 1.0 / math.sqrt( a ) * 1.25 * morescale
+
+	# for i in range( len( pts ) ):
+	# 	np = convexSum( m, pts[ i ], sc )
+	# 	pts[ i ].x = np.x - m.x
+	# 	pts[ i ].y = np.y - m.y
+
+	# na = polyArea( pts )
+
+
+#
+# 3.3.3.3.3.3
+#
+		
+def parhex_params( v0, v1, v2, v3 ):
+	hex = ( 
+		Point( -v2, 1-v3 ), 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0+v2, v1+v3 ),
+		Point( v0, 1+v1 ),
+		Point( 0, 1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih02_params( v0, v1, v2, v3 ):
+	hex = ( 
+		Point( 0, 1 ),
+		Point( -v2, 0.5 ), 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0+v3, v1+0.5 ),
+		Point( v0, 1+v1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih03_params( v0, v1, v2, v3 ):
+	hex = ( 
+		Point( -v2, v3 ), 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0+v2, v1+v3 ),
+		Point( v0, 1+v1 ),
+		Point( 0, 1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih04_params( v0, v1, v2, v3, v4, v5 ):
+	hex = ( 
+		Point( -v2, v3 ), 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0+v4, v1+v5 ),
+		Point( v0, 1+v1 ),
+		Point( 0, 1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih05_params( v0, v1, v2, v3, v4 ):
+	hex = ( 
+		Point( -v2, v3 ), 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0+v4, v1+0.5 ),
+		Point( v0, 1+v1 ),
+		Point( 0, 1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih06_params( v0, v1, v2, v3, v4 ):
+	hex = ( 
+		Point( v0 + v2, v3 - v1 ),
+		Point( v0 + v4, v1 + 1 ),
+		Point( v4, 1 ),
+		Point( -v2, v3 ),
+		Point( 0, 0 ),
+		Point( v0, -v1 ) )
+	rescale( hex )
+
+	return hex
+
+def ih07_params( v0, v1 ):
+	m = 0.5 / math.sqrt(3.0)
+	T1 = match( Point(v0,v1), Point(1,0) )
+	T2 = match( Point(0,0), Point(v0,v1) )
+
+	hex = ( 
+		Point( 0, 0 ),
+		Point( 0.5, -m ),
+		Point( 1, 0 ),
+		T1 * Point( 0.5, m ),
+		Point( v0, v1 ),
+		T2 * Point( 0.5, m ) )
+	rescale( hex )
+
+	return hex
+
+def ih09_params( v0, v1, v2 ):
+	hex = ( 
+		Point( 0, 0 ),
+		Point( v0, v1 ),
+		Point( v0 + v2, v1 + 0.5 ),
+		Point( v0, v1 + 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( -v2, 0.5 ) )
+	rescale( hex )
+
+	return hex
+
+def hex_params():
+	r32 = math.sqrt(3.0) * 0.5
+
+	hex = ( 
+		Point( 0, 0 ),
+		Point( 1, 0 ),
+		Point( 1.5, r32 ),
+		Point( 1.0, 2.0*r32 ),
+		Point( 0.0, 2.0*r32 ),
+		Point( -0.5, r32 ) )
+	rescale( hex )
+
+	return hex
+
+def ih12_params( v0, v1 ):
+	hex = ( 
+		Point( 0, 0 ),
+		Point( v0, 0 ),
+		Point( v0 + v1, 0.5 ),
+		Point( v0, 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( -v1, 0.5 ) )
+	rescale( hex )
+
+	return hex
+
+def ih13_params( v0, v1, v2 ):
+	hex = ( 
+		Point( 0, 0 ),
+		Point( v0, 0 ),
+		Point( v0 + v1, v2 ),
+		Point( v0, 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( -v1, v2 ) )
+	rescale( hex )
+
+	return hex
+
+def ih14_params( v0, v1 ):
+	hex = ( 
+		Point( v0 + v1, 0.5 ),
+		Point( v0, 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( -v1, 0.5 ),
+		Point( 0, 0 ),
+		Point( v0, 0 ) )
+	rescale( hex )
+
+	return hex
+
+def ih15_params( v0, v1, v2 ):
+	hex = ( 
+		Point( -v1, 0.5 ),
+		Point( 0.0, 0.0 ),
+		Point( v0, 0.0 ),
+		Point( v0 + v2, 0.5 ),
+		Point( v0, 1.0 ),
+		Point( 0.0, 1.0 ) )
+	rescale( hex )
+
+	return hex
+
+def ih16_params( v0 ):
+	m = 0.5 / math.sqrt(3.0)
+	T1 = match( Point(0.5,v0), Point(1,0) )
+	T2 = match( Point(0,0), Point(0.5,v0) )
+
+	hex = ( 
+		Point( 0.5, -m ),
+		Point( 1, 0 ),
+		T1 * Point( 0.5, m ),
+		Point( 0.5, v0 ),
+		T2 * Point( 0.5, m ),
+		Point( 0, 0 ) )
+	rescale( hex )
+
+	return hex
+
+#
+# 3^4.6
+#
+
+def ih21_params( v0, v1 ):
+	T1 = match( Point(0.0,0.0), Point(v0,v1) )
+
+	pent = (
+		Point( 1.0, 0.0 ),
+		Point( v0, v1 ),
+		T1 * Point( 0.5, 0.5 / math.sqrt( 3.0 ) ),
+		Point( 0.0, 0.0 ),
+		Point( 0.5, -0.5 * math.sqrt( 3.0 ) ) )
+	rescale( pent )
+
+	return pent
+	
+# 
+# 3^3.4^2
+#
+
+def ih22_params( v0, v1, v2 ):
+	pent = ( 
+		Point( v0, v1 ),
+		Point( v0 + v2, v1 + 0.5 ),
+		Point( v0, v1 + 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( pent )
+
+	return pent
+
+def ih23_params( v0, v1, v2, v3 ):
+	pent = ( 
+		Point( v0, v1 ),
+		Point( v0 + v2, v1 + v3 ),
+		Point( v0, v1 + 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( pent )
+
+	return pent
+
+def ih26_params( v0, v1 ):
+	pent = ( 
+		Point( v0, 0.0 ),
+		Point( v0 + v1, 0.5 ),
+		Point( v0, 1.0 ),
+		Point( 0.0, 1.0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( pent )
+
+	return pent
+
+#
+# 3^2.4.3.4
+#
+
+def ih27_params( v0, v1, v2 ):
+	pent = (
+		Point( v2, 1.0 ),
+		Point( -v2, 1.0 + 2.0 * v1 ),
+		Point( 0.0, 0.0 ),
+		Point( v0, -v1 ),
+		Point( v0 + v2, v1 + 1.0 ) )
+	rescale( pent )
+
+	return pent
+
+def ih28_params( v0, v1 ):
+	T1 = match( Point( v0, v1 ), Point( 0.5, 0.0 ) )
+	T2 = match( Point( -0.5, 0.0 ), Point( v0, v1 ) )
+	p1 = T1 * Point( 0.5, 0.5 )
+	p2 = T2 * Point( 0.5, 0.5 )
+
+	pent = (
+		Point( -0.5, 0.0 ),
+		Point( 0.5, 0.0 ),
+		p1,
+		Point( v0, v1 ),
+		p2 )
+	rescale( pent )
+
+	return pent
+
+def ih29_params( v0 ):
+	T = match( Point( 0.0, v0 ), Point( 0.5, 0.0 ) )
+	p = T * Point( 0.5, 0.5 )
+
+	pent = (
+		Point( -0.5, 0.0 ),
+		Point( 0.5, 0.0 ),
+		p,
+		Point( 0.0, v0 ),
+		Point( -p.x, p.y ) )
+	rescale( pent )
+
+	return pent
+
+#
+# 3.4.6.4
+#
+
+def ih30_params( v0 ):
+	T = rotateAround( Point( -v0, 1.0 ), 2.0 * math.pi / 3.0 )
+
+	q2 = T * Point( 0.0, 0.0 )
+	q2a = T * Point( -v0, 0.0 )
+	xint = q2.x - q2.y * ( q2a.x - q2.x ) / ( q2a.y - q2.y )
+
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( xint, 0.0 ),
+		q2,
+		Point( -v0, 1.0 ) )
+	rescale( quad, 0.8 )
+
+	return quad
+
+def l3464_params():
+	quad = (
+		Point( -math.sqrt( 3.0 ) * 0.25, 0.75 ),
+		Point( 0.0, 0.0 ),
+		Point( math.sqrt( 3.0 ) * 0.25, 0.75 ),
+		Point( 0.0, 1.0 ) )
+	rescale( quad, 0.8 )
+
+	return quad
+
+#
+# 3.6.3.6
+#
+
+def l3636_params():
+	quad = (
+		Point( 0.0, 0.5 ),
+		Point( -0.5 * math.sqrt( 3.0 ), 0.0 ),
+		Point( 0.0, -0.5 ),
+		Point( 0.5 * math.sqrt( 3.0 ), 0.0 ) )
+	rescale( quad, 0.8 )
+
+	return quad
+
+#
+# 3.12.12
+#
+
+def l31212_params():
+	tri = (
+		Point( -0.5, 0.0 ),
+		Point( 0.5, 0.0 ),
+		Point( 0.0, 0.5 / math.sqrt( 3.0 ) ) )
+	rescale( tri, 0.8 )
+
+	return tri
+
+#
+# 4.4.4.4
+#
+
+def parallelogram_params( v0, v1 ):
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( v0, v1 ),
+		Point( v0, v1 + 1 ),
+		Point( 0, 1 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih44_params( v0, v1 ):
+	quad = (
+		Point( v1, v0 ),
+		Point( 0.0, 1.0 ),
+		Point( -v1, v0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih45_params( v0, v1 ):
+	quad = (
+		Point( 1.0, 0.0 ),
+		Point( 1.0 - v1, v0 ),
+		Point( v1, v0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih46_params( v0, v1, v2, v3 ):
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( v0, v1 ),
+		Point( v2, v3 ) )
+	rescale( quad )
+	
+	return quad
+
+def rect_params( v0 ):
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0 + v0, 0.0 ),
+		Point( 1.0 + v0, 1.0 ),
+		Point( 0.0, 1.0 ) )
+	rescale( quad )
+	
+	return quad
+
+def trap_params( v0, v1, v2 ):
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( v2 - v1, v0 ),
+		Point( -v1, v0 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih51_params( v0, v1, v2 ):
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, -v0 ),
+		Point( v1 + 1.0, v2 + v0 ),
+		Point( v1, v2 ) )
+	rescale( quad )
+
+	return quad
+
+def ih53_params( v0, v1, v2 ):
+	quad = (
+		Point( 0, 1 ),
+		Point( -v2, 0.5 ),
+		Point( 0, 0 ), 
+		Point( v0, v1 ) )
+	rescale( quad )
+
+	return quad
+
+def ih54_params( v0, v1 ):
+	quad = (
+		Point( 0.0, 1.0 ),
+		Point( 0.0, 0.0 ),
+		Point( v0, 0.0 ),
+		Point( v0, v1 ) )
+	rescale( quad )
+
+	return quad
+
+def square_params():
+	quad = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 1.0, 1.0 ),
+		Point( 0.0, 1.0 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih56_params( v0 ):
+	quad = (
+		Point( 1.0 + v0, 0.0 ),
+		Point( 1.0, 1.0 ),
+		Point( 0.0, 1.0 - v0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( quad )
+	
+	return quad
+
+def rhomb_params( v0 ):
+	quad = (
+		Point( 0.5, 0.0 ),
+		Point( 0.0, v0 ),
+		Point( -0.5, 0.0 ),
+		Point( 0.0, -v0 ) )
+	rescale( quad )
+	
+	return quad
+
+def ih69_params( v0, v1 ):
+	quad = (
+		Point( 0.0, 1.0 ),
+		Point( -v1, v0 ),
+		Point( 0.0, 0.0 ),
+		Point( v1, v0 ) )
+	rescale( quad )
+	
+	return quad
+
+#
+# 4.6.12
+#
+
+def ih77_params():
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 1.0, math.sqrt( 3.0 ) ) )
+	rescale( tri )
+
+	return tri
+
+#
+# 4.8.8
+# 
+
+def ih78_params( v0 ):
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 1.0, v0 ) )
+	rescale( tri )
+
+	return tri
+
+def l488_params():
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 1.0, 1.0 ) )
+	rescale( tri )
+
+	return tri
+
+#
+# 6.6.6
+# 
+
+def isosceles_params( v0 ):
+	tri = (
+		Point( 1.0, 0.0 ),
+		Point( 0.5, v0 ),
+		Point( 0.0, 0.0 ) )
+	rescale( tri )
+
+	return tri
+
+def equi_params():
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 0.5, math.sqrt( 3.0 ) * 0.5 ) )
+	rescale( tri )
+
+	return tri
+
+def ih91_params( v0 ):
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( 0.5, v0 ) )
+	rescale( tri )
+
+	return tri
+
+def tri_params( v0, v1 ):
+	tri = (
+		Point( 0.0, 0.0 ),
+		Point( 1.0, 0.0 ),
+		Point( v0, v1 ) )
+	rescale( tri )
+
+	return tri
+
+parameterizations = {
+	'IH1'	 : parhex_params,
+	'IH2'    : ih02_params,
+	'IH3'    : ih03_params,
+	'IH4'    : ih04_params,
+	'IH5'    : ih05_params,
+	'IH6'    : ih06_params,
+	'IH7'    : ih07_params,
+	'IH8'    : parhex_params,
+	'IH9'    : ih09_params,
+	'IH10'   : hex_params,
+	'IH11'   : hex_params,
+	'IH12'   : ih12_params,
+	'IH13'   : ih13_params,
+	'IH14'   : ih14_params,
+	'IH15'   : ih15_params,
+	'IH16'   : ih16_params,
+	'IH17'   : ih12_params,
+	'IH18'   : hex_params,
+	'IH19'   : hex_params,
+	'IH20'   : hex_params,
+
+	'IH21'	 : ih21_params,
+
+	'IH22'	 : ih22_params,
+	'IH23'	 : ih23_params,
+	'IH24'	 : ih23_params,
+	'IH25'	 : ih22_params,
+	'IH26'	 : ih26_params,
+
+	'IH27'	 : ih27_params,
+	'IH28'	 : ih28_params,
+	'IH29'	 : ih29_params,
+
+	'IH30'	 : ih30_params,
+	'IH31'	 : l3464_params,
+	'IH32'	 : l3464_params,
+
+	'IH33'	 : l3636_params,
+	'IH34'	 : l3636_params,
+	'IH35'	 : l3636_params,
+	'IH36'	 : l3636_params,
+	'IH37'	 : l3636_params,
+
+	'IH38'	 : l31212_params,
+	'IH39'	 : l31212_params,
+	'IH40'	 : l31212_params,
+
+	'IH41'   : parallelogram_params,
+	'IH42'   : parallelogram_params,
+	'IH43'   : parallelogram_params,
+	'IH44'   : ih44_params,
+	'IH45'   : ih45_params,
+	'IH46'   : ih46_params,
+	'IH47'   : parallelogram_params,
+	'IH48'   : rect_params,
+	'IH49'   : trap_params,
+	'IH50'   : parallelogram_params,
+	'IH51'   : ih51_params,
+	'IH52'   : rect_params,
+	'IH53'   : ih53_params,
+	'IH54'   : ih54_params,
+	'IH55' 	 : square_params,
+	'IH56'   : ih56_params,
+	'IH57'   : parallelogram_params,
+	'IH58'   : parallelogram_params,
+	'IH59'   : rhomb_params,
+	'IH60'   : rect_params,
+	'IH61' 	 : square_params,
+	'IH62' 	 : square_params,
+	'IH63' 	 : square_params,
+	'IH64'   : rect_params,
+	'IH65'   : rect_params,
+	'IH66'   : rect_params,
+	'IH67'   : trap_params,
+	'IH68'   : rhomb_params,
+	'IH69'	 : ih69_params,
+	'IH70' 	 : square_params,
+	'IH71' 	 : square_params,
+	'IH72'   : rect_params,
+	'IH73' 	 : square_params,
+	'IH74'   : rhomb_params,
+	'IH75' 	 : square_params,
+	'IH76' 	 : square_params,
+
+	'IH77'	 : ih77_params,
+	'IH78'	 : ih78_params,
+	'IH79'   : l488_params,
+	'IH80'   : l488_params,
+	'IH81'   : l488_params,
+	'IH82'   : l488_params,
+	'IH83'   : isosceles_params,
+	'IH84'	 : tri_params,
+	'IH85'	 : tri_params,
+	'IH86'   : isosceles_params,
+	'IH87'   : equi_params,
+	'IH88'   : equi_params,
+	'IH89'   : equi_params,
+	'IH90'   : equi_params,
+	'IH91'   : ih91_params,
+	'IH92'   : equi_params,
+	'IH93'   : equi_params,
+}
+
+if __name__ == '__main__':
+	args = sys.argv[1:]
+
+	if len( args ) == 0:
+		print "Usage: python params.py <IH> <v_0> ... <v_n>"
+		sys.exit( 0 )
+
+	try:
+		pzation = parameterizations[ args[0] ]
+		vs = []
+
+		for a in args[1:]:
+			vs.append( float( a ) )
+
+		polygon = apply( pzation, tuple( vs ) )
+
+		for pt in polygon:
+			print pt.x, pt.y
+		
+		sys.exit( 0 )
+
+	except KeyError:
+		print ('%s is not a valid tiling type.' % args[0])
+		sys.exit( -1 )
+	except TypeError:
+		print 'Wrong number of parameter values.'
+		sys.exit( -1 )
+	except ValueError:
+		print 'Invalid parameter value.'
+	except:
+		print 'An unknown error occured.  Please contact the author.'

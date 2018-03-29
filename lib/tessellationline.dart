@@ -30,8 +30,8 @@ class TessellationLine {
       ..rotateZ(_json['angle'] / 180.0 * math.pi);
     this.ci = new Matrix4.inverted(transform);
     humanAngle = _json['angle'];
-    _points = List.from(_json['points']
-        .map((value) => new Offset(value['x'], value['y'])));
+    _points = List.from(
+        _json['points'].map((value) => new Offset(value['x'], value['y'])));
   }
 
   Map<String, dynamic> toJson() {

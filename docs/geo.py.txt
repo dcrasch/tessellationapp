@@ -1,0 +1,175 @@
+#
+# Copyright 2000, University of Washington
+# 
+# Permission to use, copy, modify, and distribute this software and its
+# documentation for any purpose and without fee is hereby granted,
+# provided that the above copyright notice appear in all copies and that
+# both the copyright notice and this permission notice and warranty
+# disclaimer appear in supporting documentation, and that the names of
+# the authors or their employers not be used in advertising or publicity
+# pertaining to distribution of the software without specific, written
+# prior permission.
+# 
+# The authors and their employers disclaim all warranties with regard to
+# this software, including all implied warranties of merchantability and
+# fitness.  In no event shall the authors or their employers be liable
+# for any special, indirect or consequential damages or any damages
+# whatsoever resulting from loss of use, data or profits, whether in an
+# action of contract, negligence or other tortious action, arising out of
+# or in connection with the use or performance of this software.
+# 
+
+#
+# geo.py
+#
+# A helper for params.py, geo.py implements some simple geometric classes,
+# namely a 2D point and 2D affine transform. 
+#
+
+import math
+
+class Point:
+	def __init__( self, x = 0.0, y = 0.0 ):
+		self.x = x
+		self.y = y
+
+
+	def __repr__( self ):
+		return 'Point( %f, %f )' % (self.x, self.y)
+
+	def __str__( self ):
+		return str( (self.x,self.y) )
+
+	def __hash__( self ):
+		return hash( (self.x, self.y) )
+
+
+	def __add__( self, other ):
+		return Point( self.x + other.x, self.y + other.y )
+	
+	def __sub__( self, other ):
+		return Point( self.x - other.x, self.y - other.y )
+		
+	def __mul__( self, d ):
+		return Point( self.x * d, self.y * d )
+	
+	def __div__( self, d ):
+		return Point( self.x / d, self.y / d )
+	
+	def __neg__( self ):
+		return Point( -self.x, -self.y )
+	
+
+	def magnitude2( self ):
+		return self.x * self.x + self.y * self.y
+	
+	def magnitude( self ):
+		return math.sqrt( self.magnitude2() )
+
+	def distance2( self, other ):
+		dx = self.x - other.x
+		dy = self.y - other.y
+
+		return dx*dx + dy*dy
+	
+	def distance( self, other ):
+		return math.sqrt( self.distance2( other ) )
+
+	def normalize( self ):
+		return self / self.magnitude()
+
+	def scale( self, sx, sy ):
+		return Point( self.x * sx, self.y * sy )
+
+def convexSum( p, q, t ):
+	return (p * (1-t)) + (q * t)
+	
+class Transform:
+	def __init__( self, a = 1.0, b = 0.0, c = 0.0, d = 0.0, e = 1.0, f = 0.0 ):
+		self.m = (a,b,c,d,e,f)
+	
+
+	def __repr__( self ):
+		return 'Transform( %f, %f, %f, %f, %f, %f )' % self.m
+
+	def __str__( self ):
+		return '[%f %f %f %f %f %f]' % self.m
+
+	def __hash__( self ):
+		return hash( self.m )
+
+	
+	def __getitem__( self, key ):
+		return self.m[ key ]
+
+	def __setitem__( self, key, value ):
+		self.m[ key ] = value
+
+
+	def __add__( self, other ):
+		return Transform(
+			self.m[0] + other.m[0],
+			self.m[1] + other.m[1],
+			self.m[2] + other.m[2],
+			self.m[3] + other.m[3],
+			self.m[4] + other.m[4],
+			self.m[5] + other.m[5] )
+	
+	def __sub__( self, other ):
+		return Transform(
+			self.m[0] - other.m[0],
+			self.m[1] - other.m[1],
+			self.m[2] - other.m[2],
+			self.m[3] - other.m[3],
+			self.m[4] - other.m[4],
+			self.m[5] - other.m[5] )
+		
+	def __mul__( self, other ):
+		if isinstance( other, Transform ):
+			return Transform(
+				self.m[0] * other.m[0] + self.m[1] * other.m[3],
+				self.m[0] * other.m[1] + self.m[1] * other.m[4],
+				self.m[0] * other.m[2] + self.m[1] * other.m[5] + self.m[2],
+				self.m[3] * other.m[0] + self.m[4] * other.m[3],
+				self.m[3] * other.m[1] + self.m[4] * other.m[4],
+				self.m[3] * other.m[2] + self.m[4] * other.m[5] + self.m[5] )
+		else:
+			return Point( 
+				self.m[0] * other.x + self.m[1] * other.y + self.m[2],
+				self.m[3] * other.x + self.m[4] * other.y + self.m[5] )
+	
+	def invert( self ):
+		det = self.m[0] * self.m[4] - self.m[1] * self.m[3]
+		return Transform(
+			self.m[4] / det, -self.m[1] / det, 
+			(self.m[1] * self.m[5] - self.m[2] * self.m[4]) / det,
+			-self.m[3] / det, self.m[0] / det, 
+			(self.m[2] * self.m[3] - self.m[0] * self.m[5]) / det )
+	
+IDENTITY = Transform( 1.0, 0.0, 0.0, 0.0, 1.0, 0.0 )
+
+def translate( x, y ):
+	return Transform( 1.0, 0.0, x, 0.0, 1.0, y )
+
+def rotate( t ):
+	return Transform( 
+		math.cos( t ), -math.sin( t ), 0.0,
+		math.sin( t ), math.cos( t ), 0.0 )
+
+def rotateAround( p, t ):
+	return translate( p.x, p.y ) * rotate( t ) * translate( -p.x, -p.y )
+
+def scale( x, y ):
+	return Transform( x, 0.0, 0.0, 0.0, y, 0.0 )
+
+
+#
+# Get the transform that maps the unit interval to the given line segment.
+#
+def match( p, q ):
+	return Transform(
+		q.x - p.x, p.y - q.y, p.x,
+		q.y - p.y, q.x - p.x, p.y )
+
+def matchTwo( p1, q1, p2, q2 ):
+	return match( p1, q1 ) * match( p2, q2 ).invert()
