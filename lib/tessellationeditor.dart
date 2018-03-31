@@ -84,15 +84,14 @@ class _FigurePageState extends State<FigurePage> {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
-    Im.Image image = new Im.Image(1024, 1024);
-    await this.figure.tessellateimage(image, 1.0);
-
-    List<int> png = Im.encodePng(image);
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-    print(filename);
+
+    Im.Image image = new Im.Image(1024, 1024);
+    this.figure.tessellateimage(image, 50.0);
+
     new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytes(png);
+      f.writeAsBytesSync(Im.encodePng(image));
       shareImage(filename);
     });
   }
