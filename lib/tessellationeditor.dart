@@ -80,10 +80,6 @@ class _FigurePageState extends State<FigurePage> {
   }
 
   Future<Null> _shareFigure() async {
-    setState(() {
-      _editing = false;
-    });
-
     if (figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
@@ -94,7 +90,7 @@ class _FigurePageState extends State<FigurePage> {
     List<int> png = Im.encodePng(image);
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-
+    print(filename);
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytes(png);
       shareImage(filename);
