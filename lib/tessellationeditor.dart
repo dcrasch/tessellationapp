@@ -87,13 +87,12 @@ class _FigurePageState extends State<FigurePage> {
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
 
+    File f = await new File(filename).create(recursive: true);
     Im.Image image = new Im.Image(1024, 1024);
     this.figure.tessellateimage(image, 50.0);
-
-    new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytesSync(Im.encodePng(image));
-      shareImage(filename);
-    });
+    List<int> png = Im.encodePng(image); // slow debug
+    f.writeAsBytesSync(png);
+    shareImage(filename);
   }
 
   void _handleFigureChanged(TessellationFigure figure) {
