@@ -9,7 +9,7 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
 @interface SharePlugin ()
 @end
 
-@implementation SharePlugin 
+@implementation SharePlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
   FlutterMethodChannel *shareChannel =
@@ -38,8 +38,8 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
   UIActivityViewController *activityViewController =
       [[UIActivityViewController alloc] initWithActivityItems:@[ sharedItems ]
                                         applicationActivities:nil];
-  [controller presentViewController:activityViewController 
-                           animated:YES 
+  [controller presentViewController:activityViewController
+                           animated:YES
                          completion:nil];
 }
 
@@ -53,14 +53,14 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
 
   // for iphone
   activityController.modalPresentationStyle = UIModalPresentationPopover;
-  [controller presentViewController:activityController 
-                           animated:NO 
+  [controller presentViewController:activityController
+                           animated:NO
                          completion:nil];
   // for ipad
   UIPopoverPresentationController *popController = [activityController popoverPresentationController];
   popController.permittedArrowDirections = UIPopoverArrowDirectionUp;
   popController.sourceView = controller.view;
-  popController.sourceRect = CGRectMake(0,40,1000,30);  
+  popController.sourceRect = CGRectMake(0,40,1000,30);
 }
 
 @end
