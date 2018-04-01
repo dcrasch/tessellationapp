@@ -86,7 +86,6 @@ class _FigurePageState extends State<FigurePage> {
     }
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-
     Im.Image image = new Im.Image(1024, 1024);
     this.figure.tessellateimage(image, 50.0);
 
@@ -94,7 +93,6 @@ class _FigurePageState extends State<FigurePage> {
       f.writeAsBytesSync(Im.encodePng(image));
       shareImage(filename);
     });
-
   }
 
   void _handleFigureChanged(TessellationFigure figure) {

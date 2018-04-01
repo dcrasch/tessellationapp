@@ -216,6 +216,9 @@ NSURL *imageUrl     = [NSURL fileURLWithPath:imagePath];
 [compressedImage writeToURL:imageUrl atomically:YES]; // save the file
 UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[ @"Check this out!", imageUrl ] applicationActivities:nil];
 
+### Ipad and iPhone difference
+https://github.com/versluis/Activity-Demo/
+
 # open simulator
 
 ## ios
