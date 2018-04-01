@@ -6,7 +6,7 @@
 
 static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
 
-@interface SharePlugin ()<UINavigationControllerDelegate>
+@interface SharePlugin ()
 @end
 
 @implementation SharePlugin 
@@ -45,15 +45,22 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
 
 + (void)shareImage:(id)sharedItems withController:(UIViewController *)controller {
   NSURL *imageUrl = [NSURL fileURLWithPath:sharedItems];
-  //  UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
-  UIActivityViewController *activityViewController =
-      [[UIActivityViewController alloc] initWithActivityItems:@[imageUrl]
+  //UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
+  NSArray *items = @[imageUrl];
+  UIActivityViewController *activityController =
+      [[UIActivityViewController alloc] initWithActivityItems:items
                                         applicationActivities:nil];
-  [controller presentViewController:activityViewController 
-                           animated:YES 
+
+  // for iphone
+  activityController.modalPresentationStyle = UIModalPresentationPopover;
+  [controller presentViewController:activityController 
+                           animated:NO 
                          completion:nil];
+  // for ipad
+  UIPopoverPresentationController *popController = [activityController popoverPresentationController];
+  popController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+  popController.sourceView = controller.view;
+  popController.sourceRect = CGRectMake(0,40,1000,30);  
 }
-
-
 
 @end

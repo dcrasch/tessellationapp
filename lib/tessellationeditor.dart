@@ -86,10 +86,10 @@ class _FigurePageState extends State<FigurePage> {
     }
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-
+    print(filename);
     File f = await new File(filename).create(recursive: true);
-    Im.Image image = new Im.Image(10, 10);
-    //this.figure.tessellateimage(image, 2.0);
+    Im.Image image = new Im.Image(1024, 1024);
+    this.figure.tessellateimage(image, 100.0);
     List<int> png = Im.encodePng(image); // slow debug
     f.writeAsBytesSync(png);
     shareImage(filename);
