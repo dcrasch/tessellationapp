@@ -178,22 +178,55 @@ class TessellationFigure {
   Future<Null> tessellateimage(Im.Image image, double dscale) async {
     Rect rect = const Offset(0.0, 0.0) & const Size(1024.0, 1024.0);
     List<List<Offset>> grid = figuregrid(rect, dscale);
-    int row = 0;
+    int rows = grid.length;
+    int cols = grid[0].length;
+    List<List<Color>> gridcolors = figurecolor(rows, cols);
+    List<Offset> points = this.toPoly();
     double rot = 0.0;
-    int color;
-    List<Offset> poly = this.toPoly();
+    int color = 0;
+    points.remove(points.first);
     for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
       if (rotdiv == currentdiv) {
         rot = 0.0;
       } else {
         rot = 2.0 * math.pi * currentdiv / rotdiv;
       }
+
+      Matrix4 t = new Matrix4.identity()
+        ..scale(dscale)
+        ..rotateZ(rot);
+      Offset minPoint, maxPoint;
+      for (Offset o in points) {
+        Offset p = MatrixUtils.transformPoint(t, o);
+        if (maxPoint == null) {
+          maxPoint = p;
+          minPoint = p;
+        }
+        maxPoint = new Offset(
+            math.max(p.dx, maxPoint.dx), math.max(p.dy, maxPoint.dy));
+        minPoint = new Offset(
+            math.min(p.dx, minPoint.dx), math.min(p.dy, minPoint.dy));
+      }
+      Matrix4 t2 = new Matrix4.identity()
+        ..translate(-minPoint.dx, -minPoint.dy)
+        ..scale(dscale)
+        ..rotateZ(rot);
+      List<Offset> poly = [];
+      for (Offset o in points) {
+        Offset p = MatrixUtils.transformPoint(t2, o);
+        poly.add(p);
+      }
+
+      int w = maxPoint.dx.ceil() - minPoint.dx.ceil();
+      int h = maxPoint.dy.ceil() - minPoint.dy.ceil();
+      Im.Image tmpimage = new Im.Image(w, h);
+      fillPolygon(tmpimage, poly, Im.getColor(255, 0, 0), 0, 0, w, h);
+      int row = 0;
       for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
           color = row % 2;
         }
         for (Offset gridpoint in gridrow) {
-          // todo rewrite to generator or something
           if (sequence == 1) {
             color = currentdiv - 1;
           }
@@ -204,13 +237,16 @@ class TessellationFigure {
             }
           }
           Color c = colors[color % 4];
-
-          Matrix4 t = new Matrix4.identity()
-            ..translate(gridpoint.dx, gridpoint.dy)
-            ..scale(dscale)
-            ..rotateZ(rot);
-
-          fillPolygon(image, poly, t, c);
+          int dx = gridpoint.dx.ceil() + minPoint.dx.ceil();
+          int dy = gridpoint.dy.ceil() + minPoint.dy.ceil();
+          for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+              if (tmpimage.getPixel(x, y) > 0) {
+                image.setPixel(
+                    x + dx, y + dy, Im.getColor(c.red, c.green, c.blue));
+              }
+            }
+          }
           color++;
         }
         row++;
@@ -218,8 +254,36 @@ class TessellationFigure {
     }
   }
 
+  List<List<Color>> figurecolor(int rows, int cols) {
+    List<List<Color>> gridcolors = [];
+    int color = 0;
+    for (int row = 0; row < rows; row++) {
+      List<Color> gridrow = [];
+      if (sequence == 0) {
+        color = row % 2;
+      }
+      for (int col = 0; col < cols; col++) {
+        if (sequence == 1) {
+          //color = currentdiv - 1;
+          color = 0;
+        }
+        if (sequence == 0) {
+          if (gridincy < gridincx) {
+            // for hexagons
+            color = row % 3;
+          }
+        }
+        Color c = colors[color % 4];
+        gridrow.add(c);
+        color++;
+      }
+      gridcolors.add(gridrow);
+    }
+    return gridcolors;
+  }
+
   List<List<Offset>> figuregrid(Rect rect, double dscale) {
-    List<List<Offset>> grid = [[]];
+    List<List<Offset>> grid = [];
     double sx = 0.0;
     double sy = 0.0;
 
