@@ -89,7 +89,7 @@ class _FigurePageState extends State<FigurePage> {
     Im.Image image = new Im.Image(1024, 1024);
     this.figure.tessellateimage(image, 80.0);
     new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytesSync(Im.encodePng(image));
+      f.writeAsBytesSync(Im.encodePng(image, level: 1));
       shareImage(filename);
     });
   }

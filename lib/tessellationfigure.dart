@@ -223,10 +223,28 @@ class TessellationFigure {
       fillPolygon(tmpimage, poly, Im.getColor(255, 0, 0), 0, 0, w, h);
       int row = 0;
       for (List<Offset> gridrow in grid) {
+        // color
         if (sequence == 0) {
           color = row % 2;
         }
         for (Offset gridpoint in gridrow) {
+          // bounds
+          int dx = gridpoint.dx.ceil() + minPoint.dx.ceil();
+          int dy = gridpoint.dy.ceil() + minPoint.dy.ceil();
+          int ex = dx + tmpimage.width;
+          int ey = dy + tmpimage.height;
+          if (dx < 0) {
+            dx = 0;
+          }
+          if (ex > image.width) {
+            ex = image.width;
+          }
+          if (dy < 0) {
+            dy = 0;
+          }
+          if (ey > image.height) {
+            ey = image.height;
+          }
           if (sequence == 1) {
             color = currentdiv - 1;
           }
@@ -237,16 +255,16 @@ class TessellationFigure {
             }
           }
           Color c = colors[color % 4];
-          int dx = gridpoint.dx.ceil() + minPoint.dx.ceil();
-          int dy = gridpoint.dy.ceil() + minPoint.dy.ceil();
-          for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-              if (tmpimage.getPixel(x, y) > 0) {
-                image.setPixel(
-                    x + dx, y + dy, Im.getColor(c.red, c.green, c.blue));
+
+          for (int x = dx; x < ex; x++) {
+            for (int y = dy; y < ey; y++) {
+              if (tmpimage[(x - dx) + (y - dy) * tmpimage.width] > 0) {
+                image[x + y * image.width] =
+                    Im.getColor(c.red, c.green, c.blue);
               }
             }
           }
+
           color++;
         }
         row++;

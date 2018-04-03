@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import 'package:image/image.dart' as Im;
 
 void fillPolygon(image, poly, c, minx, miny, maxx, maxy) {
+  // TODO check if minx, miny, maxx and maxy are in bounds of the image
   int polyCorners = poly.length;
   int nodes, pixelX, pixelY, i, j, swap;
   List<int> nodeX = new List(polyCorners);
@@ -49,7 +50,8 @@ void fillPolygon(image, poly, c, minx, miny, maxx, maxy) {
           nodeX[i + 1] = maxx;
         }
         for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) {
-          Im.drawPixel(image, pixelX, pixelY, c);
+          image[pixelX + pixelY * image.width] = c;
+          //Im.drawPixel(image, pixelX, pixelY, c);
         }
       }
     }
