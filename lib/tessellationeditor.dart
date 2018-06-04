@@ -3,11 +3,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:ui' as ui;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
-import 'package:image/image.dart' as Im;
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
@@ -86,10 +86,15 @@ class _FigurePageState extends State<FigurePage> {
     }
     Directory storageDir = await getTemporaryDirectory();
     String filename = "${storageDir.path}/images/${figure.uuid}.png";
-    Im.Image image = new Im.Image(1024, 1024);
-    this.figure.tessellateimage(image, 80.0);
+
+    final ui.PictureRecorder recorder = new ui.PictureRecorder();
+    final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 1024.0, 1024.0);
+    final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
+    widget.figure.tessellate(canvas, paintBounds, 80.0);
+    final ui.Image image = recorder.endRecording().toImage(1024,1024);
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytesSync(Im.encodePng(image, level: 1));
+      f.writeAsBytesSync(byteData.buffer.asUint8List());
       shareImage(filename);
     });
   }
