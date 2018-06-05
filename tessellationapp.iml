@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="WEB_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_color_picker/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_color_picker/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_color_picker/build" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/build" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/example/.pub" />
@@ -40,7 +43,6 @@
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/example/lib/packages" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/share/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/test/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart Packages" level="project" />
