@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_color_picker/flutter_color_picker.dart';
 import 'colorpicker.dart';
 
 class FigureSettings extends StatefulWidget {
@@ -29,7 +28,10 @@ class _FigureSettingsState extends State<FigureSettings> {
           //new Expanded(child: new Text(text)),
           new Padding(
               padding: new EdgeInsets.only(right: 14.0),
-              child: new ColorTile(color: color, size: 40.0, rounded: true)),
+              child: new Container(height:70.0, width:70.0,
+                  margin: const EdgeInsets.all(4.0),
+                  decoration: new BoxDecoration(color: color, 
+                      shape: BoxShape.circle))),
         ]),
         onTap: onTap);
   }
@@ -47,7 +49,7 @@ class _FigureSettingsState extends State<FigureSettings> {
       children.add(_buildColorTile("$i", _colors[i], () async {
         Color c = await showDialog(
             context: context,
-            builder: (BuildContext _) => new TessellationColorPickerDialog());
+            builder: (BuildContext _) => new TessellationColor());
         setState(() {
           _colors[i] = c;
         });

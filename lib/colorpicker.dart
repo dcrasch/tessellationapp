@@ -1,51 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_color_picker/flutter_color_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class TessellationColorPickerGrid extends ColorPickerGrid {
-  TessellationColorPickerGrid(
-      {ValueChanged<Color> onTap, bool rounded, Color selected})
-      : super(colors: const <Color>[
-          Colors.red,
-          Colors.redAccent,
-          Colors.pink,
-          Colors.purple,
-          Colors.deepPurple,
-          Colors.indigo,
-          Colors.blue,
-          Colors.blueAccent,
-          Colors.lightBlue,
-          Colors.cyan,
-          Colors.teal,
-          Colors.green,
-          Colors.greenAccent,
-          Colors.lightGreen,
-          Colors.lime,
-          Colors.yellow,
-          Colors.amber,
-          Colors.orange,
-          Colors.deepOrange,
-          Colors.brown,
-          Colors.grey,
-          Colors.blueGrey,
-          Colors.white,
-          Colors.black
-        ], onTap: onTap, rounded: rounded, selected: selected);
+class TessellationColor extends StatefulWidget {
+  @override
+    State<StatefulWidget> createState() => new _TessellationColorState();
 }
 
-class TessellationColorPickerDialog extends StatelessWidget {
-  final bool rounded;
-  final Color selected;
+class _TessellationColorState extends State<TessellationColor> {
+  Color pickerColor = new Color(0xff443a49);
+  //TessellationColorPickerDialog({this.pickerColor});
 
-  TessellationColorPickerDialog({this.rounded, this.selected});
+  ValueChanged<Color> onColorChanged;
+
+  changeColor(Color color) {
+    setState(() {
+      pickerColor = color;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return new ColorPickerDialog(
-        body: new TessellationColorPickerGrid(
-            onTap: (Color color) {
-              Navigator.pop(context, color);
-            },
-            rounded: rounded,
-            selected: selected));
+    return new AlertDialog(
+        title: const Text('Pick a color!'),
+        content: new SingleChildScrollView(
+            child: new ColorPicker(
+                pickerColor: pickerColor,
+                onColorChanged: changeColor,
+                colorPickerWidth: 1000.0,
+                pickerAreaHeightPercent: 0.7,
+                                   )),
+        actions: <Widget>[
+          new FlatButton(
+              child: new Text('OK'),
+              onPressed: () {
+            Navigator.of(context).pop(pickerColor);
+          },
+                         ),
+        ],
+                           );
   }
 }
