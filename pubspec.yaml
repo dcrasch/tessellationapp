@@ -11,8 +11,8 @@ dependencies:
   vector_math: any
   path_provider:
   flutter_colorpicker:
-  share:
-    path: plugins/share
+  #share:
+  #  path: plugins/share
 
 dev_dependencies:
   flutter_test:

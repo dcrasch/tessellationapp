@@ -7,7 +7,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
+//import 'package:share/share.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
@@ -95,7 +95,7 @@ class _FigurePageState extends State<FigurePage> {
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData.buffer.asUint8List());
-      shareImage(filename);
+      //shareImage(filename);
     });
   }
 
