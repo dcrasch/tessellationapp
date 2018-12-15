@@ -57,6 +57,11 @@ inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png -w144 -h144
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png -w192 -h192
 
+### flutter launcher icons
+
+* https://github.com/fluttercommunity/flutter_launcher_icons
+
+$ flutter packages pub run flutter_launcher_icons:main
 
 ### image transformer
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
@@ -83,16 +88,16 @@ flutter/packages/flutter/lib/src/painting/box_painter.dart
 aanpassingen aan painting.dart
     ninja -C out/ios_debug_sim_unopt
 ??  flutter update-packages --upgrade --local-engine=ios_debug_sim_unopt
-  
+
   FLUTTER_ENGINE=/Users/david/src/engine/src/
   flutter run --local-engine=ios_debug_sim_unopt -d 7493B601-8A6F-4F59-808F-A4AA5AAA1BB9
-  
+
 https://github.com/long1eu/material_pickers
 
 canvas to image
 ###
-https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart    
-PictureRecorder 
+https://chromium.googlesource.com/external/github.com/flutter/flutter/+/v0.0.20-alpha/examples/widgets/gestures.dart
+PictureRecorder
  canvas
 picturerecorder -> picture
 picture -> image
@@ -111,7 +116,7 @@ https://skia.org/user/api/canvas
     draw(recordingCanvas);
     sk_sp<SkPicture> picture = recorder.finishRecordingAsPicture();
     picture->toImage(100,100);
-        
+
 # Build flutter engine
 ## PATH
 export PATH=/Users/david/src/engine/src/third_party/android_tools/sdk/platform-tools/:/Users/david/flutter/depot_tools/:$PATH
@@ -123,7 +128,7 @@ ninja -C out/ios_debug_sim_unop
 
 /*  Dart_Handle canvasimage = Dart_GetNativeArgument(arguments, 0);
   if (!Dart_IsNull(canvasimage)) {
-      CanvasImage* decoded = tonic::DartConverter<CanvasImage*>::FromDart(canvasimage);      
+      CanvasImage* decoded = tonic::DartConverter<CanvasImage*>::FromDart(canvasimage);
       sk_sp<SkData> png(decoded->image()->encode(SkEncodedImageFormat::kPNG, 100));
       Dart_Handle result = tonic::DartConverter<tonic::Uint8List>::ToDart((uint8_t*)png->data(),png->size());
 }*/
@@ -135,7 +140,7 @@ set the zoom and the figure?
 
 #colors
 https://github.com/MichaelFenwick/Color/blob/master/lib/hex_color.dart
-toRadixString(16).padLeft(2, '0') 
+toRadixString(16).padLeft(2, '0')
 int.parse(_json['color1'],radix:16)
 
 #android
@@ -162,7 +167,7 @@ met swipe left right kleuren palette
 - indigo
 - blue
 - light blue
-- teal 
+- teal
 
 - green
 - light green
@@ -176,7 +181,7 @@ met swipe left right kleuren palette
 
 - black
 
-21 * 10 
+21 * 10
 https://material.io/guidelines/style/color.html#color-color-palette
 https://github.com/dart-flitter/flutter_color_picker
 
@@ -226,9 +231,9 @@ $ open -a Simulator.app
 
 ## android
 https://developer.android.com/studio/run/emulator-commandline.html
- 
+
  $ ~/Library/Android/sdk/tools/emulator @nexus &
- 
+
 # build system
 
 ## gradle

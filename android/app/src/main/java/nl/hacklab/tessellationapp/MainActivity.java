@@ -1,4 +1,4 @@
-package com.example.tessellationapp;
+package nl.hacklab.tessellationapp;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
