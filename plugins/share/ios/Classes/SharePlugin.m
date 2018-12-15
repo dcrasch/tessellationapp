@@ -6,61 +6,63 @@
 
 static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
 
-@interface SharePlugin ()
-@end
-
-@implementation SharePlugin
+@implementation FLTSharePlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
   FlutterMethodChannel *shareChannel =
       [FlutterMethodChannel methodChannelWithName:PLATFORM_CHANNEL
                                   binaryMessenger:registrar.messenger];
-  UIViewController *viewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+
   [shareChannel setMethodCallHandler:^(FlutterMethodCall *call, FlutterResult result) {
     if ([@"share" isEqualToString:call.method]) {
-      [self share:call.arguments
-            withController:viewController];
-      result(nil);
-    }
-    else if ([@"shareImage" isEqualToString:call.method]) {
-      [self shareImage:call.arguments
-        withController:viewController];
+      NSDictionary *arguments = [call arguments];
+      NSString *shareText = arguments[@"text"];
+      NSString *shareImage = arguments[@"image"];
+
+      if (shareText.length == 0 && shareImage.length==0) {
+          result([FlutterError errorWithCode:@"error"
+                                     message:@"Non-empty text expected"
+                                     details:nil]);
+          return;
+      }
+
+      NSArray *items =@[shareText];
+      if (shareImage.length != 0) {
+          NSURL *imageUrl = [NSURL fileURLWithPath:shareImage];
+          items = @[imageUrl];
+      }
+
+      NSNumber *originX = arguments[@"originX"];
+      NSNumber *originY = arguments[@"originY"];
+      NSNumber *originWidth = arguments[@"originWidth"];
+      NSNumber *originHeight = arguments[@"originHeight"];
+      CGRect originRect;
+      if (originX != nil && originY != nil && originWidth != nil && originHeight != nil) {
+        originRect = CGRectMake([originX doubleValue], [originY doubleValue],
+                                [originWidth doubleValue], [originHeight doubleValue]);
+      }
+
+      [self share:items
+          withController:[UIApplication sharedApplication].keyWindow.rootViewController
+                atSource:originRect];
       result(nil);
     } else {
-      result([FlutterError errorWithCode:@"UNKNOWN_METHOD"
-                                 message:@"Unknown share method called"
-                                 details:nil]);
+      result(FlutterMethodNotImplemented);
     }
   }];
 }
 
-+ (void)share:(id)sharedItems withController:(UIViewController *)controller {
++ (void)share:(id)sharedItems
+    withController:(UIViewController *)controller
+          atSource:(CGRect)origin {
   UIActivityViewController *activityViewController =
-      [[UIActivityViewController alloc] initWithActivityItems:@[ sharedItems ]
+      [[UIActivityViewController alloc] initWithActivityItems:sharedItems
                                         applicationActivities:nil];
-  [controller presentViewController:activityViewController
-                           animated:YES
-                         completion:nil];
-}
-
-+ (void)shareImage:(id)sharedItems withController:(UIViewController *)controller {
-  NSURL *imageUrl = [NSURL fileURLWithPath:sharedItems];
-  //UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
-  NSArray *items = @[imageUrl];
-  UIActivityViewController *activityController =
-      [[UIActivityViewController alloc] initWithActivityItems:items
-                                        applicationActivities:nil];
-
-  // for iphone
-  activityController.modalPresentationStyle = UIModalPresentationPopover;
-  [controller presentViewController:activityController
-                           animated:NO
-                         completion:nil];
-  // for ipad
-  UIPopoverPresentationController *popController = [activityController popoverPresentationController];
-  popController.permittedArrowDirections = UIPopoverArrowDirectionUp;
-  popController.sourceView = controller.view;
-  popController.sourceRect = CGRectMake(0,40,1000,30);
+  activityViewController.popoverPresentationController.sourceView = controller.view;
+  if (!CGRectIsEmpty(origin)) {
+    activityViewController.popoverPresentationController.sourceRect = origin;
+  }
+  [controller presentViewController:activityViewController animated:YES completion:nil];
 }
 
 @end
