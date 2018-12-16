@@ -122,7 +122,7 @@ class _FigurePageState extends State<FigurePage> {
             onPressed: _resizeFigure,
           ),
           new IconButton(
-            icon: const Icon(Icons.import_export),
+            icon: const Icon(Icons.share),
             onPressed: _shareFigure,
           ),
           /*
