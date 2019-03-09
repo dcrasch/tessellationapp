@@ -14,17 +14,17 @@ import 'tessellationfigure.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
 
-class FigurePage extends StatefulWidget {
-  FigurePage({Key key, this.title, this.figure}) : super(key: key);
+class TesellationEditor extends StatefulWidget {
+  TesellationEditor({Key key, this.title, this.figure}) : super(key: key);
 
   final String title;
   TessellationFigure figure;
 
   @override
-  _FigurePageState createState() => new _FigurePageState();
+  _TesellationEditorState createState() => new _TesellationEditorState();
 }
 
-class _FigurePageState extends State<FigurePage> {
+class _TesellationEditorState extends State<TesellationEditor> {
   TessellationFigure figure;
   ValueNotifier<Matrix4> zoom =
       new ValueNotifier<Matrix4>(new Matrix4.identity());
@@ -41,6 +41,11 @@ class _FigurePageState extends State<FigurePage> {
     Directory appDir = await getApplicationDocumentsDirectory();
     String filename = "${appDir.path}/${widget.figure.uuid}.json";
     return new File(filename);
+  }
+
+  Future<bool> _onWillPop() async {
+    await _saveFigure();
+    return true;
   }
 
   Future<Null> _saveFigure() async {
@@ -107,25 +112,28 @@ class _FigurePageState extends State<FigurePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(title: const Text('Tessellation'), actions: <Widget>[
-          new IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveFigure,
-          ),
-          new IconButton(
-            icon: const Icon(Icons.palette),
-            onPressed: _colorSettings,
-          ),
-          new IconButton(
-            icon: const Icon(Icons.fullscreen),
-            onPressed: _resizeFigure,
-          ),
-          new IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: _shareFigure,
-          ),
-          /*
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: new Scaffold(
+            appBar:
+                new AppBar(title: const Text('Tessellation'), actions: <Widget>[
+              new IconButton(
+                icon: const Icon(Icons.save),
+                onPressed: _saveFigure,
+              ),
+              new IconButton(
+                icon: const Icon(Icons.palette),
+                onPressed: _colorSettings,
+              ),
+              new IconButton(
+                icon: const Icon(Icons.fullscreen),
+                onPressed: _resizeFigure,
+              ),
+              new IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: _shareFigure,
+              ),
+              /*
           new PopupMenuButton<String>(
               onSelected: (String value) {
                  _handleMenu(context, value);
@@ -137,16 +145,16 @@ class _FigurePageState extends State<FigurePage> {
                         value: 'Share', child: const Text('Share')),
                   ]),
           */
-        ]),
-        body: new Stack(children: <Widget>[
-          new TessellationTiled(key: new Key(""), figure: figure),
-          _editing
-              ? new TessellationWidget(
-                  key: new Key("tessellationeditor"),
-                  figure: figure,
-                  onChanged: _handleFigureChanged,
-                  zoom: zoom)
-              : const Center(child: const CircularProgressIndicator()),
-        ]));
+            ]),
+            body: new Stack(children: <Widget>[
+              new TessellationTiled(key: new Key(""), figure: figure),
+              _editing
+                  ? new TessellationWidget(
+                      key: new Key("tessellationeditor"),
+                      figure: figure,
+                      onChanged: _handleFigureChanged,
+                      zoom: zoom)
+                  : const Center(child: const CircularProgressIndicator()),
+            ])));
   }
 }

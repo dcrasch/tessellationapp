@@ -37,7 +37,7 @@ class _TessellationListState extends State<TessellationList> {
   void showFigure(BuildContext context, TessellationFigure f) {
     Navigator.push(context,
         new MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return new FigurePage(figure: f);
+      return new TesellationEditor(figure: f);
     }));
   }
 

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'tessellationlist.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(new TessellationApp());
 }
 
-class MyApp extends StatelessWidget {
+class TessellationApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
