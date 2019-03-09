@@ -28,10 +28,12 @@ class _FigureSettingsState extends State<FigureSettings> {
           //new Expanded(child: new Text(text)),
           new Padding(
               padding: new EdgeInsets.only(right: 14.0),
-              child: new Container(height:70.0, width:70.0,
+              child: new Container(
+                  height: 70.0,
+                  width: 70.0,
                   margin: const EdgeInsets.all(4.0),
-                  decoration: new BoxDecoration(color: color, 
-                      shape: BoxShape.circle))),
+                  decoration:
+                      new BoxDecoration(color: color, shape: BoxShape.circle))),
         ]),
         onTap: onTap);
   }

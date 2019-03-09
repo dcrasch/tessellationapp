@@ -27,19 +27,17 @@ class Share {
   ///
   /// May throw [PlatformException] or [FormatException]
   /// from [MethodChannel].
-    static Future<void> share(String text, {String image, Rect sharePositionOrigin}) {
+  static Future<void> share(String text,
+      {String image, Rect sharePositionOrigin}) {
     assert(text != null);
     assert(text.isNotEmpty);
-    final Map<String, dynamic> params = <String, dynamic>{
-      'text': text
-    };
+    final Map<String, dynamic> params = <String, dynamic>{'text': text};
     if (image == null || !image.isNotEmpty) {
-        params['image']='';
+      params['image'] = '';
+    } else {
+      params['image'] = image;
     }
-    else {
-        params['image']=image;
-    }
-            
+
     if (sharePositionOrigin != null) {
       params['originX'] = sharePositionOrigin.left;
       params['originY'] = sharePositionOrigin.top;
@@ -48,5 +46,5 @@ class Share {
     }
 
     return channel.invokeMethod('share', params);
-  }    
+  }
 }

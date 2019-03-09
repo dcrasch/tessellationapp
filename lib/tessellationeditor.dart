@@ -91,11 +91,11 @@ class _FigurePageState extends State<FigurePage> {
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 1024.0, 1024.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
     widget.figure.tessellate(canvas, paintBounds, 80.0);
-    final ui.Image image = recorder.endRecording().toImage(1024,1024);
+    final ui.Image image = await recorder.endRecording().toImage(1024, 1024);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData.buffer.asUint8List());
-      Share.share(figure.description, image:filename);
+      Share.share(figure.description, image: filename);
     });
   }
 
