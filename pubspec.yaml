@@ -8,6 +8,7 @@ homepage: https://www.cloudscripting.nl/tessellations/
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.15.7
   vector_math: any
   path_provider:
   flutter_colorpicker:

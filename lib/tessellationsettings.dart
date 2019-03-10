@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'colorpicker.dart';
 
 class FigureSettings extends StatefulWidget {
-  FigureSettings({Key key, this.colors}) : super(key: key);
+  FigureSettings({Key key, this.colors, this.description}) : super(key: key);
 
   List<Color> colors;
+  String description;
 
   @override
   _FigureSettingsState createState() => new _FigureSettingsState();
@@ -12,12 +13,15 @@ class FigureSettings extends StatefulWidget {
 
 class _FigureSettingsState extends State<FigureSettings> {
   List<Color> _colors = new List<Color>(4);
+  String _description = "";
   final TextEditingController _descriptionController =
       new TextEditingController();
 
   void initState() {
     super.initState();
     setState(() {
+      _description = widget.description;
+      _descriptionController.text = _description;
       _colors = widget.colors;
     });
   }
@@ -60,7 +64,8 @@ class _FigureSettingsState extends State<FigureSettings> {
     children.add(new FlatButton(
         child: const Text("Apply"),
         onPressed: () {
-          Navigator.pop(context, _colors);
+          Navigator.pop(context,
+              {'colors': _colors, 'description': _descriptionController.text});
         }));
 
     return new Scaffold(

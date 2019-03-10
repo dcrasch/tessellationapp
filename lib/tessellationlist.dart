@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math' as math;
 
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'tessellationeditor.dart';
 import 'tessellationcreate.dart';
 import 'tessellationfigure.dart';
+import 'tessellation.dart';
 
 class TessellationList extends StatefulWidget {
   const TessellationList({Key key}) : super(key: key);
@@ -34,11 +37,18 @@ class _TessellationListState extends State<TessellationList> {
     });
   }
 
-  void showFigure(BuildContext context, TessellationFigure f) {
-    Navigator.push(context,
-        new MaterialPageRoute<Null>(builder: (BuildContext context) {
+  void showFigure(BuildContext context, int i) async {
+    TessellationFigure f = items[i];
+    TessellationFigure result = await Navigator.push(context,
+        new MaterialPageRoute<TessellationFigure>(
+            builder: (BuildContext context) {
       return new TesellationEditor(figure: f);
     }));
+    if (result != null) {
+      setState(() {
+        items[i] = result;
+      });
+    }
   }
 
   Future<List<TessellationFigure>> _getItems() async {
@@ -61,12 +71,30 @@ class _TessellationListState extends State<TessellationList> {
     return myitems;
   }
 
-  Widget buildListTile(BuildContext context, TessellationFigure f) {
+  Widget _buildIcon(BuildContext context, TessellationFigure f) {
+    Rect r = f.fit();
+    double scale = 0.7 * math.min(48.0 / r.width, 48.0 / r.height);
+    double tx = -24 + -r.left * scale + (48.0 - r.width * scale) / 2;
+    double ty = -24 + -r.top * scale + (48.0 - r.height * scale) / 2;
+    Matrix4 transform = new Matrix4.identity()
+      ..translate(tx, ty)
+      ..scale(scale);
+    return new Container(
+        padding: new EdgeInsets.all(12.0),
+        child: new CustomPaint(
+            painter: new TessellationPainter(f, transform, Colors.black)));
+  }
+
+  Widget _buildListTile(BuildContext context, int i) {
+    TessellationFigure f = items[i];
     if (f != null) {
       return new ListTile(
-          title: new Text('${f.description}.'),
+          leading: _buildIcon(context, f),
+          title: new Text('${f.description}'),
+          //subtitle: new Text( DateFormat('yyyy-MM-dd kk:mm').format(f.created)),
+          //
           onTap: () {
-            showFigure(context, f);
+            showFigure(context, i);
           });
     } else {
       return null;
@@ -80,7 +108,7 @@ class _TessellationListState extends State<TessellationList> {
       setState(() {
         items.add(f);
       });
-      showFigure(context, f);
+      showFigure(context, items.length - 1);
     }
   }
 
@@ -88,22 +116,22 @@ class _TessellationListState extends State<TessellationList> {
     return new TessellationCreate();
   }
 
+  Widget _buildFigureList() {
+    return new ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, i) {
+          return _buildListTile(context, i);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Iterable<Widget> listTiles =
-        items.map((TessellationFigure item) => buildListTile(context, item));
-
     return new Scaffold(
         key: scaffoldKey,
         appBar: new AppBar(
           title: new Text('Figure List'),
         ),
-        body: new Scrollbar(
-          child: new ListView(
-            padding: new EdgeInsets.symmetric(vertical: 4.0),
-            children: listTiles.toList(),
-          ),
-        ),
+        body: _buildFigureList(),
         floatingActionButton: new FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: _onPressed,

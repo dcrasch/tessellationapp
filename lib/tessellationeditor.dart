@@ -39,17 +39,18 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
-    String filename = "${appDir.path}/${widget.figure.uuid}.json";
+    String filename = "${appDir.path}/${figure.uuid}.json";
     return new File(filename);
   }
 
   Future<bool> _onWillPop() async {
     await _saveFigure();
-    return true;
+    Navigator.pop(context, figure);
+    return new Future.value(false);
   }
 
   Future<Null> _saveFigure() async {
-    if (widget.figure.uuid.isEmpty) {
+    if (figure.uuid.isEmpty) {
       DateTime _nu = new DateTime.now();
       figure.uuid = _nu.toString();
     }
@@ -72,14 +73,15 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<Null> _colorSettings() async {
-    List<Color> _newcolors = await Navigator.push(context,
-        new MaterialPageRoute<List<Color>>(builder: (BuildContext context) {
-      return new FigureSettings(colors: figure.colors);
+    Map results = await Navigator.push(context,
+        new MaterialPageRoute<Map>(builder: (BuildContext context) {
+      return new FigureSettings(
+          colors: figure.colors, description: figure.description);
     }));
-    if (_newcolors != null) {
+    if (results != null) {
       setState(() {
-        figure.colors = _newcolors;
-        //figure.description = _description;
+        figure.colors = results['colors'];
+        figure.description = results['description'];
       });
     }
   }
@@ -95,7 +97,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 1024.0, 1024.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
-    widget.figure.tessellate(canvas, paintBounds, 80.0);
+    figure.tessellate(canvas, paintBounds, 80.0);
     final ui.Image image = await recorder.endRecording().toImage(1024, 1024);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {

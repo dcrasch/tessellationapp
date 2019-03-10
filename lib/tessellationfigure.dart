@@ -4,18 +4,12 @@ import 'dart:async';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 import 'tessellationline.dart';
 
 class TessellationFigure {
   TessellationFigure();
-
-  final Paint _paint = new Paint()
-    ..color = const Color(0xFFFFFF00)
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0 / 50
-    ..strokeJoin = StrokeJoin.round;
-
   double rectsize = 2.0 / 50;
 
   double gridincx, gridincy, shiftx, shifty;
@@ -239,7 +233,13 @@ class TessellationFigure {
     return grid;
   }
 
-  void paint(Canvas canvas, _) {
+  void paint(Canvas canvas, _, Color borderColor) {
+    final Paint _paint = new Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0 / 50
+      ..strokeJoin = StrokeJoin.round;
+
     List<Offset> poly = toPoly();
     Path p = new Path();
     p.addPolygon(poly, true);

@@ -2,14 +2,17 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 import 'tessellationfigure.dart';
 import 'tessellationline.dart';
 
 class TessellationPainter extends CustomPainter {
-  TessellationPainter(this.figure, this.transform);
+  TessellationPainter(this.figure, this.transform, this.borderColor);
   final TessellationFigure figure;
-  Matrix4 transform;
+  final Matrix4 transform;
+  final Color borderColor;
+
   @override
   void paint(Canvas canvas, Size size) {
     Offset offset = Offset.zero;
@@ -18,7 +21,7 @@ class TessellationPainter extends CustomPainter {
     if (figure != null) {
       canvas.save();
       canvas.transform(transform.storage);
-      figure.paint(canvas, offset);
+      figure.paint(canvas, offset, borderColor);
       canvas.restore();
     }
   }
@@ -94,7 +97,8 @@ class TessellationState extends State<TessellationWidget> {
             _handlePanEnd(details);
           },
           child: new CustomPaint(
-              painter: new TessellationPainter(figure, transform))),
+              painter:
+                  new TessellationPainter(figure, transform, Colors.yellow))),
     );
   }
 
