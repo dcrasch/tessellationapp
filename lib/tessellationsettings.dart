@@ -55,7 +55,7 @@ class _FigureSettingsState extends State<FigureSettings> {
       children.add(_buildColorTile("$i", _colors[i], () async {
         Color c = await showDialog(
             context: context,
-            builder: (BuildContext _) => new TessellationColor());
+            builder: (BuildContext _) => new TessellationColor(_colors[i]));
         setState(() {
           _colors[i] = c;
         });
