@@ -10,6 +10,10 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import java.util.Map;
 
+import android.support.v4.content.FileProvider;
+import android.net.Uri;
+import java.io.File;
+
 /** Plugin method host for presenting a share sheet via Intent */
 public class SharePlugin implements MethodChannel.MethodCallHandler {
 
@@ -34,7 +38,19 @@ public class SharePlugin implements MethodChannel.MethodCallHandler {
         throw new IllegalArgumentException("Map argument expected");
       }
       // Android does not support showing the share sheet at a particular point on screen.
-      share((String) call.argument("text"));
+      String shareText = (String) call.argument("text");
+      String shareImage = (String) call.argument("image");
+
+      if ((shareText == null || shareText.isEmpty()) &&
+          (shareImage == null || shareImage.isEmpty())) {
+          throw new IllegalArgumentException("Non-empty text expected");
+      }
+      if (!(shareImage==null || shareImage.isEmpty())) {
+          shareImage(shareImage);
+      }
+      else {
+          share(shareText);
+      }
       result.success(null);
     } else {
       result.notImplemented();
@@ -50,6 +66,27 @@ public class SharePlugin implements MethodChannel.MethodCallHandler {
     shareIntent.setAction(Intent.ACTION_SEND);
     shareIntent.putExtra(Intent.EXTRA_TEXT, text);
     shareIntent.setType("text/plain");
+    Intent chooserIntent = Intent.createChooser(shareIntent, null /* dialog title optional */);
+    if (mRegistrar.activity() != null) {
+      mRegistrar.activity().startActivity(chooserIntent);
+    } else {
+      chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      mRegistrar.context().startActivity(chooserIntent);
+    }
+  }
+
+  private void shareImage(String filename) {
+
+    if (filename == null || filename.isEmpty()) {
+      throw new IllegalArgumentException("Non-empty image expected");
+    }
+    File imageFile = new File(filename);
+    Uri fileuri = FileProvider.getUriForFile(mRegistrar.context(), "nl.cloudscripting.fileprovider", imageFile);
+    Intent shareIntent = new Intent();
+    shareIntent.setAction(Intent.ACTION_SEND);
+    shareIntent.setType("image/*");
+    shareIntent.putExtra(Intent.EXTRA_STREAM, fileuri);
+    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
     Intent chooserIntent = Intent.createChooser(shareIntent, null /* dialog title optional */);
     if (mRegistrar.activity() != null) {
       mRegistrar.activity().startActivity(chooserIntent);
