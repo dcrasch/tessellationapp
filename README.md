@@ -57,6 +57,9 @@ inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png -w144 -h144
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png -w192 -h192
 
+Remove alpha from images
+find . -name "*.png" -exec convert "{}" -alpha off "{}" \;
+
 ### flutter launcher icons
 
 * https://github.com/fluttercommunity/flutter_launcher_icons
@@ -239,3 +242,9 @@ https://developer.android.com/studio/run/emulator-commandline.html
 ## gradle
 upgrade to gradle 4.1
 https://github.com/flutter/flutter/wiki/Updating-Flutter-projects-to-Gradle-4.1-and-Android-Studio-Gradle-plugin-3.0.1
+
+
+## increase build version
+in pubspec.yaml increase the number after the +
+version: 2.0.0+5 -> version: 2.0.0+6
+See https://medium.com/@ralphbergmann/versioning-with-flutter-299869e68af4
