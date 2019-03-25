@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'tessellationeditor.dart';
 import 'tessellationcreate.dart';
@@ -22,8 +23,8 @@ class TessellationList extends StatefulWidget {
 }
 
 class _TessellationListState extends State<TessellationList> {
-  static final GlobalKey<ScaffoldState> scaffoldKey =
-      new GlobalKey<ScaffoldState>();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<TessellationFigure> items = <TessellationFigure>[];
 
@@ -50,6 +51,24 @@ class _TessellationListState extends State<TessellationList> {
       });
     }
   }
+
+  Future<File> _getLocalFile(figure) async {
+    // TODO move file stuff to repo
+    Directory appDir = await getApplicationDocumentsDirectory();
+    String filename = "${appDir.path}/${figure.uuid}.json";
+    return new File(filename);
+  }
+
+  void deleteFigure(BuildContext context, int i) async {
+    // TODO move file stuff to repo
+    final file = await _getLocalFile(items[i]);
+    await file.delete();
+    // remove from filesystem
+    setState(() {
+        items.removeAt(i);
+      });
+  }
+
 
   Future<List<TessellationFigure>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
@@ -88,14 +107,25 @@ class _TessellationListState extends State<TessellationList> {
   Widget _buildListTile(BuildContext context, int i) {
     TessellationFigure f = items[i];
     if (f != null) {
-      return new ListTile(
+      return new Slidable(
+        delegate: SlidableScrollDelegate(),
+        actionExtentRatio: 0.25,
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () => deleteFigure(context, i)
+          ),
+        ],
+        child: ListTile(
           leading: _buildIcon(context, f),
           title: new Text('${f.description}'),
           //subtitle: new Text( DateFormat('yyyy-MM-dd kk:mm').format(f.created)),
-          //
           onTap: () {
             showFigure(context, i);
-          });
+        }),
+      );
     } else {
       return null;
     }
@@ -127,7 +157,7 @@ class _TessellationListState extends State<TessellationList> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        key: scaffoldKey,
+        key: _scaffoldKey,
         appBar: new AppBar(
           title: new Text('Figure List'),
         ),

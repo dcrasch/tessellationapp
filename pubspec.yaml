@@ -12,6 +12,7 @@ dependencies:
   vector_math: any
   path_provider:
   flutter_colorpicker:
+  flutter_slidable:
   share:
     path: plugins/share
 
