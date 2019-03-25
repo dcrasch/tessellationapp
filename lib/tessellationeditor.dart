@@ -102,6 +102,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData.buffer.asUint8List());
+      print(filename);
       Share.share(figure.description, image: filename);
     });
   }
