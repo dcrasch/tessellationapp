@@ -61,12 +61,16 @@ class _TessellationListState extends State<TessellationList> {
 
   void deleteFigure(BuildContext context, int i) async {
     // TODO move file stuff to repo
-    final file = await _getLocalFile(items[i]);
-    await file.delete();
-    // remove from filesystem
-    setState(() {
-        items.removeAt(i);
+    try {
+      final file = await _getLocalFile(items[i]);
+      await file.delete();
+      setState(() {
+          items.removeAt(i);
       });
+    }
+    catch(e) {
+      // show error
+    }
   }
 
 
