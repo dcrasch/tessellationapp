@@ -23,7 +23,6 @@ class TessellationList extends StatefulWidget {
 }
 
 class _TessellationListState extends State<TessellationList> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<TessellationFigure> items = <TessellationFigure>[];
@@ -65,14 +64,12 @@ class _TessellationListState extends State<TessellationList> {
       final file = await _getLocalFile(items[i]);
       await file.delete();
       setState(() {
-          items.removeAt(i);
+        items.removeAt(i);
       });
-    }
-    catch(e) {
+    } catch (e) {
       // show error
     }
   }
-
 
   Future<List<TessellationFigure>> _getItems() async {
     Directory appDir = await getApplicationDocumentsDirectory();
@@ -112,23 +109,22 @@ class _TessellationListState extends State<TessellationList> {
     TessellationFigure f = items[i];
     if (f != null) {
       return new Slidable(
-        delegate: SlidableScrollDelegate(),
+        actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.25,
         secondaryActions: <Widget>[
           IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () => deleteFigure(context, i)
-          ),
+              caption: 'Delete',
+              color: Colors.red,
+              icon: Icons.delete,
+              onTap: () => deleteFigure(context, i)),
         ],
         child: ListTile(
-          leading: _buildIcon(context, f),
-          title: new Text('${f.description}'),
-          //subtitle: new Text( DateFormat('yyyy-MM-dd kk:mm').format(f.created)),
-          onTap: () {
-            showFigure(context, i);
-        }),
+            leading: _buildIcon(context, f),
+            title: new Text('${f.description}'),
+            //subtitle: new Text( DateFormat('yyyy-MM-dd kk:mm').format(f.created)),
+            onTap: () {
+              showFigure(context, i);
+            }),
       );
     } else {
       return null;

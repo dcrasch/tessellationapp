@@ -10,7 +10,7 @@ class TessellationApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        debugShowCheckedModeBanner: false, // for screenshots
+      debugShowCheckedModeBanner: false, // for screenshots
       title: 'Tessellation App',
       theme: new ThemeData(
         primarySwatch: Colors.blue,

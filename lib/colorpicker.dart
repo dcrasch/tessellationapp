@@ -18,7 +18,7 @@ class _TessellationColorState extends State<TessellationColor> {
   void initState() {
     super.initState();
     setState(() {
-        pickerColor = widget.currentColor;
+      pickerColor = widget.currentColor;
     });
   }
 
@@ -34,7 +34,7 @@ class _TessellationColorState extends State<TessellationColor> {
       title: const Text('Pick a color!'),
       content: new SingleChildScrollView(
           child: new MaterialPicker(
-          pickerColor: pickerColor,
+        pickerColor: pickerColor,
         onColorChanged: changeColor,
       )),
       actions: <Widget>[
