@@ -103,7 +103,8 @@ class _TesellationEditorState extends State<TesellationEditor> {
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData.buffer.asUint8List());
       print(filename);
-      Share.share(figure.description, image: filename);
+      Share.shareFiles([filename],
+          mimeTypes: ["image/png"], subject: figure.description);
     });
   }
 

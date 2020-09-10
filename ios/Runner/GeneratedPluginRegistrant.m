@@ -3,8 +3,18 @@
 //
 
 #import "GeneratedPluginRegistrant.h"
+
+#if __has_include(<path_provider/PathProviderPlugin.h>)
 #import <path_provider/PathProviderPlugin.h>
-#import <share/SharePlugin.h>
+#else
+@import path_provider;
+#endif
+
+#if __has_include(<share/FLTSharePlugin.h>)
+#import <share/FLTSharePlugin.h>
+#else
+@import share;
+#endif
 
 @implementation GeneratedPluginRegistrant
 
