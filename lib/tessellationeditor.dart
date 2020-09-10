@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
@@ -44,7 +46,9 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<bool> _onWillPop() async {
-    await _saveFigure();
+    if (!kIsWeb) {
+      await _saveFigure();
+    }
     Navigator.pop(context, figure);
     return new Future.value(false);
   }
@@ -121,10 +125,13 @@ class _TesellationEditorState extends State<TesellationEditor> {
         child: new Scaffold(
             appBar:
                 new AppBar(title: const Text('Tessellation'), actions: <Widget>[
-              new IconButton(
-                icon: const Icon(Icons.save),
-                onPressed: _saveFigure,
-              ),
+              !kIsWeb
+                  ? new IconButton(
+                      icon: const Icon(Icons.save),
+                      onPressed: _saveFigure,
+                    )
+                  : new IconButton(
+                      icon: const Icon(Icons.save), onPressed: null),
               new IconButton(
                 icon: const Icon(Icons.palette),
                 onPressed: _colorSettings,
@@ -133,10 +140,13 @@ class _TesellationEditorState extends State<TesellationEditor> {
                 icon: const Icon(Icons.fullscreen),
                 onPressed: _resizeFigure,
               ),
-              new IconButton(
-                icon: const Icon(Icons.share),
-                onPressed: _shareFigure,
-              ),
+              !kIsWeb
+                  ? new IconButton(
+                      icon: const Icon(Icons.share),
+                      onPressed: _shareFigure,
+                    )
+                  : new IconButton(
+                      icon: const Icon(Icons.share), onPressed: null),
               /*
           new PopupMenuButton<String>(
               onSelected: (String value) {
