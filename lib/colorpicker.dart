@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/material_picker.dart';
+import 'package:flutter_colorpicker/src/material_picker.dart';
 
 class TessellationColor extends StatefulWidget {
   Color currentColor;

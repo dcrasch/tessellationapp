@@ -5,6 +5,9 @@ authors:
   - David Rasch <david@cloudscripting.nl>
 homepage: https://www.cloudscripting.nl/tessellations/
 
+environment:                                                            
+  sdk: '>=2.10.0 <3.0.0'
+  
 dependencies:
   flutter:
     sdk: flutter
@@ -18,7 +21,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.0"
+  flutter_launcher_icons: "^0.8.1"
 
 flutter_icons:
   android: "launcher_icon"

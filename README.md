@@ -64,7 +64,8 @@ find . -name "*.png" -exec convert "{}" -alpha off "{}" \;
 
 * https://github.com/fluttercommunity/flutter_launcher_icons
 
-$ flutter packages pub run flutter_launcher_icons:main
+```shell
+$ flutter pub run flutter_launcher_icons:main
 
 ### image transformer
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
