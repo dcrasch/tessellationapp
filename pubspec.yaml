@@ -11,17 +11,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.15.7
-  vector_math: any
-  path_provider:
-  flutter_colorpicker: "^0.3.5"
-  flutter_slidable: "^0.5.7"
-  share:
+  intl: ^0.17.0
+  vector_math: ^2.1.0
+  path_provider: ^2.0.1
+  flutter_colorpicker: ^0.4.0-nullsafety.0 
+  flutter_slidable: ^0.6.0-nullsafety.0
+  share: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.8.1"
+  flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
   android: "launcher_icon"

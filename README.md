@@ -249,3 +249,8 @@ https://github.com/flutter/flutter/wiki/Updating-Flutter-projects-to-Gradle-4.1-
 in pubspec.yaml increase the number after the +
 version: 2.0.0+5 -> version: 2.0.0+6
 See https://medium.com/@ralphbergmann/versioning-with-flutter-299869e68af4
+
+## dart migrate null safety
+
+dart migrate
+fix the null safety issues
