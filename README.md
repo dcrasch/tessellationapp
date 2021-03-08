@@ -66,6 +66,7 @@ find . -name "*.png" -exec convert "{}" -alpha off "{}" \;
 
 ```shell
 $ flutter pub run flutter_launcher_icons:main
+```
 
 ### image transformer
 Only convert the image part not the whole page with -a 0:-6.933:320:313.067
@@ -254,3 +255,13 @@ See https://medium.com/@ralphbergmann/versioning-with-flutter-299869e68af4
 
 dart migrate
 fix the null safety issues
+
+
+## recreate apple directory ios
+
+```shell
+flutter create --platforms ios --org nl.hacklab .
+flutter pub run flutter_launcher_icons:main
+```
+
+aanpassen bundle id in xcode: Tessellations , nl.hacklab.Tessellation
