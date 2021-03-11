@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:async';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -14,8 +13,8 @@ class TessellationFigure {
 
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
-  List<TessellationLine> _lines = new List<TessellationLine>();
-  List<Color> colors = new List(4);
+  List<TessellationLine> _lines;
+  List<Color> colors;
   String description;
   String uuid;
 
@@ -106,7 +105,7 @@ class TessellationFigure {
   }
 
   List<Offset> toPoly() {
-    final List<Offset> p = new List<Offset>();
+    final List<Offset> p = [];
     _lines.forEach((line1) => line1.addToPoly(p));
     if (sequence == 0) {
       _lines.forEach((line3) => line3.addToPolyC(p));

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/src/material_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class TessellationColor extends StatefulWidget {
   Color currentColor;
@@ -38,7 +38,7 @@ class _TessellationColorState extends State<TessellationColor> {
         onColorChanged: changeColor,
       )),
       actions: <Widget>[
-        new FlatButton(
+        new TextButton(
           child: new Text('OK'),
           onPressed: () {
             Navigator.of(context).pop(pickerColor);

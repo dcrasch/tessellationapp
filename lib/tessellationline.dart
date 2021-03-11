@@ -7,15 +7,16 @@ import 'package:flutter/painting.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class PointIndexPath {
-  PointIndexPath(this.lineIndex, this.pointIndex, this.corrp);
   int pointIndex;
   int lineIndex;
   bool corrp;
+  
+  PointIndexPath(this.lineIndex, this.pointIndex, this.corrp);
 }
 
 class TessellationLine {
   double humanAngle = 0.0;
-  List<Offset> _points = new List<Offset>();
+  List<Offset> _points = [];
   Matrix4 transform = new Matrix4.identity();
   Matrix4 ci = new Matrix4.identity();
 
@@ -23,15 +24,17 @@ class TessellationLine {
     ci = new Matrix4.inverted(transform);
   }
 
-  TessellationLine.fromJson(Map _json) {
+  TessellationLine.fromJson(Map<String, dynamic> _json) {
     // TODO check for types
     transform = new Matrix4.identity()
-      ..translate(_json['tx'], _json['ty'])
-      ..rotateZ(_json['angle'] / 180.0 * math.pi);
+      ..translate(_json['tx'] as double, _json['ty'] as double)
+      ..rotateZ((_json['angle'] as double)/ 180.0 * math.pi);
     this.ci = new Matrix4.inverted(transform);
-    humanAngle = _json['angle'];
+    humanAngle = _json['angle'] as double;
     _points = List.from(
-        _json['points'].map((value) => new Offset(value['x'], value['y'])));
+      _json['points'].map((value) => new Offset(
+          value['x'] as double,
+          value['y'] as double)));
   }
 
   Map<String, dynamic> toJson() {

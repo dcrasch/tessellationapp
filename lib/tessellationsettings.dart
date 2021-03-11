@@ -12,7 +12,7 @@ class FigureSettings extends StatefulWidget {
 }
 
 class _FigureSettingsState extends State<FigureSettings> {
-  List<Color> _colors = new List<Color>(4);
+  List<Color> _colors = []..length=4;
   String _description = "";
   final TextEditingController _descriptionController =
       new TextEditingController();
@@ -61,7 +61,7 @@ class _FigureSettingsState extends State<FigureSettings> {
         });
       }));
     }
-    children.add(new FlatButton(
+    children.add(new TextButton(
         child: const Text("Apply"),
         onPressed: () {
           Navigator.pop(context,
