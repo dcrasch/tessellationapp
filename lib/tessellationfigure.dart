@@ -14,51 +14,52 @@ class TessellationFigure {
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
   List<TessellationLine> _lines;
-  List<Color> colors;
+  List<Color> colors = [const Color(0xFFFFFFFF),
+    const Color(0xFF000000),
+    const Color(0xFF545454),
+    const Color(0xFFA8A8A8)];
   String description;
   String uuid;
 
   TessellationFigure.fromJson(Map _json) {
     // TODO check for types
-    description = _json['description'];
+    this.description = _json['description'];
+    
     gridincx = _json['gridincx'];
     gridincy = _json['gridincy'];
     shiftx = _json['shiftx'];
     shifty = _json['shifty'];
     rotdiv = _json['rotdiv'];
     sequence = _json['sequence'];
+
     if (_json.containsKey('uuid')) {
       uuid = _json['uuid'];
     } else {
       uuid = '';
     }
-
+    
     _lines = List.from(
-        _json['lines'].map((value) => new TessellationLine.fromJson(value)));
+      _json['lines'].map((value) => new TessellationLine.fromJson(value)));
 
     if (_json.containsKey('color1')) {
       colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
       colors[1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
       colors[2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
       colors[3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
-    } else {
-      colors[0] = const Color(0xFFFFFFFF);
-      colors[1] = const Color(0xFF000000);
-      colors[2] = const Color(0xFF545454);
-      colors[3] = const Color(0xFFA8A8A8);
+    }
 
-      if (sequence == 0) {
-        if (gridincy == gridincx) {
-          if ((shiftx == 0.0)) {
-            colors[2] = colors[0];
-            colors[3] = colors[1];
-          }
-        }
-      } else {
-        if (rotdiv % 2 == 0) {
+    /* two different colors */
+    if (sequence == 0) {
+      if (gridincy == gridincx) {
+        if ((shiftx == 0.0)) {
           colors[2] = colors[0];
           colors[3] = colors[1];
         }
+      }
+    } else {
+      if (rotdiv % 2 == 0) {
+        colors[2] = colors[0];
+        colors[3] = colors[1];
       }
     }
   }
