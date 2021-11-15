@@ -10,7 +10,7 @@ class PointIndexPath {
   int pointIndex;
   int lineIndex;
   bool corrp;
-  
+
   PointIndexPath(this.lineIndex, this.pointIndex, this.corrp);
 }
 
@@ -27,14 +27,14 @@ class TessellationLine {
   TessellationLine.fromJson(Map<String, dynamic> _json) {
     // TODO check for types
     transform = new Matrix4.identity()
-      ..translate(_json['tx'] as double, _json['ty'] as double)
-      ..rotateZ((_json['angle'] as double)/ 180.0 * math.pi);
+      ..translate(_json['tx'], _json['ty'])
+      ..rotateZ(_json['angle'] / 180.0 * math.pi);
+
     this.ci = new Matrix4.inverted(transform);
-    humanAngle = _json['angle'] as double;
+    humanAngle = _json['angle'];
+
     _points = List.from(
-      _json['points'].map((value) => new Offset(
-          value['x'] as double,
-          value['y'] as double)));
+        _json['points'].map((value) => new Offset(value['x'], value['y'])));
   }
 
   Map<String, dynamic> toJson() {

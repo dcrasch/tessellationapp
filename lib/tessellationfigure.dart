@@ -14,17 +14,17 @@ class TessellationFigure {
   double gridincx, gridincy, shiftx, shifty;
   int sequence, rotdiv;
   List<TessellationLine> _lines;
-  List<Color> colors = [const Color(0xFFFFFFFF),
+  List<Color> colors = [
+    const Color(0xFFFFFFFF),
     const Color(0xFF000000),
     const Color(0xFF545454),
-    const Color(0xFFA8A8A8)];
+    const Color(0xFFA8A8A8)
+  ];
   String description;
   String uuid;
 
   TessellationFigure.fromJson(Map _json) {
-    // TODO check for types
-    this.description = _json['description'];
-    
+    description = _json['description'];
     gridincx = _json['gridincx'];
     gridincy = _json['gridincy'];
     shiftx = _json['shiftx'];
@@ -37,10 +37,8 @@ class TessellationFigure {
     } else {
       uuid = '';
     }
-    
     _lines = List.from(
-      _json['lines'].map((value) => new TessellationLine.fromJson(value)));
-
+        _json['lines'].map((value) => new TessellationLine.fromJson(value)));
     if (_json.containsKey('color1')) {
       colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
       colors[1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));

@@ -257,6 +257,14 @@ dart migrate
 fix the null safety issues
 
 
+## upgrade flutter
+
+```shell
+flutter upgrade
+flutter clean
+```
+
+
 ## recreate apple directory ios
 
 ```shell
@@ -264,4 +272,4 @@ flutter create --platforms ios --org nl.hacklab .
 flutter pub run flutter_launcher_icons:main
 ```
 
-aanpassen bundle id in xcode: Tessellations , nl.hacklab.Tessellation
+Aanpassen bundle id in xcode: cfbundlename = Tessellations , nl.hacklab.Tessellation
