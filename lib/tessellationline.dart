@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/painting.dart';
 
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 

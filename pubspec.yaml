@@ -1,8 +1,6 @@
 name: tessellation
 version: 2.1.5+11
 description: Tessellation
-authors:
-  - David Rasch <david@cloudscripting.nl>
 homepage: https://www.cloudscripting.nl/tessellations/
 
 environment:                                                            
