@@ -31,11 +31,11 @@ class TessellationPainter extends CustomPainter {
 class TessellationWidget extends StatefulWidget {
   TessellationWidget({Key key, this.figure, this.onChanged, this.zoom})
       : super(key: key);
-  TessellationFigure figure;
-  ValueChanged<TessellationFigure> onChanged;
-  ValueNotifier<Matrix4> zoom;
+  final TessellationFigure figure;
+  final ValueChanged<TessellationFigure> onChanged;
+  final ValueNotifier<Matrix4> zoom;
 
-  PointIndexPath selectedPoint;
+  final PointIndexPath selectedPoint = null;
   @override
   TessellationState createState() => new TessellationState();
 }

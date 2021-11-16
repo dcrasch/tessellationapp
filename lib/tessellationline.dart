@@ -24,7 +24,6 @@ class TessellationLine {
   }
 
   TessellationLine.fromJson(Map<String, dynamic> _json) {
-    // TODO check for types
     transform = new Matrix4.identity()
       ..translate(_json['tx'], _json['ty'])
       ..rotateZ(_json['angle'] / 180.0 * math.pi);

@@ -22,8 +22,8 @@ class TessellationTiledPainter extends CustomPainter {
 }
 
 class TessellationTiled extends StatelessWidget {
-  TessellationFigure figure;
   TessellationTiled({Key key, this.figure}) : super(key: key);
+  final TessellationFigure figure;
 
   @override
   Widget build(BuildContext context) {

@@ -4,8 +4,8 @@ import 'colorpicker.dart';
 class FigureSettings extends StatefulWidget {
   FigureSettings({Key key, this.colors, this.description}) : super(key: key);
 
-  List<Color> colors;
-  String description;
+  final List<Color> colors;
+  final String description;
 
   @override
   _FigureSettingsState createState() => new _FigureSettingsState();

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class TessellationColor extends StatefulWidget {
-  Color currentColor;
   TessellationColor(this.currentColor);
+  final Color currentColor;
 
   @override
   State<StatefulWidget> createState() => new _TessellationColorState();

@@ -20,7 +20,7 @@ class TesellationEditor extends StatefulWidget {
   TesellationEditor({Key key, this.title, this.figure}) : super(key: key);
 
   final String title;
-  TessellationFigure figure;
+  final TessellationFigure figure;
 
   @override
   _TesellationEditorState createState() => new _TesellationEditorState();
