@@ -32,10 +32,10 @@ class TessellationWidget extends StatefulWidget {
   TessellationWidget({Key key, this.figure, this.onChanged, this.zoom})
       : super(key: key);
   final TessellationFigure figure;
-  final ValueChanged<TessellationFigure> onChanged;
-  final ValueNotifier<Matrix4> zoom;
+  final ValueChanged<TessellationFigure> onChanged; // TODO
+  final ValueNotifier<Matrix4> zoom; // TODO
 
-  final PointIndexPath selectedPoint = null;
+  final PointIndexPath selectedPoint = null; // TODO
   @override
   TessellationState createState() => new TessellationState();
 }

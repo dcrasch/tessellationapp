@@ -19,7 +19,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>share.xcscheme</key>
+		<key>share_plus.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>url_launcher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
