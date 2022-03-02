@@ -4,7 +4,7 @@ description: Tessellation
 homepage: https://www.cloudscripting.nl/tessellations/
 
 environment:                                                            
-  sdk: '>=2.10.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
   
 dependencies:
   flutter:

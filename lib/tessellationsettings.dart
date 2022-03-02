@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'colorpicker.dart';
 
 class FigureSettings extends StatefulWidget {
-  FigureSettings({Key key, this.colors, this.description}) : super(key: key);
+  FigureSettings({Key? key, this.colors, this.description}) : super(key: key);
 
-  final List<Color> colors;
-  final String description;
+  final List<Color?>? colors;
+  final String? description;
 
   @override
   _FigureSettingsState createState() => new _FigureSettingsState();
 }
 
 class _FigureSettingsState extends State<FigureSettings> {
-  List<Color> _colors = []..length=4;
-  String _description = "";
+  List<Color?>? _colors = []..length=4;
+  String? _description = "";
   final TextEditingController _descriptionController =
       new TextEditingController();
 
@@ -21,12 +21,12 @@ class _FigureSettingsState extends State<FigureSettings> {
     super.initState();
     setState(() {
       _description = widget.description;
-      _descriptionController.text = _description;
+      _descriptionController.text = _description!;
       _colors = widget.colors;
     });
   }
 
-  Widget _buildColorTile(String text, Color color, VoidCallback onTap) {
+  Widget _buildColorTile(String text, Color? color, VoidCallback onTap) {
     return new ListTile(
         title: new Row(children: [
           //new Expanded(child: new Text(text)),
@@ -51,13 +51,13 @@ class _FigureSettingsState extends State<FigureSettings> {
             hintText: 'Description',
           ))
     ];
-    for (int i = 0; i < _colors.length; i++) {
-      children.add(_buildColorTile("$i", _colors[i], () async {
-        Color c = await showDialog(
+    for (int i = 0; i < _colors!.length; i++) {
+      children.add(_buildColorTile("$i", _colors![i], () async {
+        Color? c = await showDialog(
             context: context,
-            builder: (BuildContext _) => new TessellationColor(_colors[i]));
+            builder: (BuildContext _) => new TessellationColor(_colors![i]));
         setState(() {
-          _colors[i] = c;
+          _colors![i] = c;
         });
       }));
     }

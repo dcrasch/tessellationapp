@@ -14,7 +14,7 @@ class PointIndexPath {
 }
 
 class TessellationLine {
-  double humanAngle = 0.0;
+  double? humanAngle = 0.0;
   List<Offset> _points = [];
   Matrix4 transform = new Matrix4.identity();
   Matrix4 ci = new Matrix4.identity();
@@ -131,7 +131,7 @@ class TessellationLine {
         (d.dy > -rectsize));
   }
 
-  PointIndexPath hitendpoint(Offset p1, double rectsize) {
+  PointIndexPath? hitendpoint(Offset p1, double rectsize) {
     int counter = 0;
     Offset p2 = MatrixUtils.transformPoint(ci, p1);
     int maxPointIndex = _points.length - 1;
@@ -149,8 +149,8 @@ class TessellationLine {
     return null;
   }
 
-  PointIndexPath hitline(Offset p1, double rectsize) {
-    Offset previous;
+  PointIndexPath? hitline(Offset p1, double rectsize) {
+    late Offset previous;
     int counter = 0;
     Offset p2 = MatrixUtils.transformPoint(ci, p1);
     for (Offset current in _points) {

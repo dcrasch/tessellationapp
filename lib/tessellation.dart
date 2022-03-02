@@ -5,8 +5,8 @@ import 'tessellationline.dart';
 
 class TessellationPainter extends CustomPainter {
   TessellationPainter(this.figure, this.transform, this.borderColor);
-  final TessellationFigure figure;
-  final Matrix4 transform;
+  final TessellationFigure? figure;
+  final Matrix4? transform;
   final Color borderColor;
 
   @override
@@ -16,8 +16,8 @@ class TessellationPainter extends CustomPainter {
         offset & size, new Paint()..color = const Color(0x00FFFFFF));
     if (figure != null) {
       canvas.save();
-      canvas.transform(transform.storage);
-      figure.paint(canvas, offset, borderColor);
+      canvas.transform(transform!.storage);
+      figure!.paint(canvas, offset, borderColor);
       canvas.restore();
     }
   }
@@ -29,32 +29,33 @@ class TessellationPainter extends CustomPainter {
 }
 
 class TessellationWidget extends StatefulWidget {
-  TessellationWidget({Key key, this.figure, this.onChanged, this.zoom})
+  TessellationWidget({Key? key, this.figure, required this.onChanged, this.zoom})
       : super(key: key);
-  final TessellationFigure figure;
-  final ValueChanged<TessellationFigure> onChanged; // TODO
-  final ValueNotifier<Matrix4> zoom; // TODO
+  final TessellationFigure? figure;
 
-  final PointIndexPath selectedPoint = null; // TODO
+  final ValueChanged<TessellationFigure?> onChanged;
+  final ValueNotifier<Matrix4>? zoom; // TODO
+
+  final PointIndexPath? selectedPoint = null; // TODO
   @override
   TessellationState createState() => new TessellationState();
 }
 
 class TessellationState extends State<TessellationWidget> {
-  TessellationFigure figure;
-  PointIndexPath selectedPoint;
-  Matrix4 transform;
-  Matrix4 ci;
+  TessellationFigure? figure;
+  PointIndexPath? selectedPoint;
+  Matrix4? transform;
+  late Matrix4 ci;
 
   // zoom
-  Matrix4 _oldTransform;
-  Offset _startingFocalPoint;
+  Matrix4? _oldTransform;
+  late Offset _startingFocalPoint;
 
   @override
   void initState() {
     super.initState();
-    widget.zoom.removeListener(_setRemoteZoom);
-    widget.zoom.addListener(_setRemoteZoom);
+    widget.zoom!.removeListener(_setRemoteZoom);
+    widget.zoom!.addListener(_setRemoteZoom);
     _setRemoteZoom();
   }
 
@@ -67,8 +68,8 @@ class TessellationState extends State<TessellationWidget> {
   void _setRemoteZoom() {
     setState(() {
       figure = widget.figure;
-      transform = widget.zoom.value;
-      ci = new Matrix4.inverted(transform);
+      transform = widget.zoom!.value;
+      ci = new Matrix4.inverted(transform!);
     });
   }
 
@@ -99,20 +100,20 @@ class TessellationState extends State<TessellationWidget> {
   }
 
   void _handlePanStart(BuildContext context, ScaleStartDetails details) {
-    RenderBox box = context.findRenderObject();
+    RenderBox box = context.findRenderObject() as RenderBox;
     Offset touchPoint = box.globalToLocal(details.focalPoint);
     bool _changed = false;
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
-    selectedPoint = figure.leftdown(touchPoint);
+    selectedPoint = figure!.leftdown(touchPoint);
     if (selectedPoint != null) {
-      _changed = figure.drag(touchPoint, selectedPoint);
+      _changed = figure!.drag(touchPoint, selectedPoint);
       if (_changed && widget.onChanged != null) {
-        widget.onChanged(figure);
+        widget.onChanged!(figure);
       }
     } else {
-      selectedPoint = figure.leftcreate(touchPoint);
+      selectedPoint = figure!.leftcreate(touchPoint);
       if (selectedPoint != null) {
-        figure.addPoint(touchPoint, selectedPoint);
+        figure!.addPoint(touchPoint, selectedPoint!);
         if (widget.onChanged != null) {
           //widget.onChanged(figure);
         }
@@ -121,14 +122,14 @@ class TessellationState extends State<TessellationWidget> {
   }
 
   void _handlePanUpdate(BuildContext context, ScaleUpdateDetails details) {
-    RenderBox box = context.findRenderObject();
+    RenderBox box = context.findRenderObject() as RenderBox;
     Offset touchPoint = box.globalToLocal(details.focalPoint);
     touchPoint = MatrixUtils.transformPoint(ci, touchPoint);
     bool _changed = false;
     if (selectedPoint != null) {
-      _changed = figure.drag(touchPoint, selectedPoint);
+      _changed = figure!.drag(touchPoint, selectedPoint);
       if (_changed == true && widget.onChanged != null) {
-        widget.onChanged(figure);
+        widget.onChanged!(figure);
       }
     }
   }
@@ -142,7 +143,7 @@ class TessellationState extends State<TessellationWidget> {
     _oldTransform = transform;
   }
 
-  void _handleScaleUpdate(Size size, ScaleUpdateDetails d) {
+  void _handleScaleUpdate(Size? size, ScaleUpdateDetails d) {
     Offset focal = d.focalPoint - _startingFocalPoint;
     Matrix4 newTransform = new Matrix4.identity()
       ..translate(_startingFocalPoint.dx, _startingFocalPoint.dy)
@@ -151,7 +152,7 @@ class TessellationState extends State<TessellationWidget> {
           -_startingFocalPoint.dy + focal.dy);
     setState(() {
       transform = newTransform * _oldTransform;
-      ci = new Matrix4.inverted(transform);
+      ci = new Matrix4.inverted(transform!);
     });
   }
 }

@@ -17,17 +17,17 @@ import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
 
 class TesellationEditor extends StatefulWidget {
-  TesellationEditor({Key key, this.title, this.figure}) : super(key: key);
+  TesellationEditor({Key? key, this.title, this.figure}) : super(key: key);
 
-  final String title;
-  final TessellationFigure figure;
+  final String? title;
+  final TessellationFigure? figure;
 
   @override
   _TesellationEditorState createState() => new _TesellationEditorState();
 }
 
 class _TesellationEditorState extends State<TesellationEditor> {
-  TessellationFigure figure;
+  TessellationFigure? figure;
   ValueNotifier<Matrix4> zoom =
       new ValueNotifier<Matrix4>(new Matrix4.identity());
   bool _editing = true;
@@ -41,7 +41,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   Future<File> _getLocalFile() async {
     Directory appDir = await getApplicationDocumentsDirectory();
-    String filename = "${appDir.path}/${figure.uuid}.json";
+    String filename = "${appDir.path}/${figure!.uuid}.json";
     return new File(filename);
   }
 
@@ -54,17 +54,17 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<Null> _saveFigure() async {
-    if (figure.uuid.isEmpty) {
+    if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
-      figure.uuid = _nu.toString();
+      figure!.uuid = _nu.toString();
     }
     final JsonEncoder encoder = new JsonEncoder();
-    String code = encoder.convert(figure.toJson());
+    String code = encoder.convert(figure!.toJson());
     await (await _getLocalFile()).writeAsString(code);
   }
 
   Future<Null> _resizeFigure() async {
-    Rect r = figure.fit();
+    Rect r = figure!.fit();
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
     double scale =
         0.7 * math.min(s.size.width / r.width, s.size.height / r.height);
@@ -77,42 +77,42 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<Null> _colorSettings() async {
-    Map results = await Navigator.push(context,
+    Map? results = await Navigator.push(context,
         new MaterialPageRoute<Map>(builder: (BuildContext context) {
       return new FigureSettings(
-          colors: figure.colors, description: figure.description);
+          colors: figure!.colors, description: figure!.description);
     }));
     if (results != null) {
       setState(() {
-        figure.colors = results['colors'];
-        figure.description = results['description'];
+        figure!.colors = results['colors'];
+        figure!.description = results['description'];
       });
     }
   }
 
   Future<Null> _shareFigure() async {
-    if (figure.uuid.isEmpty) {
+    if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
-      figure.uuid = _nu.toString();
+      figure!.uuid = _nu.toString();
     }
     Directory storageDir = await getTemporaryDirectory();
-    String filename = "${storageDir.path}/images/${figure.uuid}.png";
+    String filename = "${storageDir.path}/images/${figure!.uuid}.png";
 
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 1024.0, 1024.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
-    figure.tessellate(canvas, paintBounds, 80.0);
+    figure!.tessellate(canvas, paintBounds, 80.0);
     final ui.Image image = await recorder.endRecording().toImage(1024, 1024);
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytesSync(byteData.buffer.asUint8List());
+      f.writeAsBytesSync(byteData!.buffer.asUint8List());
       print(filename);
       Share.shareFiles([filename],
-          mimeTypes: ["image/png"], subject: figure.description);
+          mimeTypes: ["image/png"], subject: figure!.description);
     });
   }
 
-  void _handleFigureChanged(TessellationFigure figure) {
+  void _handleFigureChanged(TessellationFigure? figure) {
     setState(() {
       this.figure = figure;
     });
@@ -166,7 +166,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
                   ? new TessellationWidget(
                       key: new Key("tessellationeditor"),
                       figure: figure,
-                      onChanged: _handleFigureChanged,
+                      onChanged:  _handleFigureChanged,
                       zoom: zoom)
                   : const Center(child: const CircularProgressIndicator()),
             ])));

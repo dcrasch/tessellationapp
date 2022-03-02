@@ -3,13 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'tessellationfigure.dart';
 
 class TessellationTiledPainter extends CustomPainter {
-  final TessellationFigure figure;
+  final TessellationFigure? figure;
   final double dscale;
   TessellationTiledPainter(this.figure, this.dscale);
 
   @override
   void paint(Canvas canvas, Size size) {
-    figure.tessellate(
+    figure!.tessellate(
         canvas,
         new Rect.fromPoints(Offset.zero, size.bottomRight(Offset.zero)),
         dscale);
@@ -22,8 +22,8 @@ class TessellationTiledPainter extends CustomPainter {
 }
 
 class TessellationTiled extends StatelessWidget {
-  TessellationTiled({Key key, this.figure}) : super(key: key);
-  final TessellationFigure figure;
+  TessellationTiled({Key? key, this.figure}) : super(key: key);
+  final TessellationFigure? figure;
 
   @override
   Widget build(BuildContext context) {

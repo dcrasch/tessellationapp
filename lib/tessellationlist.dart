@@ -13,7 +13,7 @@ import 'tessellationfigure.dart';
 import 'tessellation.dart';
 
 class TessellationList extends StatefulWidget {
-  const TessellationList({Key key}) : super(key: key);
+  const TessellationList({Key? key}) : super(key: key);
 
   static const String routeName = '/material/list';
 
@@ -38,7 +38,7 @@ class _TessellationListState extends State<TessellationList> {
 
   void showFigure(BuildContext context, int i) async {
     TessellationFigure f = items[i];
-    TessellationFigure result = await Navigator.push(context,
+    TessellationFigure? result = await Navigator.push(context,
         new MaterialPageRoute<TessellationFigure>(
             builder: (BuildContext context) {
       return new TesellationEditor(figure: f);
@@ -130,12 +130,12 @@ class _TessellationListState extends State<TessellationList> {
             }),
       );
     } else {
-      return null;
+      return new Text("Error opening file.");
     }
   }
 
   Future<Null> _onPressed() async {
-    TessellationFigure f = await showDialog<TessellationFigure>(
+    TessellationFigure? f = await showDialog<TessellationFigure>(
         context: context, builder: _buildDialog);
     if (f != null) {
       setState(() {

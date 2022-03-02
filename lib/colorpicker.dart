@@ -3,16 +3,16 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class TessellationColor extends StatefulWidget {
   TessellationColor(this.currentColor);
-  final Color currentColor;
+  final Color? currentColor;
 
   @override
   State<StatefulWidget> createState() => new _TessellationColorState();
 }
 
 class _TessellationColorState extends State<TessellationColor> {
-  Color pickerColor = new Color(0xff443a49);
+  Color? pickerColor = new Color(0xff443a49);
 
-  ValueChanged<Color> onColorChanged;
+  ValueChanged<Color>? onColorChanged;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _TessellationColorState extends State<TessellationColor> {
       title: const Text('Pick a color!'),
       content: new SingleChildScrollView(
           child: new MaterialPicker(
-        pickerColor: pickerColor,
+        pickerColor: pickerColor!,
         onColorChanged: changeColor,
       )),
       actions: <Widget>[

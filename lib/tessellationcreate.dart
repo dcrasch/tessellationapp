@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'tessellationfigure.dart';
 
 class TessellationItem extends StatelessWidget {
-  const TessellationItem({Key key, this.figurekey}) : super(key: key);
+  const TessellationItem({Key? key, this.figurekey}) : super(key: key);
 
-  final String figurekey;
+  final String? figurekey;
 
   Future<TessellationFigure> _getFigure(String key, AssetBundle bundle) async {
     final String code = await bundle.loadString(key) ?? "failed";
@@ -20,16 +20,16 @@ class TessellationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder<TessellationFigure>(
-        future: _getFigure(figurekey, DefaultAssetBundle.of(context)),
+        future: _getFigure(figurekey!, DefaultAssetBundle.of(context)),
         builder:
             (BuildContext context, AsyncSnapshot<TessellationFigure> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            TessellationFigure f = snapshot.data;
+            TessellationFigure f = snapshot.data!;
             return new SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, f);
               },
-              child: new Text(f.description),
+              child: new Text(f.description!),
             );
           } else {
             return const Text("failed to load example");

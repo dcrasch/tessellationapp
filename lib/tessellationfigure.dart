@@ -11,17 +11,17 @@ class TessellationFigure {
   TessellationFigure();
   double rectsize = 2.0 / 50;
 
-  double gridincx, gridincy, shiftx, shifty;
-  int sequence, rotdiv;
-  List<TessellationLine> _lines;
-  List<Color> colors = [
+  double? gridincx, gridincy, shiftx, shifty;
+  int? sequence, rotdiv;
+  late List<TessellationLine> _lines;
+  List<Color>? colors = [
     const Color(0xFFFFFFFF),
     const Color(0xFF000000),
     const Color(0xFF545454),
     const Color(0xFFA8A8A8)
   ];
-  String description;
-  String uuid;
+  String? description;
+  String? uuid;
 
   TessellationFigure.fromJson(Map _json) {
     description = _json['description'];
@@ -40,24 +40,24 @@ class TessellationFigure {
     _lines = List.from(
         _json['lines'].map((value) => new TessellationLine.fromJson(value)));
     if (_json.containsKey('color1')) {
-      colors[0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
-      colors[1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
-      colors[2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
-      colors[3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
+      colors![0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
+      colors![1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
+      colors![2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
+      colors![3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
     }
 
     /* two different colors */
     if (sequence == 0) {
       if (gridincy == gridincx) {
         if ((shiftx == 0.0)) {
-          colors[2] = colors[0];
-          colors[3] = colors[1];
+          colors![2] = colors![0];
+          colors![3] = colors![1];
         }
       }
     } else {
-      if (rotdiv % 2 == 0) {
-        colors[2] = colors[0];
-        colors[3] = colors[1];
+      if (rotdiv! % 2 == 0) {
+        colors![2] = colors![0];
+        colors![3] = colors![1];
       }
     }
   }
@@ -73,18 +73,18 @@ class TessellationFigure {
     _json['rotdiv'] = rotdiv;
     _json['sequence'] = sequence;
     _json['lines'] = _lines.map((value) => value.toJson()).toList();
-    _json['color1'] = colors[0].red.toRadixString(16).padLeft(2, '0') +
-        colors[0].green.toRadixString(16).padLeft(2, '0') +
-        colors[0].blue.toRadixString(16).padLeft(2, '0');
-    _json['color2'] = colors[1].red.toRadixString(16).padLeft(2, '0') +
-        colors[1].green.toRadixString(16).padLeft(2, '0') +
-        colors[1].blue.toRadixString(16).padLeft(2, '0');
-    _json['color3'] = colors[2].red.toRadixString(16).padLeft(2, '0') +
-        colors[2].green.toRadixString(16).padLeft(2, '0') +
-        colors[2].blue.toRadixString(16).padLeft(2, '0');
-    _json['color4'] = colors[3].red.toRadixString(16).padLeft(2, '0') +
-        colors[3].green.toRadixString(16).padLeft(2, '0') +
-        colors[3].blue.toRadixString(16).padLeft(2, '0');
+    _json['color1'] = colors![0].red.toRadixString(16).padLeft(2, '0') +
+        colors![0].green.toRadixString(16).padLeft(2, '0') +
+        colors![0].blue.toRadixString(16).padLeft(2, '0');
+    _json['color2'] = colors![1].red.toRadixString(16).padLeft(2, '0') +
+        colors![1].green.toRadixString(16).padLeft(2, '0') +
+        colors![1].blue.toRadixString(16).padLeft(2, '0');
+    _json['color3'] = colors![2].red.toRadixString(16).padLeft(2, '0') +
+        colors![2].green.toRadixString(16).padLeft(2, '0') +
+        colors![2].blue.toRadixString(16).padLeft(2, '0');
+    _json['color4'] = colors![3].red.toRadixString(16).padLeft(2, '0') +
+        colors![3].green.toRadixString(16).padLeft(2, '0') +
+        colors![3].blue.toRadixString(16).padLeft(2, '0');
 
     return _json;
   }
@@ -119,9 +119,9 @@ class TessellationFigure {
     List<List<Offset>> grid = figuregrid(rect, dscale);
     int row = 0;
     double rot = 0.0;
-    int color;
-    for (int currentdiv = 1; currentdiv <= rotdiv; currentdiv++) {
-      rot = 2 * math.pi * currentdiv / rotdiv;
+    int? color;
+    for (int currentdiv = 1; currentdiv <= rotdiv!; currentdiv++) {
+      rot = 2 * math.pi * currentdiv / rotdiv!;
 
       for (List<Offset> gridrow in grid) {
         if (sequence == 0) {
@@ -133,7 +133,7 @@ class TessellationFigure {
             color = currentdiv - 1;
           }
           if (sequence == 0) {
-            if (gridincy < gridincx) {
+            if (gridincy! < gridincx!) {
               // for hexagons
               color = row % 3;
             }
@@ -142,7 +142,7 @@ class TessellationFigure {
           canvas.translate(gridpoint.dx, gridpoint.dy);
           canvas.scale(dscale, dscale);
           canvas.rotate(rot);
-          Color c = colors[color % 4];
+          Color c = colors![color! % 4];
 /*
           Paint p = new Paint()
             ..color = c
@@ -178,12 +178,12 @@ class TessellationFigure {
           color = 0;
         }
         if (sequence == 0) {
-          if (gridincy < gridincx) {
+          if (gridincy! < gridincx!) {
             // for hexagons
             color = row % 3;
           }
         }
-        Color c = colors[color % 4];
+        Color c = colors![color % 4];
         gridrow.add(c);
         color++;
       }
@@ -197,10 +197,10 @@ class TessellationFigure {
     double sx = 0.0;
     double sy = 0.0;
 
-    double igx = dscale * gridincx;
-    double igy = dscale * gridincy;
-    double shx = dscale * shiftx;
-    double shy = dscale * shifty;
+    double igx = dscale * gridincx!;
+    double igy = dscale * gridincy!;
+    double shx = dscale * shiftx!;
+    double shy = dscale * shifty!;
     double minx;
     double maxx;
     double miny;
@@ -254,9 +254,9 @@ class TessellationFigure {
     _lines[i.lineIndex].insertPointAt(i.pointIndex, p1);
   }
 
-  PointIndexPath leftcreate(Offset point) {
+  PointIndexPath? leftcreate(Offset point) {
     int counter = 0;
-    PointIndexPath selectedpointindex;
+    PointIndexPath? selectedpointindex;
     for (TessellationLine line in _lines) {
       selectedpointindex = line.hitline(point, rectsize);
       if (selectedpointindex != null) {
@@ -268,9 +268,9 @@ class TessellationFigure {
     return null;
   }
 
-  PointIndexPath leftdown(Offset point) {
+  PointIndexPath? leftdown(Offset point) {
     int counter = 0;
-    PointIndexPath selectedpointindex;
+    PointIndexPath? selectedpointindex;
     for (TessellationLine line in _lines) {
       selectedpointindex = line.hitendpoint(point, rectsize);
       if (selectedpointindex != null) {
@@ -282,7 +282,7 @@ class TessellationFigure {
     return null;
   }
 
-  bool drag(Offset point, PointIndexPath i) {
+  bool drag(Offset point, PointIndexPath? i) {
     Offset p1;
     if (i != null) {
       if (i.corrp) {
