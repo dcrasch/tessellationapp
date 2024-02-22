@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
+/* import 'package:share_plus/share_plus.dart'; */
 import 'package:undo/undo.dart';
 
 import 'tessellation.dart';
@@ -96,6 +96,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     }
   }
 
+/*
   Future<Null> _shareFigure() async {
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -117,6 +118,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
           mimeTypes: ["image/png"], subject: figure!.description);
     });
   }
+*/
 
   void _handleFigureChanged(TessellationFigure? figure) {
     setState(() {
@@ -185,6 +187,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
                           });
                       },
               ),
+	      /*
               !kIsWeb
                   ? new IconButton(
                       icon: const Icon(Icons.share),
@@ -192,7 +195,6 @@ class _TesellationEditorState extends State<TesellationEditor> {
                     )
                   : new IconButton(
                       icon: const Icon(Icons.share), onPressed: null),
-              /*
           new PopupMenuButton<String>(
               onSelected: (String value) {
                  _handleMenu(context, value);
