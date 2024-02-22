@@ -124,13 +124,21 @@ class _TesellationEditorState extends State<TesellationEditor> {
     });
   }
 
-  void _handleFigureModified((Offset, PointIndexPath) p) {
+  void _handleFigureAddPoint((Offset, PointIndexPath) p) {
     var (touchPoint, selectedPoint) = p;
     this._changes.add(Change(
           null, // oldvalue,
           () => this.figure!.addPoint(touchPoint, selectedPoint!),
           (oldValue) => this.figure!.removePoint(selectedPoint),
         ));
+  }
+
+  void _handleFigureModified((Offset, PointIndexPath) p) {
+    var (touchPoint, selectedPoint) = p;
+    this._changes.add(Change(
+        this.figure!.getPoint(selectedPoint),
+        () => this.figure!.updatePoint(selectedPoint, touchPoint),
+        (oldValue) => this.figure!.updatePoint(selectedPoint, oldValue)));
   }
 
   @override
@@ -205,6 +213,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
                       figure: figure,
                       onChanged: _handleFigureChanged,
                       onModified: _handleFigureModified,
+                      onAddPoint: _handleFigureAddPoint,
                       zoom: zoom)
                   : const Center(child: const CircularProgressIndicator()),
             ])));

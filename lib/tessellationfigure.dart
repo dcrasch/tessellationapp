@@ -298,8 +298,8 @@ class TessellationFigure {
       } else {
         p1 = point;
       }
-      if (_lines[i.lineIndex].getPointAt(i.pointIndex) != p1) {
-        _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
+      if (getPoint(i) != p1) {
+        updatePoint(i, p1);
         return true;
       }
     }
@@ -309,6 +309,10 @@ class TessellationFigure {
   Offset getPoint(PointIndexPath i) {
     Offset point = _lines[i.lineIndex].getPointAt(i.pointIndex);
     return point;
+  }
+
+  void updatePoint(PointIndexPath i, Offset p1) {
+    _lines[i.lineIndex].replacePointAt(i.pointIndex, p1);
   }
 
   Rect fit() {

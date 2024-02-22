@@ -33,6 +33,7 @@ class TessellationWidget extends StatefulWidget {
       {Key? key,
       this.figure,
       required this.onChanged,
+      required this.onAddPoint,
       required this.onModified,
       this.zoom})
       : super(key: key);
@@ -40,6 +41,8 @@ class TessellationWidget extends StatefulWidget {
 
   final ValueChanged<TessellationFigure?> onChanged;
   final ValueChanged<(Offset, PointIndexPath)> onModified;
+  final ValueChanged<(Offset, PointIndexPath)> onAddPoint;
+
   final ValueNotifier<Matrix4>? zoom; // TODO
 
   final PointIndexPath? selectedPoint = null; // TODO
@@ -120,7 +123,7 @@ class TessellationState extends State<TessellationWidget> {
       selectedPoint = figure!.leftcreate(touchPoint);
       if (selectedPoint != null) {
         if (widget.onChanged != null) {
-          widget.onModified!((touchPoint, selectedPoint!));
+          widget.onAddPoint!((touchPoint, selectedPoint!));
         }
       }
     }
@@ -140,6 +143,10 @@ class TessellationState extends State<TessellationWidget> {
   }
 
   void _handlePanEnd(ScaleEndDetails details) {
+    if (selectedPoint != null) {
+      var touchPoint = this.figure!.getPoint(selectedPoint!);
+      widget.onModified!((touchPoint, selectedPoint!));
+    }
     selectedPoint = null;
   }
 
