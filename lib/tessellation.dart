@@ -29,11 +29,17 @@ class TessellationPainter extends CustomPainter {
 }
 
 class TessellationWidget extends StatefulWidget {
-  TessellationWidget({Key? key, this.figure, required this.onChanged, this.zoom})
+  TessellationWidget(
+      {Key? key,
+      this.figure,
+      required this.onChanged,
+      required this.onModified,
+      this.zoom})
       : super(key: key);
   final TessellationFigure? figure;
 
   final ValueChanged<TessellationFigure?> onChanged;
+  final ValueChanged<(Offset, PointIndexPath)> onModified;
   final ValueNotifier<Matrix4>? zoom; // TODO
 
   final PointIndexPath? selectedPoint = null; // TODO
@@ -113,9 +119,8 @@ class TessellationState extends State<TessellationWidget> {
     } else {
       selectedPoint = figure!.leftcreate(touchPoint);
       if (selectedPoint != null) {
-        figure!.addPoint(touchPoint, selectedPoint!);
         if (widget.onChanged != null) {
-          //widget.onChanged(figure);
+          widget.onModified!((touchPoint, selectedPoint!));
         }
       }
     }

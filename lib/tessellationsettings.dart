@@ -12,7 +12,7 @@ class FigureSettings extends StatefulWidget {
 }
 
 class _FigureSettingsState extends State<FigureSettings> {
-  List<Color?>? _colors = []..length=4;
+  List<Color?>? _colors = []..length = 4;
   String? _description = "";
   final TextEditingController _descriptionController =
       new TextEditingController();

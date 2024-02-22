@@ -40,10 +40,14 @@ class TessellationFigure {
     _lines = List.from(
         _json['lines'].map((value) => new TessellationLine.fromJson(value)));
     if (_json.containsKey('color1')) {
-      colors![0] = new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
-      colors![1] = new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
-      colors![2] = new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
-      colors![3] = new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
+      colors![0] =
+          new Color(0xFF000000 | int.parse(_json['color1'], radix: 16));
+      colors![1] =
+          new Color(0xFF000000 | int.parse(_json['color2'], radix: 16));
+      colors![2] =
+          new Color(0xFF000000 | int.parse(_json['color3'], radix: 16));
+      colors![3] =
+          new Color(0xFF000000 | int.parse(_json['color4'], radix: 16));
     }
 
     /* two different colors */
@@ -252,6 +256,10 @@ class TessellationFigure {
       p1 = point;
     }
     _lines[i.lineIndex].insertPointAt(i.pointIndex, p1);
+  }
+
+  void removePoint(PointIndexPath i) {
+    _lines[i.lineIndex].removePointAt(i.pointIndex);
   }
 
   PointIndexPath? leftcreate(Offset point) {

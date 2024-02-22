@@ -10,11 +10,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:undo/undo.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
+import 'tessellationline.dart';
 
 class TesellationEditor extends StatefulWidget {
   TesellationEditor({Key? key, this.title, this.figure}) : super(key: key);
@@ -31,6 +33,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
   ValueNotifier<Matrix4> zoom =
       new ValueNotifier<Matrix4>(new Matrix4.identity());
   bool _editing = true;
+  ChangeStack _changes = ChangeStack();
 
   @override
   void initState() {
@@ -65,6 +68,8 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   Future<Null> _resizeFigure() async {
     Rect r = figure!.fit();
+
+    // TODO: add changes
     MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
     double scale =
         0.7 * math.min(s.size.width / r.width, s.size.height / r.height);
@@ -83,6 +88,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
           colors: figure!.colors, description: figure!.description);
     }));
     if (results != null) {
+      // TODO: add changes
       setState(() {
         figure!.colors = results['colors'];
         figure!.description = results['description'];
@@ -114,8 +120,17 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   void _handleFigureChanged(TessellationFigure? figure) {
     setState(() {
-      this.figure = figure;
+      this.figure = figure; // trigger change
     });
+  }
+
+  void _handleFigureModified((Offset, PointIndexPath) p) {
+    var (touchPoint, selectedPoint) = p;
+    this._changes.add(Change(
+          null, // oldvalue,
+          () => this.figure!.addPoint(touchPoint, selectedPoint!),
+          (oldValue) => this.figure!.removePoint(selectedPoint),
+        ));
   }
 
   @override
@@ -139,6 +154,28 @@ class _TesellationEditorState extends State<TesellationEditor> {
               new IconButton(
                 icon: const Icon(Icons.fullscreen),
                 onPressed: _resizeFigure,
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: !_changes.canUndo
+                    ? null
+                    : () {
+                        if (mounted)
+                          setState(() {
+                            _changes.undo();
+                          });
+                      },
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_forward),
+                onPressed: !_changes.canRedo
+                    ? null
+                    : () {
+                        if (mounted)
+                          setState(() {
+                            _changes.redo();
+                          });
+                      },
               ),
               !kIsWeb
                   ? new IconButton(
@@ -166,7 +203,8 @@ class _TesellationEditorState extends State<TesellationEditor> {
                   ? new TessellationWidget(
                       key: new Key("tessellationeditor"),
                       figure: figure,
-                      onChanged:  _handleFigureChanged,
+                      onChanged: _handleFigureChanged,
+                      onModified: _handleFigureModified,
                       zoom: zoom)
                   : const Center(child: const CircularProgressIndicator()),
             ])));

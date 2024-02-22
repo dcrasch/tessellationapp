@@ -108,17 +108,15 @@ class _TessellationListState extends State<TessellationList> {
     TessellationFigure f = items[i];
     if (f != null) {
       return new Slidable(
-     
         endActionPane: ActionPane(
           motion: const DrawerMotion(),
           extentRatio: 0.25,
           children: [
             SlidableAction(
-              label: 'Delete',
-              backgroundColor: Colors.red,
-              icon: Icons.delete,
-              onPressed: (context) => deleteFigure(context, i)
-            ),
+                label: 'Delete',
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
+                onPressed: (context) => deleteFigure(context, i)),
           ],
         ),
         child: ListTile(

@@ -4,7 +4,7 @@ description: Tessellation
 homepage: https://www.cloudscripting.nl/tessellations/
 
 environment:                                                            
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: '>=3.2.6 <4.0.0'
   
 dependencies:
   flutter:
@@ -15,6 +15,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_slidable: ^1.2.0
   share_plus: ^3.0.4
+  undo: ^1.5.0
 
 dev_dependencies:
   flutter_test:
