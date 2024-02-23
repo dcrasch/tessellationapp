@@ -12,9 +12,9 @@ class TessellationApp extends StatelessWidget {
     return new MaterialApp(
       debugShowCheckedModeBanner: false, // for screenshots
       title: 'Tessellation App',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       home: new TessellationList(),
     );
   }

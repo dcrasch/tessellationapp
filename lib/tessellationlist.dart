@@ -101,7 +101,10 @@ class _TessellationListState extends State<TessellationList> {
     return new Container(
         padding: new EdgeInsets.all(12.0),
         child: new CustomPaint(
-            painter: new TessellationPainter(f, transform, Colors.black)));
+            painter: new TessellationPainter(f, transform,
+Theme.of(context).colorScheme.secondary
+))
+	    );
   }
 
   Widget _buildListTile(BuildContext context, int i) {
