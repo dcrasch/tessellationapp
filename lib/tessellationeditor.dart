@@ -95,7 +95,6 @@ class _TesellationEditorState extends State<TesellationEditor> {
     }
   }
 
-
   Future<Null> _shareFigure() async {
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -125,19 +124,23 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   void _handleFigureAddPoint((Offset, PointIndexPath) p) {
     var (touchPoint, selectedPoint) = p;
+
     this._changes.add(Change(
           null, // oldvalue,
           () => this.figure!.addPoint(touchPoint, selectedPoint!),
           (oldValue) => this.figure!.removePoint(selectedPoint),
+          description: 'add point',
         ));
   }
 
   void _handleFigureModified((Offset, PointIndexPath) p) {
     var (touchPoint, selectedPoint) = p;
     this._changes.add(Change(
-        this.figure!.getPoint(selectedPoint),
-        () => this.figure!.updatePoint(selectedPoint, touchPoint),
-        (oldValue) => this.figure!.updatePoint(selectedPoint, oldValue)));
+          this.figure!.getPoint(selectedPoint),
+          () => this.figure!.updatePoint(selectedPoint, touchPoint),
+          (oldValue) => this.figure!.updatePoint(selectedPoint, oldValue),
+          description: 'move point',
+        ));
   }
 
   @override
@@ -184,22 +187,24 @@ class _TesellationEditorState extends State<TesellationEditor> {
                           });
                       },
               ),
-	      /*
+              /*
                   new IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: _shareFigure,
                     )        ,
 		    */
-          new PopupMenuButton<String>(
-              onSelected: (String value) {
-                 //_handleMenu(context, value);
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                    const PopupMenuItem<String>(
-                        value: 'Export SVG', child: const Text('Export SVG')),
-                    const PopupMenuItem<String>(
-                        value: 'Share', child: const Text('Share')),
-                  ]),
+              new PopupMenuButton<String>(
+                  onSelected: (String value) {
+                    //_handleMenu(context, value);
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuItem<String>>[
+                        const PopupMenuItem<String>(
+                            value: 'Export SVG',
+                            child: const Text('Export SVG')),
+                        const PopupMenuItem<String>(
+                            value: 'Share', child: const Text('Share')),
+                      ]),
             ]),
             body: new Stack(children: <Widget>[
               new TessellationTiled(key: new Key(""), figure: figure),
