@@ -57,12 +57,6 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
-  if (g_file_test("assets", G_FILE_TEST_IS_DIR)) {
-      gtk_window_set_icon_from_file(window, "assets/icon/icon.png", NULL); // For debug mode
-  } else {
-      gtk_window_set_icon_from_file(window, "data/flutter_assets/assets/icon/icon.png", NULL); // For release mode
-  }
-  
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));

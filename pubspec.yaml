@@ -30,4 +30,3 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
-    - assets/icon/icon.png
