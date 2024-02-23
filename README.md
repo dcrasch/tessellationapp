@@ -57,6 +57,8 @@ inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png -w144 -h144
 inkscape ~/src/tessellationapp/lib/icon.svg -a 0:-6.933:320:313.067 --export-png=./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png -w192 -h192
 
+inkscape icon-outline.svg --export-area -100:-125:450:425 -o icon-outline.png -w 1024 -h 1024
+
 Remove alpha from images
 find . -name "*.png" -exec convert "{}" -alpha off "{}" \;
 

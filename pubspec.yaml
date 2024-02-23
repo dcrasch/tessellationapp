@@ -21,11 +21,6 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
 
-flutter_launcher_icons:
-  android: "ic_launcher"
-  ios: true
-  image_path: "assets/icon/icon.png"
-
 flutter:
   uses-material-design: true
   assets:
@@ -35,3 +30,4 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
+    - assets/icon/icon.png
