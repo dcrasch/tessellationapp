@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:undo/undo.dart';
 
 import 'tessellation.dart';
@@ -114,8 +113,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData!.buffer.asUint8List());
       // TODO export file in linux desktop
-      Share.shareFiles([filename],
-          mimeTypes: ["image/png"], subject: figure!.description);
+      //Share.shareXFiles([XFile(filename)], text: figure!.description);
     });
   }
 
@@ -186,10 +184,12 @@ class _TesellationEditorState extends State<TesellationEditor> {
                           });
                       },
               ),
+	      /*
                   new IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: _shareFigure,
-                    )        ,        
+                    )        ,
+		    */
           new PopupMenuButton<String>(
               onSelected: (String value) {
                  //_handleMenu(context, value);
