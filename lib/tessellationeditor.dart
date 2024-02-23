@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-/* import 'package:share_plus/share_plus.dart'; */
+import 'package:share_plus/share_plus.dart';
 import 'package:undo/undo.dart';
 
 import 'tessellation.dart';
@@ -96,7 +96,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     }
   }
 
-/*
+
   Future<Null> _shareFigure() async {
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -113,12 +113,11 @@ class _TesellationEditorState extends State<TesellationEditor> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     new File(filename).create(recursive: true).then((File f) {
       f.writeAsBytesSync(byteData!.buffer.asUint8List());
-      print(filename);
+      // TODO export file in linux desktop
       Share.shareFiles([filename],
           mimeTypes: ["image/png"], subject: figure!.description);
     });
   }
-*/
 
   void _handleFigureChanged(TessellationFigure? figure) {
     setState(() {
@@ -187,17 +186,13 @@ class _TesellationEditorState extends State<TesellationEditor> {
                           });
                       },
               ),
-	      /*
-              !kIsWeb
-                  ? new IconButton(
+                  new IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: _shareFigure,
-                    )
-                  : new IconButton(
-                      icon: const Icon(Icons.share), onPressed: null),
+                    )        ,        
           new PopupMenuButton<String>(
               onSelected: (String value) {
-                 _handleMenu(context, value);
+                 //_handleMenu(context, value);
               },
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                     const PopupMenuItem<String>(
@@ -205,7 +200,6 @@ class _TesellationEditorState extends State<TesellationEditor> {
                     const PopupMenuItem<String>(
                         value: 'Share', child: const Text('Share')),
                   ]),
-          */
             ]),
             body: new Stack(children: <Widget>[
               new TessellationTiled(key: new Key(""), figure: figure),
