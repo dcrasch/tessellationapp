@@ -11,4 +11,4 @@ PRODUCT_NAME = tessellationapp
 PRODUCT_BUNDLE_IDENTIFIER = nl.hacklab.tessellationapp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2021 nl.hacklab. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 nl.hacklab. All rights reserved.
