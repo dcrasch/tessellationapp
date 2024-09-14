@@ -11,7 +11,7 @@ class TessellationItem extends StatelessWidget {
   final String? figurekey;
 
   Future<TessellationFigure> _getFigure(String key, AssetBundle bundle) async {
-    final String code = await bundle.loadString(key) ?? "failed";
+    final String code = await bundle.loadString(key);
     final JsonDecoder decoder = new JsonDecoder();
     final Map<String, dynamic> result = decoder.convert(code);
     return TessellationFigure.fromJson(result);

@@ -277,3 +277,27 @@ flutter pub run flutter_launcher_icons:main
 ```
 
 Aanpassen bundle id in xcode: cfbundlename = Tessellations , nl.hacklab.Tessellation
+
+
+## filesaver
+
+Enable download
+
+### ios
+
+ios/Runner/Info.plist
+
+```
+<key>LSSupportsOpeningDocumentsInPlace</key>
+<true/>
+<key>UIFileSharingEnabled</key>
+<true/>
+````
+
+### macos
+macOS/Runner/DebugProfile.entitlements
+
+```
+<key>com.apple.security.files.downloads.read-write</key>
+<true/>
+```

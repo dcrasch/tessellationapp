@@ -6,16 +6,17 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
+import 'package:file_saver/file_saver.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationsettings.dart';
 import 'tessellationtiled.dart';
 import 'tessellationline.dart';
+import 'tessellationsvg.dart';
 
 class TesellationEditor extends StatefulWidget {
   TesellationEditor({Key? key, this.title, this.figure}) : super(key: key);
@@ -69,7 +70,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     Rect r = figure!.fit();
 
     // TODO: add changes
-    MediaQueryData s = new MediaQueryData.fromWindow(ui.window);
+    MediaQueryData s = new MediaQueryData.fromView(ui.window);
     double scale =
         0.7 * math.min(s.size.width / r.width, s.size.height / r.height);
     double tx = -r.left * scale + (s.size.width - r.width * scale) / 2;
@@ -95,6 +96,13 @@ class _TesellationEditorState extends State<TesellationEditor> {
     }
   }
 
+  /// Function to convert SVG to Data URL
+  Future<Null> svgToDataUrl(String data) async {
+    await FileSaver.instance.saveFile(
+        name: figure!.description.toString() + ".svg",
+        bytes: utf8.encode(data));
+  }
+
   Future<Null> _shareFigure() async {
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
@@ -116,6 +124,10 @@ class _TesellationEditorState extends State<TesellationEditor> {
     });
   }
 
+  Future<Null> _exportSVG() async {
+    await svgToDataUrl(TessellationSVG.convert(figure!));
+  }
+
   void _handleFigureChanged(TessellationFigure? figure) {
     setState(() {
       this.figure = figure; // trigger change
@@ -127,7 +139,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
     this._changes.add(Change(
           null, // oldvalue,
-          () => this.figure!.addPoint(touchPoint, selectedPoint!),
+          () => this.figure!.addPoint(touchPoint, selectedPoint),
           (oldValue) => this.figure!.removePoint(selectedPoint),
           description: 'add point',
         ));
@@ -195,13 +207,18 @@ class _TesellationEditorState extends State<TesellationEditor> {
 		    */
               new PopupMenuButton<String>(
                   onSelected: (String value) {
+                    if (value == "Share") {
+                      _shareFigure();
+                    } else if (value == "Download SVG") {
+                      _exportSVG();
+                    }
                     //_handleMenu(context, value);
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuItem<String>>[
                         const PopupMenuItem<String>(
-                            value: 'Export SVG',
-                            child: const Text('Export SVG')),
+                            value: 'Download SVG',
+                            child: const Text('Download SVG')),
                         const PopupMenuItem<String>(
                             value: 'Share', child: const Text('Share')),
                       ]),

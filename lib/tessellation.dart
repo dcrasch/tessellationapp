@@ -116,15 +116,13 @@ class TessellationState extends State<TessellationWidget> {
     selectedPoint = figure!.leftdown(touchPoint);
     if (selectedPoint != null) {
       _changed = figure!.drag(touchPoint, selectedPoint);
-      if (_changed && widget.onChanged != null) {
-        widget.onChanged!(figure);
+      if (_changed) {
+        widget.onChanged(figure);
       }
     } else {
       selectedPoint = figure!.leftcreate(touchPoint);
       if (selectedPoint != null) {
-        if (widget.onChanged != null) {
-          widget.onAddPoint!((touchPoint, selectedPoint!));
-        }
+        widget.onAddPoint!((touchPoint, selectedPoint!));
       }
     }
   }
@@ -136,8 +134,8 @@ class TessellationState extends State<TessellationWidget> {
     bool _changed = false;
     if (selectedPoint != null) {
       _changed = figure!.drag(touchPoint, selectedPoint);
-      if (_changed == true && widget.onChanged != null) {
-        widget.onChanged!(figure);
+      if (_changed == true) {
+        widget.onChanged(figure);
       }
     }
   }
@@ -145,7 +143,7 @@ class TessellationState extends State<TessellationWidget> {
   void _handlePanEnd(ScaleEndDetails details) {
     if (selectedPoint != null) {
       var touchPoint = this.figure!.getPoint(selectedPoint!);
-      widget.onModified!((touchPoint, selectedPoint!));
+      widget.onModified((touchPoint, selectedPoint!));
     }
     selectedPoint = null;
   }
