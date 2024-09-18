@@ -301,3 +301,8 @@ macOS/Runner/DebugProfile.entitlements
 <key>com.apple.security.files.downloads.read-write</key>
 <true/>
 ```
+
+### flutter_slidable
+
+version 3.1.1 <=
+https://github.com/letsar/flutter_slidable/pull/484
