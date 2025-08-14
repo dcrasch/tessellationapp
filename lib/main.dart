@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'tessellationlist.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initLocalStorage();
   runApp(new TessellationApp());
 }
 

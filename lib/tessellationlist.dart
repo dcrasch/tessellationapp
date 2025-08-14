@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -70,7 +72,35 @@ class _TessellationListState extends State<TessellationList> {
     }
   }
 
+  Future<List<TessellationFigure>> _getStorageItems() async {
+    List<TessellationFigure> myitems = <TessellationFigure>[];
+    String? figures = localStorage.getItem('figures');
+    if (figures == null) {
+      return myitems;
+    }
+    final JsonDecoder decoder = new JsonDecoder();
+    final List<dynamic> listresult = decoder.convert(figures);
+    for (String figureId in listresult) {
+      String? code = localStorage.getItem(figureId);
+      if (code == null) {
+        continue;
+      }
+      final JsonDecoder decoder = new JsonDecoder();
+      final Map<String, dynamic> result = decoder.convert(code);
+      try {
+        TessellationFigure f = new TessellationFigure.fromJson(result);
+        myitems.add(f);
+      } catch (e) {
+        //print(e);
+      }
+    }
+    return myitems;
+  }
+
   Future<List<TessellationFigure>> _getItems() async {
+    if (kIsWeb) {
+      return _getStorageItems();
+    }
     Directory appDir = await getApplicationDocumentsDirectory();
     List<TessellationFigure> myitems = <TessellationFigure>[];
     for (FileSystemEntity entity in appDir.listSync(recursive: false)) {
@@ -101,10 +131,8 @@ class _TessellationListState extends State<TessellationList> {
     return new Container(
         padding: new EdgeInsets.all(12.0),
         child: new CustomPaint(
-            painter: new TessellationPainter(f, transform,
-Theme.of(context).colorScheme.secondary
-))
-	    );
+            painter: new TessellationPainter(
+                f, transform, Theme.of(context).colorScheme.secondary)));
   }
 
   Widget _buildListTile(BuildContext context, int i) {

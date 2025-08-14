@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
 import 'package:file_saver/file_saver.dart';
@@ -49,7 +50,9 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<bool> _onWillPop() async {
-    if (!kIsWeb) {
+    if (kIsWeb) {
+      await _storeFigure();
+    } else {
       await _saveFigure();
     }
     Navigator.pop(context, figure);
@@ -64,6 +67,30 @@ class _TesellationEditorState extends State<TesellationEditor> {
     final JsonEncoder encoder = new JsonEncoder();
     String code = encoder.convert(figure!.toJson());
     await (await _getLocalFile()).writeAsString(code);
+  }
+
+  Future<Null> _storeFigure() async {
+    // TODO repo
+    if (figure!.uuid!.isEmpty) {
+      DateTime _nu = new DateTime.now();
+      figure!.uuid = _nu.toString();
+    }
+    String figureId = figure!.uuid!;
+    String? figures = localStorage.getItem('figures');
+    List<dynamic> listresult = [];
+    if (figures != null) {
+      final JsonDecoder decoder = new JsonDecoder();
+      listresult = decoder.convert(figures);
+    }
+    if (!listresult.contains(figureId)) {
+      listresult.add(figureId);
+    }
+    String figureList = jsonEncode(listresult);
+    localStorage.setItem('figures', figureList);
+
+    final JsonEncoder encoder = new JsonEncoder();
+    String code = encoder.convert(figure!.toJson());
+    localStorage.setItem(figureId, code);
   }
 
   Future<Null> _resizeFigure() async {
@@ -168,7 +195,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
                       onPressed: _saveFigure,
                     )
                   : new IconButton(
-                      icon: const Icon(Icons.save), onPressed: null),
+                      icon: const Icon(Icons.save), onPressed: _storeFigure),
               new IconButton(
                 icon: const Icon(Icons.palette),
                 onPressed: _colorSettings,
