@@ -1,15 +1,24 @@
 # tessellationapp
 
+## Tessellation Download
+
 * Free [Live app](https://dcrasch.github.io/tessellationapp/)
 
 * [Android app](https://play.google.com/store/apps/details?id=nl.cloudscripting.tessellationapp)
 
-Tessellation
+## Features
 
-## Getting Started
+* save figures
+* delete figure (swipe left on list item)
+* undo/redo (click arrows)
+* change name (clik color palette and edit text)
+* Share (maybe works)
+* Save as svg
+* [free and opensource](https://www.gnu.org/philosophy/free-sw.en.html)
 
-For help getting started with Flutter, view our online
-[documentation](http://flutter.io/).
+## Documentation and inspiration
+
+* [Tessellation in rust](https://github.com/dcrasch/tir/)
 
 ## License
 
