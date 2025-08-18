@@ -9,10 +9,10 @@
 ## Features
 
 * save figures
-* delete figure (swipe left on list item)
+* delete figure (swipe left on list item, needs FIXING)
 * undo/redo (click arrows)
 * change name (clik color palette and edit text)
-* Share (maybe works)
+* Share (needs FIXING)
 * Save as svg
 * [free and opensource](https://www.gnu.org/philosophy/free-sw.en.html)
 
