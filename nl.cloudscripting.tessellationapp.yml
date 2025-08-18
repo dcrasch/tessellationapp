@@ -1,6 +1,6 @@
 id: nl.cloudscripting.tessellationapp
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: "24.08"
 sdk: org.freedesktop.Sdk
 command: tessellationapp
 finish-args:
@@ -9,7 +9,7 @@ finish-args:
   - --device=dri
   - --socket=fallback-x11
   - --socket=wayland
-  - --filesystem=home
+  - --filesystem=xdg-documents
 modules:
   - name: tessellationapp
     buildsystem: simple
