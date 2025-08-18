@@ -7,10 +7,13 @@ add --filesystem=xdg-documents/tessellationapp  and save to that directory in th
 
 # Android
 
-Upload new app to play store.
+* Upload new app to play store.
+* Upload app to f-droid
 
 # Features
 
-Fix delete
+* Fix delete
+* add more figure
+* add round lines
 
 
