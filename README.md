@@ -310,3 +310,13 @@ macOS/Runner/DebugProfile.entitlements
 
 version 3.1.1 <=
 https://github.com/letsar/flutter_slidable/pull/484
+
+
+## Flatpak
+
+```
+flutter build linux --release
+##flatpak-builder build-dir nl.cloudscripting.tessellationapp.yml --force-clean
+flatpak-builder --user --install --force-clean build-dir nl.cloudscripting.tessellationapp.yml
+flatpak run nl.cloudscripting.tessellationapp
+```

@@ -1,0 +1,22 @@
+id: nl.cloudscripting.tessellationapp
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: tessellationapp
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --filesystem=home
+modules:
+  - name: tessellationapp
+    buildsystem: simple
+    build-commands:
+      - install -D build/linux/x64/release/bundle/tessellationapp /app/bin/tessellationapp
+      - cp -r build/linux/x64/release/bundle/data /app/bin/data
+      - cp -r build/linux/x64/release/bundle/lib /app/bin/lib
+    sources:
+      - type: dir
+        path: .
