@@ -32,3 +32,7 @@ flutter:
     - lib/brick.json
     - lib/diamond.json
     - lib/hexagon.json
+  licenses:
+    - LICENSE
+
+

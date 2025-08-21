@@ -324,3 +324,25 @@ flutter build linux --release
 flatpak-builder --user --install --force-clean build-dir nl.cloudscripting.tessellationapp.yml
 flatpak run nl.cloudscripting.tessellationapp
 ```
+
+## Ubuntu
+
+Build linux use 12, 13 or
+```
+sudo apt install libstdc++-14-dev
+```
+
+## Sign android app
+
+android/key.properties
+```
+storePassword=...
+keyPassword=....
+keyAlias=...
+storeFile=...
+```
+
+* https://randombits.dev/articles/android/fdroid
+* https://github.com/subosito/flutter-action
+
+
