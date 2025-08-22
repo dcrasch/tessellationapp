@@ -11,43 +11,45 @@ jobs:
     steps:
         # Checkout the repository to get access to the code
       - name: Checkout repository
-        uses: actions/checkout@v3        
-      
+        uses: actions/checkout@v3
         # Set up Flutter environment using the stable channel
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable' 
           architecture: x64 
-          
         # Install Flutter dependencies from pubspec.yaml
       - name: Install dependencies
         run: flutter pub get
-        
         # Set up JDK 17 required for building Android applications
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'  # Use Zulu distribution of Java
           java-version: '17'     # Specify Java version 17
-        
         # Create relevant secret files for the Android build
       - name: Create relevant secret files
         run: |
           echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
-          
         # Decode the Base64 encoded keystore & save it as a .jks file
       - name: Decode Keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE_64 }}" | base64 --decode > android/app/your-keystore.jks
-          
         # Build the Android APK as an App Bundle (AAB) for release
       - name: Build Android APK
-        run: flutter build appbundle --release      
-
+        run: flutter build apk --release
+        # Rename the apk
+      - name: Rename apk
+        id: rename_apk
+        run: |
+          buildName=$(grep "version: " pubspec.yaml | sed 's/version: //g' | sed 's/+.*//g')
+          apkName="tessellationapp_v${buildName}.apk"
+          echo "apkName=$apkName" >> $GITHUB_OUTPUT
+          mkdir -p output
+          mv build/app/outputs/flutter-apk/app-release.apk output/$apkName
         # Upload the artifact
       - name: Upload Artifact 
         uses: actions/upload-artifact@v4
         with: 
-          name: android-AAB
-          path: build/app/outputs/bundle/release/*.aab
+          name: tessellationapp-apk
+          path: output/${{ steps.rename_apk.outputs.apkName }}
