@@ -35,8 +35,7 @@ jobs:
       - name: Create relevant secret files
         run: |
           echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
-          EOF        
-        
+          
         # Decode the Base64 encoded keystore & save it as a .jks file
       - name: Decode Keystore
         env:
