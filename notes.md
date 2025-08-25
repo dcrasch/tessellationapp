@@ -345,4 +345,9 @@ storeFile=...
 * https://randombits.dev/articles/android/fdroid
 * https://github.com/subosito/flutter-action
 
+## Build web
+
+```
+flutter build web -o docs --base-href=/tessellationapp/
+```
 
