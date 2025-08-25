@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
-import 'package:file_saver/file_saver.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:file_selector/file_selector.dart';
 
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
@@ -125,9 +126,31 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   /// Function to convert SVG to Data URL
   Future<Null> svgToDataUrl(String data) async {
-    await FileSaver.instance.saveFile(
-        name: figure!.description.toString() + ".svg",
-        bytes: utf8.encode(data));
+    if (figure!.uuid!.isEmpty) {
+      DateTime _nu = new DateTime.now();
+      figure!.uuid = _nu.toString();
+    }
+    String filename = "${figure!.uuid}.svg";
+
+    if (!kIsWeb && Platform.isLinux) {
+
+      const XTypeGroup typeGroup = XTypeGroup(
+        label: 'images',
+        extensions: <String>['svg'],
+      );
+      final location = await getSaveLocation(
+          suggestedName: filename, acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+      if (location != null) {
+        new File(location.path).create(recursive: true).then((File f) {
+          f.writeAsBytesSync(utf8.encode(data));
+        });
+      }
+      return;
+    }
+    SharePlus.instance.share(ShareParams(
+        text: figure!.description,
+        files: [XFile.fromData(utf8.encode(data), mimeType: 'image/svg+xml')],
+        fileNameOverrides: [filename]));
   }
 
   Future<Null> _shareFigure() async {
@@ -135,20 +158,33 @@ class _TesellationEditorState extends State<TesellationEditor> {
       DateTime _nu = new DateTime.now();
       figure!.uuid = _nu.toString();
     }
-    Directory storageDir = await getTemporaryDirectory();
-    String filename = "${storageDir.path}/images/${figure!.uuid}.png";
-
+    String filename = "${figure!.uuid}.png";
     final ui.PictureRecorder recorder = new ui.PictureRecorder();
     final ui.Rect paintBounds = new ui.Rect.fromLTRB(0.0, 0.0, 1024.0, 1024.0);
     final ui.Canvas canvas = new ui.Canvas(recorder, paintBounds);
     figure!.tessellate(canvas, paintBounds, 80.0);
     final ui.Image image = await recorder.endRecording().toImage(1024, 1024);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    new File(filename).create(recursive: true).then((File f) {
-      f.writeAsBytesSync(byteData!.buffer.asUint8List());
-      // TODO export file in linux desktop
-      //Share.shareXFiles([XFile(filename)], text: figure!.description);
-    });
+
+    if (!kIsWeb && Platform.isLinux) {
+      const XTypeGroup typeGroup = XTypeGroup(
+        label: 'images',
+        extensions: <String>['png'],
+      );
+      final location = await getSaveLocation(
+          suggestedName: filename, acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+      if (location != null) {
+        new File(location.path).create(recursive: true).then((File f) {
+          f.writeAsBytesSync(byteData!.buffer.asUint8List());
+        });
+      }
+      return;
+    }
+    SharePlus.instance.share(ShareParams(text: figure!.description, files: [
+      XFile.fromData(byteData!.buffer.asUint8List(), mimeType: 'image/png')
+    ], fileNameOverrides: [
+      filename
+    ]));
   }
 
   Future<Null> _exportSVG() async {
