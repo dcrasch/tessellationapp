@@ -5,14 +5,14 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kIsMacOS, kIsWindows;
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_selector/file_selector.dart';
-
+import 'package:file_saver/file_saver.dart';
 import 'tessellation.dart';
 import 'tessellationfigure.dart';
 import 'tessellationsettings.dart';
@@ -131,9 +131,10 @@ class _TesellationEditorState extends State<TesellationEditor> {
       figure!.uuid = _nu.toString();
     }
     String filename = "${figure!.uuid}.svg";
-
-    if (!kIsWeb && Platform.isLinux) {
-
+    if (kIsWeb) {
+      await FileSaver.instance
+          .saveFile(name: filename, bytes: utf8.encode(data));
+    } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       const XTypeGroup typeGroup = XTypeGroup(
         label: 'images',
         extensions: <String>['svg'],
@@ -146,11 +147,15 @@ class _TesellationEditorState extends State<TesellationEditor> {
         });
       }
       return;
+    } else {
+      await SharePlus.instance.share(ShareParams(
+          text: figure!.description,
+          files: [
+            XFile.fromData(utf8.encode(data),
+                name: filename, mimeType: 'image/svg+xml')
+          ],
+          downloadFallbackEnabled: true));
     }
-    SharePlus.instance.share(ShareParams(
-        text: figure!.description,
-        files: [XFile.fromData(utf8.encode(data), mimeType: 'image/svg+xml')],
-        fileNameOverrides: [filename]));
   }
 
   Future<Null> _shareFigure() async {
@@ -166,7 +171,10 @@ class _TesellationEditorState extends State<TesellationEditor> {
     final ui.Image image = await recorder.endRecording().toImage(1024, 1024);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
-    if (!kIsWeb && Platform.isLinux) {
+    if (kIsWeb) {
+      await FileSaver.instance
+          .saveFile(name: filename, bytes: byteData!.buffer.asUint8List());
+    } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       const XTypeGroup typeGroup = XTypeGroup(
         label: 'images',
         extensions: <String>['png'],
@@ -178,13 +186,15 @@ class _TesellationEditorState extends State<TesellationEditor> {
           f.writeAsBytesSync(byteData!.buffer.asUint8List());
         });
       }
-      return;
+    } else {
+      await SharePlus.instance.share(ShareParams(
+          text: figure!.description,
+          files: [
+            XFile.fromData(byteData!.buffer.asUint8List(),
+                name: filename, mimeType: 'image/png')
+          ],
+          downloadFallbackEnabled: true));
     }
-    SharePlus.instance.share(ShareParams(text: figure!.description, files: [
-      XFile.fromData(byteData!.buffer.asUint8List(), mimeType: 'image/png')
-    ], fileNameOverrides: [
-      filename
-    ]));
   }
 
   Future<Null> _exportSVG() async {
