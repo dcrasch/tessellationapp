@@ -2,8 +2,8 @@ name: Android APK Build
 # Trigger the workflow on push events to the main branch
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"   # Runs when you push a tag like v1.0.0
 jobs:
   build-android:
     # Define the job to run on the latest Ubuntu environment
@@ -35,7 +35,7 @@ jobs:
       - name: Decode Keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE_64 }}" | base64 --decode > android/app/your-keystore.jks
-        # Build the Android APK as an App Bundle (AAB) for release
+        # Build the Android APK
       - name: Build Android APK
         run: flutter build apk --release
         # Rename the apk
@@ -53,3 +53,12 @@ jobs:
         with: 
           name: tessellationapp-apk
           path: output/${{ steps.rename_apk.outputs.apkName }}
+
+        # Create GitHub Release and attach APK
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: output/${{ steps.rename_apk.outputs.apkName }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
