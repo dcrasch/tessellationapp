@@ -2,9 +2,10 @@
 
 ## Tessellation Download
 
-* Free [Live app](https://dcrasch.github.io/tessellationapp/)
+* Free live [web app](https://dcrasch.github.io/tessellationapp/)
+* Free and opensource [![GitHub release (latest by date)](https://img.shields.io/github/v/release/dcrasch/tessellationapp?display_name=tag&logo=github)](https://github.com/dcrasch/tessellationapp/releases/latest) from Github
+* Free [Android Tessellation app](https://play.google.com/store/apps/details?id=nl.cloudscripting.tessellationapp) from the Google Play Store
 
-* [Android app](https://play.google.com/store/apps/details?id=nl.cloudscripting.tessellationapp)
 
 ## Features
 
