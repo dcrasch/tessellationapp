@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*"   # Runs when you push a tag like v1.0.0
-permissions:
-  contents: write   # Needed to publish release
 jobs:
   build-android:
     # Define the job to run on the latest Ubuntu environment
