@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show kIsWeb, kIsMacOS, kIsWindows;
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -126,6 +126,10 @@ class _TesellationEditorState extends State<TesellationEditor> {
 
   /// Function to convert SVG to Data URL
   Future<Null> svgToDataUrl(String data) async {
+    final bool kIsDesktop = (defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.fuchsia);
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
       figure!.uuid = _nu.toString();
@@ -134,7 +138,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     if (kIsWeb) {
       await FileSaver.instance
           .saveFile(name: filename, bytes: utf8.encode(data));
-    } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    } else if (kIsDesktop) {
       const XTypeGroup typeGroup = XTypeGroup(
         label: 'images',
         extensions: <String>['svg'],
@@ -142,9 +146,8 @@ class _TesellationEditorState extends State<TesellationEditor> {
       final location = await getSaveLocation(
           suggestedName: filename, acceptedTypeGroups: <XTypeGroup>[typeGroup]);
       if (location != null) {
-        new File(location.path).create(recursive: true).then((File f) {
-          f.writeAsBytesSync(utf8.encode(data));
-        });
+        await FileSaver.instance
+            .saveFile(name: filename, bytes: utf8.encode(data));
       }
       return;
     } else {
@@ -159,6 +162,10 @@ class _TesellationEditorState extends State<TesellationEditor> {
   }
 
   Future<Null> _shareFigure() async {
+    final bool kIsDesktop = (defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.fuchsia);
     if (figure!.uuid!.isEmpty) {
       DateTime _nu = new DateTime.now();
       figure!.uuid = _nu.toString();
@@ -174,7 +181,7 @@ class _TesellationEditorState extends State<TesellationEditor> {
     if (kIsWeb) {
       await FileSaver.instance
           .saveFile(name: filename, bytes: byteData!.buffer.asUint8List());
-    } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    } else if (kIsDesktop) {
       const XTypeGroup typeGroup = XTypeGroup(
         label: 'images',
         extensions: <String>['png'],
@@ -182,9 +189,8 @@ class _TesellationEditorState extends State<TesellationEditor> {
       final location = await getSaveLocation(
           suggestedName: filename, acceptedTypeGroups: <XTypeGroup>[typeGroup]);
       if (location != null) {
-        new File(location.path).create(recursive: true).then((File f) {
-          f.writeAsBytesSync(byteData!.buffer.asUint8List());
-        });
+        await FileSaver.instance
+            .saveFile(name: filename, bytes: byteData!.buffer.asUint8List());
       }
     } else {
       await SharePlus.instance.share(ShareParams(
