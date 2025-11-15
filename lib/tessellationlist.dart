@@ -52,74 +52,6 @@ class _TessellationListState extends State<TessellationList> {
     }
   }
 
-  Future<File> _getLocalFile(figure) async {
-    // TODO move file stuff to repo
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String filename = "${appDir.path}/${figure.uuid}.json";
-    return new File(filename);
-  }
-
-  void deleteFigure(BuildContext context, int i) async {
-    // TODO move file stuff to repo
-    try {
-      final file = await _getLocalFile(items[i]);
-      await file.delete();
-      setState(() {
-        items.removeAt(i);
-      });
-    } catch (e) {
-      // show error
-    }
-  }
-
-  Future<List<TessellationFigure>> _getStorageItems() async {
-    List<TessellationFigure> myitems = <TessellationFigure>[];
-    String? figures = localStorage.getItem('figures');
-    if (figures == null) {
-      return myitems;
-    }
-    final JsonDecoder decoder = new JsonDecoder();
-    final List<dynamic> listresult = decoder.convert(figures);
-    for (String figureId in listresult) {
-      String? code = localStorage.getItem(figureId);
-      if (code == null) {
-        continue;
-      }
-      final JsonDecoder decoder = new JsonDecoder();
-      final Map<String, dynamic> result = decoder.convert(code);
-      try {
-        TessellationFigure f = new TessellationFigure.fromJson(result);
-        myitems.add(f);
-      } catch (e) {
-        //print(e);
-      }
-    }
-    return myitems;
-  }
-
-  Future<List<TessellationFigure>> _getItems() async {
-    if (kIsWeb) {
-      return _getStorageItems();
-    }
-    Directory appDir = await getApplicationDocumentsDirectory();
-    List<TessellationFigure> myitems = <TessellationFigure>[];
-    for (FileSystemEntity entity in appDir.listSync(recursive: false)) {
-      // TODO skip failed
-      if (entity is File && entity.path.endsWith('.json')) {
-        String code = entity.readAsStringSync();
-        final JsonDecoder decoder = new JsonDecoder();
-        final Map<String, dynamic> result = decoder.convert(code);
-        try {
-          TessellationFigure f = new TessellationFigure.fromJson(result);
-          myitems.add(f);
-        } catch (e) {
-          //print(e);
-        }
-      }
-    }
-    return myitems;
-  }
-
   Widget _buildIcon(BuildContext context, TessellationFigure f) {
     Rect r = f.fit();
     double scale = 0.7 * math.min(48.0 / r.width, 48.0 / r.height);
@@ -198,5 +130,18 @@ class _TessellationListState extends State<TessellationList> {
           child: const Icon(Icons.add),
           onPressed: _onPressed,
         ));
+  }
+
+  void deleteFigure(BuildContext context, int i) async {
+    // TODO move file stuff to repo
+    try {
+      final file = await _getLocalFile(items[i]);
+      await file.delete();
+      setState(() {
+        items.removeAt(i);
+      });
+    } catch (e) {
+      // show error
+    }
   }
 }
